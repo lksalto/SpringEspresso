@@ -50,7 +50,6 @@ fabric.properties
 # *.ipr
 
 # Ignora para não commitar alteração de senha
-/target/classes/application.properties
 /src/main/resources/application.properties
 
 ### Java ###
