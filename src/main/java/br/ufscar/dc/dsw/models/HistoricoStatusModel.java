@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "historico_status_sessao")
@@ -13,9 +14,9 @@ public class HistoricoStatusModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_historico")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_historico", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_anterior")
@@ -38,11 +39,11 @@ public class HistoricoStatusModel implements Serializable {
         this.dataHora = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

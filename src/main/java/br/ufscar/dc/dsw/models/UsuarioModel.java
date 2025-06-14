@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "usuario")
@@ -15,9 +16,9 @@ public class UsuarioModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_usuario", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Column(nullable = false, length = 256)
     private String nome;
@@ -37,11 +38,11 @@ public class UsuarioModel implements Serializable {
     @ManyToMany(mappedBy = "membros", fetch = FetchType.LAZY)
     private Set<ProjetoModel> projetos = new HashSet<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "dica")
@@ -11,9 +12,9 @@ public class DicaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_dica")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_dica", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String dica;
@@ -23,11 +24,11 @@ public class DicaModel implements Serializable {
     @JoinColumn(name = "id_estrategia", nullable = false)
     private EstrategiaModel estrategia;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

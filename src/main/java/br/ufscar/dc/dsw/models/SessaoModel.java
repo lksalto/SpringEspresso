@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "sessao")
@@ -18,9 +19,9 @@ public class SessaoModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_sessao")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_sessao", columnDefinition = "binary(16)")
+    private UUID id;
 
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JsonBackReference("projeto-sessoes")
@@ -62,11 +63,11 @@ public class SessaoModel implements Serializable {
         }
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

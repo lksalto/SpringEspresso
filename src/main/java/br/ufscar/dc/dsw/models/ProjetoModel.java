@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "projeto")
@@ -14,9 +15,9 @@ public class ProjetoModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_projeto")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_projeto", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Column(nullable = false, unique = true, length = 255)
     private String nome;
@@ -45,11 +46,11 @@ public class ProjetoModel implements Serializable {
         this.dataCriacao = LocalDate.now();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
