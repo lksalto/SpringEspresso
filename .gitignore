@@ -49,9 +49,6 @@ fabric.properties
 # .idea/misc.xml
 # *.ipr
 
-# Ignora para não commitar alteração de senha
-/src/main/resources/application.properties
-
 ### Java ###
 # Compiled class file
 *.class
