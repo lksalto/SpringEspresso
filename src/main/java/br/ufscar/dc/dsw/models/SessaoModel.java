@@ -1,10 +1,14 @@
 package br.ufscar.dc.dsw.models;
 
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,23 +18,27 @@ public class SessaoModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sessao")
     private Long id;
 
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JsonBackReference("projeto-sessoes")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_projeto", nullable = false)
     private ProjetoModel projeto;
 
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tester", nullable = false)
     private UsuarioModel tester;
 
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estrategia", nullable = false)
     private EstrategiaModel estrategia;
 
-    private LocalTime duracao;
+    private Duration duracao;
 
     @Column(columnDefinition = "TEXT")
     private String descricao;
@@ -39,11 +47,20 @@ public class SessaoModel implements Serializable {
     @Column(nullable = false)
     private StatusSessao status;
 
+    @JsonManagedReference("sessao-historico")
     @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<HistoricoStatusModel> historico = new HashSet<>();
 
+    @JsonManagedReference("sessao-bugs")
     @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<BugModel> bugs = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.status == null) {
+            this.status = StatusSessao.CRIADO;
+        }
+    }
 
     public Long getId() {
         return id;
@@ -77,11 +94,11 @@ public class SessaoModel implements Serializable {
         this.estrategia = estrategia;
     }
 
-    public LocalTime getDuracao() {
+    public Duration getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(LocalTime duracao) {
+    public void setDuracao(Duration duracao) {
         this.duracao = duracao;
     }
 

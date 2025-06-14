@@ -1,7 +1,8 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 
 @Entity
@@ -10,7 +11,7 @@ public class ExemploModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exemplo")
     private Long id;
 
@@ -20,7 +21,7 @@ public class ExemploModel implements Serializable {
     @Column(name = "url_imagem", length = 1024)
     private String urlImagem;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("estrategia-exemplos")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estrategia", nullable = false)
     private EstrategiaModel estrategia;

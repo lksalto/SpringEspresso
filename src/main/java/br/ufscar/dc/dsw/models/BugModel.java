@@ -1,6 +1,6 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,7 +12,7 @@ public class BugModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_bug")
     private Long id;
 
@@ -25,7 +25,7 @@ public class BugModel implements Serializable {
     @Column(nullable = false)
     private boolean resolvido = false;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("sessao-bugs")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sessao", nullable = false)
     private SessaoModel sessao;

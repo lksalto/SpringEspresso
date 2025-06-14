@@ -1,6 +1,6 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -11,14 +11,14 @@ public class DicaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_dica")
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String dica;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("estrategia-dicas")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estrategia", nullable = false)
     private EstrategiaModel estrategia;

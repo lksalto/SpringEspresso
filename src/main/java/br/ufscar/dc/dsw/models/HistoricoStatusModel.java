@@ -1,7 +1,7 @@
 package br.ufscar.dc.dsw.models;
 
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ public class HistoricoStatusModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_historico")
     private Long id;
 
@@ -28,14 +28,14 @@ public class HistoricoStatusModel implements Serializable {
     @Column(name = "data_hora", nullable = false)
     private LocalDateTime dataHora;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("sessao-historico")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sessao", nullable = false)
     private SessaoModel sessao;
 
     @PrePersist
     protected void onCreate() {
-        dataHora = LocalDateTime.now();
+        this.dataHora = LocalDateTime.now();
     }
 
     public Long getId() {

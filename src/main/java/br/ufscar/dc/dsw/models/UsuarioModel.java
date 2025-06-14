@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw.models;
 
 import br.ufscar.dc.dsw.models.enums.Papel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -14,25 +15,25 @@ public class UsuarioModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Long id;
 
     @Column(nullable = false, length = 256)
     private String nome;
 
-    @Column(nullable = false, unique = true, length = 255, name = "login")
+    @Column(nullable = false, unique = true, length = 255, name = "email")
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 60)
     private String senha;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Papel papel;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("projeto-membros")
     @ManyToMany(mappedBy = "membros", fetch = FetchType.LAZY)
     private Set<ProjetoModel> projetos = new HashSet<>();
 

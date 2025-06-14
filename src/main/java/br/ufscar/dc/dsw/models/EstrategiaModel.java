@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ public class EstrategiaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estrategia")
     private Long id;
 
@@ -22,9 +23,11 @@ public class EstrategiaModel implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
+    @JsonManagedReference("estrategia-dicas")
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<DicaModel> dicas = new HashSet<>();
 
+    @JsonManagedReference("estrategia-exemplos")
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<ExemploModel> exemplos = new HashSet<>();
 

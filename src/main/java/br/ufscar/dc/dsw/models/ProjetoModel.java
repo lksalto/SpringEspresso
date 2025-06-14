@@ -1,6 +1,6 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -14,7 +14,7 @@ public class ProjetoModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_projeto")
     private Long id;
 
@@ -27,22 +27,22 @@ public class ProjetoModel implements Serializable {
     @Column(nullable = false, updatable = false)
     private LocalDate dataCriacao;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonManagedReference("projeto-membros")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "MembroProjeto",
+            name = "membro_projeto",
             joinColumns = @JoinColumn(name = "id_projeto"),
             inverseJoinColumns = @JoinColumn(name = "id_usuario")
     )
     private Set<UsuarioModel> membros = new HashSet<>();
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonManagedReference("projeto-sessoes")
     @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SessaoModel> sessoes = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
-        dataCriacao = LocalDate.now();
+        this.dataCriacao = LocalDate.now();
     }
 
     public Long getId() {
