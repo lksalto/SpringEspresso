@@ -1,0 +1,12 @@
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/EspressoGamingTestingJpaApplication.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/controllers/LivroController.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/dtos/LivroRecordDto.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/models/AutorModel.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/models/LivroModel.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/models/PublisherModel.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/models/ReviewModel.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/repositories/AutorRepository.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/repositories/LivroRepository.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/repositories/PublisherRepository.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/repositories/ReviewRepository.java
+/home/ronan/SpringEspresso/src/main/java/br/ufscar/dc/dsw/services/LivroService.java

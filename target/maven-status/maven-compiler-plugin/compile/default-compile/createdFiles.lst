@@ -1,0 +1,12 @@
+br/ufscar/dc/dsw/EspressoGamingTestingJpaApplication.class
+br/ufscar/dc/dsw/models/PublisherModel.class
+br/ufscar/dc/dsw/controllers/LivroController.class
+br/ufscar/dc/dsw/repositories/AutorRepository.class
+br/ufscar/dc/dsw/dtos/LivroRecordDto.class
+br/ufscar/dc/dsw/models/AutorModel.class
+br/ufscar/dc/dsw/repositories/LivroRepository.class
+br/ufscar/dc/dsw/repositories/ReviewRepository.class
+br/ufscar/dc/dsw/models/ReviewModel.class
+br/ufscar/dc/dsw/repositories/PublisherRepository.class
+br/ufscar/dc/dsw/models/LivroModel.class
+br/ufscar/dc/dsw/services/LivroService.class
