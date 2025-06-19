@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw;
 
+import br.ufscar.dc.dsw.dtos.UsuarioCadastroDTO;
 import br.ufscar.dc.dsw.models.UsuarioModel;
 import br.ufscar.dc.dsw.models.enums.Papel;
 import br.ufscar.dc.dsw.services.UsuarioService;
@@ -27,28 +28,22 @@ public class EspressoGamingTestingJpaApplication {
 	public CommandLineRunner initializationRunner() {
 		return args -> {
 			// Criar usuário 'admin' se não existir
-			UsuarioModel adminExistente = usuarioService.buscarPorLogin("admin@admin.com");
-			if (adminExistente == null) { // <--- CORREÇÃO AQUI: Verifique se o objeto é null
-				UsuarioModel admin = new UsuarioModel();
-				admin.setNome("Administrador");
-				admin.setEmail("admin@admin.com");
-				admin.setSenha("admin"); // A senha será codificada pelo serviço
-				admin.setPapel(Papel.ADMIN);
-				usuarioService.salvar(admin);
+			UsuarioModel adminExistente = usuarioService.buscarPorEmail("admin@admin.com");
+			if (adminExistente == null) {
+				UsuarioCadastroDTO admin = new UsuarioCadastroDTO("Administrador",
+						"admin@admin.com", "admin", Papel.ADMIN);
+				usuarioService.salvarNovoUsuario(admin);
 				System.out.println("Usuário 'admin' criado.");
 			} else {
 				System.out.println("Usuário 'admin' já existe.");
 			}
 
 			// Criar usuário 'tester' se não existir
-			UsuarioModel testerExistente = usuarioService.buscarPorLogin("tester@tester.com");
-			if (testerExistente == null) { // <--- CORREÇÃO AQUI: Verifique se o objeto é null
-				UsuarioModel tester = new UsuarioModel();
-				tester.setNome("Tester");
-				tester.setEmail("tester@tester.com");
-				tester.setSenha("tester"); // A senha será codificada pelo serviço
-				tester.setPapel(Papel.TESTER);
-				usuarioService.salvar(tester);
+			UsuarioModel testerExistente = usuarioService.buscarPorEmail("tester@tester.com");
+			if (testerExistente == null) { //
+				UsuarioCadastroDTO tester = new UsuarioCadastroDTO("Tester", "tester@tester.com",
+						"tester", Papel.TESTER);
+				usuarioService.salvarNovoUsuario(tester);
 				System.out.println("Usuário 'tester' criado.");
 			} else {
 				System.out.println("Usuário 'tester' já existe.");
