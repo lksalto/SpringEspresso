@@ -24,7 +24,6 @@ Antes de começar, certifique-se de ter instalado:
 
 1. Abra o terminal e clone o projeto
 **Execute esse comando:**
-```bash
 **git clone https://github.com/ronanpjr/SpringEspresso.git**
 3. Acesse a pasta do projeto
 **Execute esse comando:**
