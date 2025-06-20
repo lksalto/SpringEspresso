@@ -33,6 +33,7 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    // Modified to receive Papel from the DTO
     public UsuarioDTO salvarNovoUsuario(UsuarioCadastroDTO usuarioCadastroDTO) {
         Optional<UsuarioModel> existingUser = usuarioRepository.findByEmail(usuarioCadastroDTO.email());
         if (existingUser.isPresent()) {
@@ -40,10 +41,13 @@ public class UsuarioService implements UserDetailsService {
         }
 
         UsuarioModel usuario = new UsuarioModel();
+        // The DTO now has 'id' but it will be null for new users, which is fine
+        // usuario.setId(usuarioCadastroDTO.id()); // No need to set ID, it's auto-generated
+
         usuario.setNome(usuarioCadastroDTO.nome());
         usuario.setEmail(usuarioCadastroDTO.email());
         usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.senha()));
-        usuario.setPapel(usuarioCadastroDTO.papel());
+        usuario.setPapel(usuarioCadastroDTO.papel()); // Get papel directly from DTO
 
         try {
             UsuarioModel savedUsuario = usuarioRepository.save(usuario);
