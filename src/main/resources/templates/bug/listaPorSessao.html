@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bugs da Sessão de Teste - <span th:text="${sessao.nomeSessao()}"></span></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h2 style="text-align: center;">Bugs da Sessão: <span th:text="${sessao.nomeSessao()}"></span></h2>
+    <p style="text-align: center;">Projeto: <span th:text="${sessao.nomeProjeto()}"></span></p>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a th:href="@{/bugs/cadastro(idSessao=${sessao.id()})}" class="button button-primary">Registrar Novo Bug</a>
+    </div>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Descrição do Bug</th>
+            <th>Resolvido</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bug : ${listaBugs}">
+            <td th:text="${bug.descricao()}">Descrição</td>
+            <td th:text="${bug.resolvido() ? 'Sim' : 'Não'}">Resolvido</td>
+            <td>
+                <a th:href="@{/bugs/editar/{id}(id=${bug.id()})}" class="button button-secondary">Editar</a>
+                <a th:href="@{/bugs/remover/{id}(id=${bug.id()})}" class="button button-danger"
+                   onclick="return confirm('Tem certeza que deseja remover este bug?');">Remover</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(listaBugs)}">
+            <td colspan="3" style="text-align: center;">Nenhum bug encontrado nesta sessão.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/sessoesTeste/listar}" class="button button-secondary">Voltar para Sessões</a>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

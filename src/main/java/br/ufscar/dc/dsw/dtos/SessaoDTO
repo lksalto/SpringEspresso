@@ -1,0 +1,11 @@
+// package br.ufscar.dc.dsw.dtos;
+
+package br.ufscar.dc.dsw.dtos;
+
+import java.util.UUID;
+
+public record SessaoDTO(
+    UUID id,
+    String titulo,
+    UUID idTester 
+) {}
