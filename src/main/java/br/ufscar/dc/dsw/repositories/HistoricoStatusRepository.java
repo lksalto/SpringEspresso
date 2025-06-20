@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface HistoricoStatusRepository extends JpaRepository<HistoricoStatusModel, Long> {
+public interface HistoricoStatusRepository extends JpaRepository<HistoricoStatusModel, UUID> {
 
     /**
      * Busca todo o histórico de uma sessão, ordenado pela data/hora de forma ascendente.
@@ -18,7 +19,7 @@ public interface HistoricoStatusRepository extends JpaRepository<HistoricoStatus
      * @param sessaoId O ID da sessão para a qual o histórico será buscado.
      * @return Uma lista de objetos HistoricoStatusSessao.
      */
-    List<HistoricoStatusModel> findBySessaoIdOrderByDataHoraAsc(Long sessaoId);
+    List<HistoricoStatusModel> findBySessaoIdOrderByDataHoraAsc(UUID sessaoId);
 
     List<HistoricoStatusModel> findBySessaoOrderByDataHoraAsc(SessaoModel sessao);
 }
