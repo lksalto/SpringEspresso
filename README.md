@@ -1,4 +1,13 @@
-# SpringEspresso
+# ☕ SpringEspresso
+
+---
+
+## Tecnologias usadas no projeto
+
+- Spring MVC, Spring Data JPA, Spring Security & Thymeleaf (Lado Servidor)
+- Javascript & CSS (Lado Cliente)
+
+---
 
 ## Pré-requisitos
 
@@ -9,6 +18,8 @@ Antes de começar, certifique-se de ter instalado:
 - **MySQL Server**
 - **IDE (Eclipse, IntelliJ ou VS Code)**
 
+---
+
 ## 1️⃣ Clonar o repositório
 
 1. Abra o terminal e clone o projeto
@@ -17,6 +28,8 @@ Antes de começar, certifique-se de ter instalado:
 2. Acesse a pasta do projeto
 **Execute esse comando:**
 **cd SpringEspresso**
+
+---
 
 ## 2️⃣ Configurar o banco de dados MySQL
 1. Inicie o serviço do MySQL
@@ -30,11 +43,17 @@ mysql -u root -p
 **Execute esse comando:**
 CREATE DATABASE spring_espresso;
 EXIT;
-## 4️⃣ Build do projeto com Maven
+
+---
+
+## 3️⃣ Build do projeto com Maven
 No terminal, na raiz do projeto:
 **Execute esse comando:**
 mvn clean install
-## 5️⃣ Rodar o projeto
+
+---
+
+## 4️⃣ Rodar o projeto
 Agora, para iniciar a aplicação
 **Execute esse comando:**
 mvn spring-boot:run
