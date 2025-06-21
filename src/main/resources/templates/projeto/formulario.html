@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${projetoCadastroDTO != null ? 'Cadastro de Projeto' : 'Edição de Projeto'}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${projetoCadastroDTO != null ? 'Cadastro de Projeto' : 'Edição de Projeto'}"></h1>
+
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
+    </div>
+
+    <!-- Formulário de cadastro -->
+    <div th:if="${projetoCadastroDTO != null}">
+        <form th:action="@{/projetos/salvar}" th:object="${projetoCadastroDTO}" method="post">
+
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" th:field="*{nome}" placeholder="Nome do Projeto" required/>
+            </div>
+
+            <div>
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição"></textarea>
+            </div>
+
+            <div>
+                <label>Membros:</label>
+                <select multiple th:field="*{membrosIds}">
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="button button-primary">Salvar Projeto</button>
+            <a th:href="@{/projetos/listar}" class="button button-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <!-- Formulário de edição -->
+    <div th:if="${projetoEdicaoDTO != null}">
+        <form th:action="@{/projetos/editar}" th:object="${projetoEdicaoDTO}" method="post">
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" th:field="*{nome}" placeholder="Nome do Projeto" required/>
+            </div>
+
+            <div>
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descrição"></textarea>
+            </div>
+
+            <div>
+                <label>Membros:</label>
+                <select multiple th:field="*{membrosIds}">
+                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"
+                            th:selected="${#lists.contains(projetoEdicaoDTO.membrosIds, usuario.id)}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="button button-primary">Atualizar Projeto</button>
+            <a th:href="@{/projetos/listar}" class="button button-secondary">Cancelar</a>
+        </form>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
