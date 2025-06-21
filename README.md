@@ -5,7 +5,7 @@
 ## Tecnologias usadas no projeto
 
 - Spring MVC, Spring Data JPA, Spring Security & Thymeleaf (Lado Servidor)
-- Javascript & CSS (Lado Cliente)
+- HTML & CSS (Lado Cliente)
 
 ---
 
