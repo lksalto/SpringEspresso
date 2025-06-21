@@ -9,8 +9,8 @@
     .details-card h3 { text-align: left; margin-top: 0; }
     .details-card p { margin: 10px 0; }
     .details-card strong { color: var(--cafe-escuro); }
-    .action-forms { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
-    .action-forms .card { flex-grow: 1; }
+    .action-forms { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+    .action-forms .card { flex-grow: 1; min-width: 250px; }
   </style>
 </head>
 <body>
@@ -21,6 +21,9 @@
 
   <div th:if="${mensagemSucesso}" class="message-box success">
     <p th:text="${mensagemSucesso}"></p>
+  </div>
+  <div th:if="${mensagemFalha}" class="message-box error">
+    <p th:text="${mensagemFalha}"></p>
   </div>
 
   <div class="details-card">
@@ -41,11 +44,23 @@
         <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
         <select name="novoStatus" required>
           <option value="">-- Selecione --</option>
-          <option th:each="st : ${todosStatus}" th:if="${st.name() != sessao.status.name()}"
-                  th:value="${st}" th:text="${st.name()}"></option>
+          <th:block th:switch="${sessao.status}">
+            <option th:case="${T(br.ufscar.dc.dsw.models.enums.StatusSessao).CRIADO}"
+                    th:value="${T(br.ufscar.dc.dsw.models.enums.StatusSessao).EM_EXECUCAO}"
+                    th:text="EM_EXECUCAO"></option>
+            <option th:case="${T(br.ufscar.dc.dsw.models.enums.StatusSessao).EM_EXECUCAO}"
+                    th:value="${T(br.ufscar.dc.dsw.models.enums.StatusSessao).FINALIZADO}"
+                    th:text="FINALIZADO"></option>
+          </th:block>
         </select>
         <button type="submit" class="button button-primary">Atualizar</button>
       </form>
+    </div>
+
+    <div class="card" th:if="${sessao.status.name() == 'CRIADO'}">
+      <h3>Editar Sessão</h3>
+      <p>Altere os detalhes desta sessão.</p>
+      <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary">Editar Informações</a>
     </div>
 
     <div class="card">
@@ -67,16 +82,28 @@
     <table class="table">
       <thead><tr><th>De</th><th>Para</th><th>Data/Hora</th></tr></thead>
       <tbody>
-      <tr th:each="h : ${sessao.historico}">
-        <td th:text="${h.statusAnterior != null ? h.statusAnterior.name() : 'Criação'}"></td>
-        <td th:text="${h.statusNovo.name()}"></td>
-        <td th:text="${#temporals.format(h.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+      <tr th:each="hist : ${sessao.historico}">
+        <th:block th:switch="${hist.statusAnterior}">
+          <th:block th:case="null">
+            <td style="font-style: italic; color: #555;">INEXISTENTE</td>
+            <td th:text="${hist.statusNovo.name()}"></td>
+            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+          </th:block>
+          <th:block th:case="*">
+            <td th:text="${hist.statusAnterior.name()}"></td>
+            <td th:text="${hist.statusNovo.name()}"></td>
+            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+          </th:block>
+        </th:block>
       </tr>
       </tbody>
     </table>
   </div>
 
-  <p><a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a Lista de Sessões</a></p>
+  <p>
+    <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a Lista de Sessões</a>
+    <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
+  </p>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

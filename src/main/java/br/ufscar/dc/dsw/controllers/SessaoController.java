@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw.controllers;
 
 import br.ufscar.dc.dsw.dtos.ProjetoDTO;
 import br.ufscar.dc.dsw.dtos.SessaoDTO;
+import br.ufscar.dc.dsw.dtos.SessaoEdicaoDTO;
 import br.ufscar.dc.dsw.models.EstrategiaModel;
 import br.ufscar.dc.dsw.models.SessaoModel;
 import br.ufscar.dc.dsw.models.UsuarioModel;
@@ -52,8 +53,39 @@ public class SessaoController {
             RedirectAttributes redirectAttrs,
             @AuthenticationPrincipal UsuarioModel usuarioLogado
     ) {
-        SessaoModel novaSessao = sessaoService.criarSessao(sessaoDto, usuarioLogado.getEmail());        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão criada com sucesso!");
+        SessaoModel novaSessao = sessaoService.criarSessao(sessaoDto, usuarioLogado.getEmail());
+        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão criada com sucesso!");
         return "redirect:/sessoes/" + novaSessao.getId();
+    }
+
+    @GetMapping("/editar/{id}")
+    public String exibirFormularioEdicao(@PathVariable UUID id, Model model, RedirectAttributes redirectAttrs, @AuthenticationPrincipal UsuarioModel usuarioLogado) {
+        SessaoModel sessao = sessaoService.buscarParaEdicao(id, usuarioLogado);
+
+        SessaoEdicaoDTO dto = new SessaoEdicaoDTO(
+                sessao.getId(),
+                sessao.getProjeto().getId(),
+                sessao.getEstrategia().getId(),
+                sessao.getDuracao().toMinutes(),
+                sessao.getDescricao()
+        );
+
+        model.addAttribute("sessaoEdicaoDTO", dto);
+        model.addAttribute("estrategias", estrategiaService.findAll());
+        return "sessao/formulario";
+
+    }
+
+    @PostMapping("/editar")
+    public String editarSessao(
+            @ModelAttribute @Valid SessaoEdicaoDTO sessaoEdicaoDTO,
+            RedirectAttributes redirectAttrs,
+            @AuthenticationPrincipal UsuarioModel usuarioLogado
+    ) {
+
+        sessaoService.atualizarSessao(sessaoEdicaoDTO, usuarioLogado);
+        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão atualizada com sucesso!");
+        return "redirect:/sessoes/" + sessaoEdicaoDTO.id();
     }
 
     @GetMapping("/{id}")

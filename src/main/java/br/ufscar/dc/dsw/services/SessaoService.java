@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw.services;
 
 import br.ufscar.dc.dsw.dtos.SessaoDTO;
+import br.ufscar.dc.dsw.dtos.SessaoEdicaoDTO;
 import br.ufscar.dc.dsw.models.*;
 import br.ufscar.dc.dsw.models.enums.Papel;
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
@@ -65,6 +66,20 @@ public class SessaoService {
     }
 
     @Transactional
+    public SessaoModel atualizarSessao(SessaoEdicaoDTO dto, UsuarioModel usuarioLogado) {
+        SessaoModel sessao = getSessaoAndCheckOwnership(dto.id(), usuarioLogado);
+        if (sessao.getStatus() != StatusSessao.CRIADO) {
+            throw new IllegalStateException("Só é possível editar sessões com status 'CRIADO'.");
+        }
+        EstrategiaModel estrategia = estrategiaRepository.findById(dto.estrategiaId())
+                .orElseThrow(() -> new EntityNotFoundException("Estratégia não encontrada"));
+        sessao.setEstrategia(estrategia);
+        sessao.setDuracao(Duration.ofMinutes(dto.duracao()));
+        sessao.setDescricao(dto.descricao());
+        return sessaoRepository.save(sessao);
+    }
+
+    @Transactional
     public SessaoModel atualizarStatus(UUID sessaoId, StatusSessao novoStatus, UsuarioModel usuarioLogado) {
         SessaoModel sessao = getSessaoAndCheckOwnership(sessaoId, usuarioLogado);
         StatusSessao statusAtual = sessao.getStatus();
@@ -119,5 +134,14 @@ public class SessaoService {
         if (!transicaoValida) {
             throw new IllegalStateException("Transição de status inválida de " + atual + " para " + novo);
         }
+    }
+
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public SessaoModel buscarParaEdicao(UUID id, UsuarioModel usuarioLogado) {
+        SessaoModel sessao = getSessaoAndCheckOwnership(id, usuarioLogado);
+        if (sessao.getStatus() != StatusSessao.CRIADO) {
+            throw new IllegalStateException("Apenas sessões com status 'CRIADO' podem ser editadas");
+        }
+        return sessao;
     }
 }

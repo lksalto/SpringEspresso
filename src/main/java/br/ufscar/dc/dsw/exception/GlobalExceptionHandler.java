@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,23 +26,15 @@ public class GlobalExceptionHandler {
         return mav;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ModelAndView handleAccessDeniedException(AccessDeniedException ex) {
-        logger.warn("Tentativa de acesso negado: {}", ex.getMessage());
-        ModelAndView mav = new ModelAndView("error/error-403");
-        mav.addObject("statusCode", HttpStatus.FORBIDDEN.value());
-        mav.addObject("message", ex.getMessage());
-        return mav;
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleIllegalStateException(IllegalStateException ex) {
-        logger.warn("Requisição inválida: {}", ex.getMessage());
-        ModelAndView mav = new ModelAndView("error/error-400");
-        mav.addObject("statusCode", HttpStatus.BAD_REQUEST.value());
-        mav.addObject("message", ex.getMessage());
-        return mav;
+    @ExceptionHandler({IllegalStateException.class, AccessDeniedException.class})
+    public String handleBusinessExceptions(
+            Exception ex,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes
+    ) {
+        logger.warn("Operação negada ou inválida: {}", ex.getMessage());
+        redirectAttributes.addFlashAttribute("mensagemFalha", ex.getMessage());
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/home");
     }
 }
