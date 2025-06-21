@@ -17,7 +17,7 @@ public class DicaModel implements Serializable {
     private UUID id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String dica;
+    private String texto;
 
     @JsonBackReference("estrategia-dicas")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,12 +32,12 @@ public class DicaModel implements Serializable {
         this.id = id;
     }
 
-    public String getDica() {
-        return dica;
+    public String getTexto() {
+        return texto;
     }
 
-    public void setDica(String dica) {
-        this.dica = dica;
+    public void setTexto(String texto) {
+        this.texto = texto;
     }
 
     public EstrategiaModel getEstrategia() {

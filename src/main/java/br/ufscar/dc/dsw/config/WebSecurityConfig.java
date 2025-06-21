@@ -21,9 +21,7 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        // O Spring injetará o UserDetailsService (seu UsuarioService) aqui
         authProvider.setUserDetailsService(userDetailsService);
-        // E aqui usamos o método do passwordEncoder criado nesta mesma classe
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -31,10 +29,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Note que não precisamos mais injetar o provider manualmente aqui,
-                // o Spring o encontrará automaticamente
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/css/**", "/images/**", "/", "/error", "/login").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/", "/error", "/login", "/language", "/estrategias").permitAll()
                         .requestMatchers("/projetos/**", "/sessoes/**", "/bugs/**", "/usuarios/**").hasAnyRole("ADMIN", "TESTER")
                         .anyRequest().authenticated()
                 )
@@ -50,7 +46,6 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf.disable());
-
         return http.build();
     }
 }

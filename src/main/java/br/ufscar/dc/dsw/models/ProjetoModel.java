@@ -1,9 +1,6 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "projeto")
-public class ProjetoModel implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class ProjetoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,29 +18,20 @@ public class ProjetoModel implements Serializable {
     @Column(nullable = false, unique = true, length = 255)
     private String nome;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 1000)
     private String descricao;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDate dataCriacao;
+    private LocalDate dataCriacao = LocalDate.now();
 
-    @JsonManagedReference("projeto-membros")
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
-            name = "membro_projeto",
-            joinColumns = @JoinColumn(name = "id_projeto"),
-            inverseJoinColumns = @JoinColumn(name = "id_usuario")
+            name = "projeto_membros",
+            joinColumns = @JoinColumn(name = "projeto_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private Set<UsuarioModel> membros = new HashSet<>();
 
-    @JsonManagedReference("projeto-sessoes")
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SessaoModel> sessoes = new HashSet<>();
-
-    @PrePersist
-    protected void onCreate() {
-        this.dataCriacao = LocalDate.now();
-    }
+    // Getters e Setters
 
     public UUID getId() {
         return id;
@@ -84,13 +71,5 @@ public class ProjetoModel implements Serializable {
 
     public void setMembros(Set<UsuarioModel> membros) {
         this.membros = membros;
-    }
-
-    public Set<SessaoModel> getSessoes() {
-        return sessoes;
-    }
-
-    public void setSessoes(Set<SessaoModel> sessoes) {
-        this.sessoes = sessoes;
     }
 }

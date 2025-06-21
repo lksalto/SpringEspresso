@@ -147,6 +147,8 @@ button[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
+
+
 /* Mensagens */
 .message-box {
     padding: 15px;
@@ -345,4 +347,49 @@ tr:hover {
 
 .id-table {
 word-break: break-all;
+}
+
+/* Estilos para seção de navegação modularizada */
+.navigation-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #E0E0E0;
+    text-align: center;
+}
+
+.navigation-section .button {
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.navigation-section .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Responsividade para seção de navegação */
+@media (max-width: 480px) {
+    .navigation-section {
+        margin-top: 30px;
+        padding-top: 15px;
+    }
+    
+    .navigation-section .button {
+        display: block;
+        margin: 10px auto;
+        max-width: 200px;
+    }
+}
+
+.lang-button {
+    background-color: rgba(0,0,0,0%);
+    border: rgba(0,0,0,0%);
+}
+
+.lang-button button:hover {
+    background-color: #c68062;
+}
+
+.id-table2 {
+    word-break: break-all;
 }

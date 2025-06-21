@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Projetos</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Lista de Projetos</h1>
+
+    <div th:if="${success}" class="message-box success">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
+    </div>
+
+    <!-- Se for ADMIN, mostra o botão Novo Projeto -->
+    <div th:if="${ehAdmin}">
+        <p><a th:href="@{/projetos/cadastro}" class="button button-primary">Novo Projeto</a></p>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Data de Criação</th>
+            <th>Membros</th>
+            <th th:if="${ehAdmin}">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="projeto : ${listaProjetos}">
+            <td th:text="${projeto.id}" class="id-table2"></td>
+            <td th:text="${projeto.nome}"></td>
+            <td th:text="${projeto.descricao}"></td>
+            <td th:text="${projeto.dataCriacao}"></td>
+            <td>
+                <ul>
+                    <li th:each="membro : ${projeto.nomesMembros}" th:text="${membro}"></li>
+                </ul>
+            </td>
+            <td th:if="${ehAdmin}">
+                <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
+                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
+                   onclick="return confirm('Tem certeza que deseja remover este projeto?');">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p><a th:href="@{/home}" class="button button-secondary">Voltar ao Menu Principal</a></p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
