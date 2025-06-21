@@ -10,47 +10,47 @@
 
 <div class="wrapper">
     <h2 style="text-align: center;">
-        <span th:text="#{titulo.home}">Seja Bem-vindo(a)</span>,
-        <span th:if="${#authentication != null and #authentication.principal != null and #authentication.principal != 'anonymousUser'}" th:text="${#authentication.name}">Usuário</span>
-        <span th:if="${#authentication == null or #authentication.principal == null or #authentication.principal == 'anonymousUser'}" th:text="#{titulo.usuario.visitante}">Visitante</span>!
+        <span th:text="#{titulo.home}"></span>,
+        <span th:if="${#authentication != null and #authentication.principal != null and #authentication.principal != 'anonymousUser'}" th:text="${#authentication.name}"></span>
+        <span th:if="${#authentication == null or #authentication.principal == null or #authentication.principal == 'anonymousUser'}" th:text="#{titulo.usuario.visitante}"></span>!
     </h2>
-    <p style="text-align: center; margin-bottom: 30px; color: var(--cafe-medio);" th:text="#{home.subtitulo}">Selecione uma opção abaixo para começar:</p>
+    <p style="text-align: center; margin-bottom: 30px; color: var(--cafe-medio);" th:text="#{home.subtitulo}"></p>
 
     <div class="dashboard-grid">
         <div class="card">
-            <h3 th:text="#{home.card.usuarios.titulo}">Gerenciar Usuários</h3>
-            <p th:text="#{home.card.usuarios.descricao}">Adicione, edite ou remova usuários do sistema.</p>
-            <a th:href="@{/usuarios/listar}" class="button button-primary" th:text="#{home.card.usuarios.botao}">Acessar Usuários</a>
+            <h3 th:text="#{home.card.usuarios.titulo}"></h3>
+            <p th:text="#{home.card.usuarios.descricao}"></p>
+            <a th:href="@{/usuarios/listar}" class="button button-primary" th:text="#{home.card.usuarios.botao}"></a>
         </div>
 
         <div class="card">
-            <h3 th:text="#{home.card.projetos.titulo}">Gerenciar Projetos</h3>
-            <p th:text="#{home.card.projetos.descricao}">Crie e organize seus projetos de teste.</p>
-            <a th:href="@{/projetos/listar}" class="button button-primary" th:text="#{home.card.projetos.botao}">Acessar Projetos</a>
+            <h3 th:text="#{home.card.projetos.titulo}"></h3>
+            <p th:text="#{home.card.projetos.descricao}"></p>
+            <a th:href="@{/projetos/listar}" class="button button-primary" th:text="#{home.card.projetos.botao}"></a>
         </div>
 
         <div class="card">
-            <h3 th:text="#{home.card.estrategias.titulo}">Gerenciar Estratégias</h3>
-            <p th:text="#{home.card.estrategias.descricao}">Crie e gerencie estratégias de teste para seus projetos.</p>
-            <a th:href="@{/estrategias}" class="button button-primary" th:text="#{home.card.estrategias.botao}">Acessar Estratégias</a>
+            <h3 th:text="#{home.card.estrategias.titulo}"></h3>
+            <p th:text="#{home.card.estrategias.descricao}"></p>
+            <a th:href="@{/estrategias}" class="button button-primary" th:text="#{home.card.estrategias.botao}"></a>
         </div>
 
         <div class="card">
-            <h3 th:text="#{home.card.sessoes.titulo}">Minhas Sessões de Teste</h3>
-            <p th:text="#{home.card.sessoes.descricao}">Acompanhe e gerencie suas sessões de teste ativas.</p>
-            <a th:href="@{/sessoesTeste/listar}" class="button button-primary" th:text="#{home.card.sessoes.botao}">Ver Sessões</a>
+            <h3 th:text="#{home.card.sessoes.titulo}"></h3>
+            <p th:text="#{home.card.sessoes.descricao}"></p>
+            <a th:href="@{/sessoesTeste/listar}" class="button button-primary" th:text="#{home.card.sessoes.botao}"></a>
         </div>
 
         <div class="card">
-            <h3 th:text="#{home.card.bugs.titulo}">Relatórios de Bugs</h3>
-            <p th:text="#{home.card.bugs.descricao}">Visualize e registre bugs encontrados durante os testes.</p>
-            <a th:href="@{/bugs/listar}" class="button button-primary" th:text="#{home.card.bugs.botao}">Ver Bugs</a>
+            <h3 th:text="#{home.card.bugs.titulo}"></h3>
+            <p th:text="#{home.card.bugs.descricao}"></p>
+            <a th:href="@{/bugs/listar}" class="button button-primary" th:text="#{home.card.bugs.botao}"></a>
         </div>
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <form th:action="@{/logout}" method="post" class="logout">
-            <button type="submit" class="button button-secondary" th:text="#{home.botao.sair}">Sair</button>
+            <button type="submit" class="button button-secondary" th:text="#{home.botao.sair}"></button>
         </form>
     </div>
 </div>

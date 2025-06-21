@@ -147,6 +147,8 @@ button[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
+
+
 /* Mensagens */
 .message-box {
     padding: 15px;
@@ -377,4 +379,17 @@ word-break: break-all;
         margin: 10px auto;
         max-width: 200px;
     }
+}
+
+.lang-button {
+    background-color: rgba(0,0,0,0%);
+    border: rgba(0,0,0,0%);
+}
+
+.lang-button button:hover {
+    background-color: #c68062;
+}
+
+.id-table2 {
+    word-break: break-all;
 }

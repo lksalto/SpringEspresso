@@ -9,32 +9,38 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h2 style="text-align: center;" th:text="#{titulo.login}">Bem-vindo(a) de volta!</h2>
-    <p style="text-align: center; margin-bottom: 25px; color: var(--cafe-medio);" th:text="#{login.subtitulo}">Entre para gerenciar seus projetos de teste.</p>
+    <h2 style="text-align: center;" th:text="#{titulo.login}"></h2>
+    <p style="text-align: center; margin-bottom: 25px; color: var(--cafe-medio);" th:text="#{login.subtitulo}"></p>
 
     <div th:if="${param.error}" class="message-box error">
-        <p th:text="#{login.erro.invalido}">Login ou senha inválidos.</p>
+        <p th:text="#{login.erro.invalido}"></p>
     </div>
     <div th:if="${param.logout}" class="message-box success">
-        <p th:text="#{login.sucesso.logout}">Você foi desconectado com sucesso.</p>
+        <p th:text="#{login.sucesso.logout}"></p>
     </div>
 
     <form th:action="@{/login}" method="post" class="login-form">
-        <label for="username" th:text="#{login.label.usuario}">Login:</label>
+        <label for="username" th:text="#{login.label.usuario}"></label>
         <input type="text" id="username" name="username" th:placeholder="#{login.placeholder.usuario}" required autofocus/>
 
-        <label for="password" th:text="#{login.label.senha}">Senha:</label>
+        <label for="password" th:text="#{login.label.senha}"></label>
         <input type="password" id="password" name="password" th:placeholder="#{login.placeholder.senha}" required/>
 
-        <button type="submit" class="button-primary" th:text="#{login.botao.entrar}">Entrar</button>
+        <button type="submit" class="button-primary" th:text="#{login.botao.entrar}"></button>
     </form>
 
     <div style="text-align: center; margin-top: 20px;">
+        <p style="color: var(--cafe-medio);" th:text="#{login.visitante.mensagem}"></p>
+        <a th:href="@{/estrategias}" class="button button-secondary" th:text="#{login.visitante.botao}">Ver Estratégias (Visitante)</a>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
         <p style="color: var(--cafe-medio);">
-            <span th:text="#{login.sem.conta}">Não tem uma conta?</span> 
-            <a href="#" style="color: var(--laranja-suave); text-decoration: none; font-weight: 600;" th:text="#{login.contatar.admin}">Contate o administrador.</a>
+            <span th:text="#{login.sem.conta}"></span>
+            <a href="#" style="color: var(--laranja-suave); text-decoration: none; font-weight: 600;" th:text="#{login.contatar.admin}"></a>
         </p>
     </div>
+
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
