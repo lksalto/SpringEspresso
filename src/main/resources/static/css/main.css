@@ -393,3 +393,10 @@ word-break: break-all;
 .id-table2 {
     word-break: break-all;
 }
+
+.id-table {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
