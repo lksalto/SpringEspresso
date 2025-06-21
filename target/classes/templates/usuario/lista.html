@@ -34,7 +34,7 @@
         </thead>
         <tbody>
         <tr th:each="usuario : ${listaUsuarios}">
-            <td th:text="${usuario.id}"></td>
+            <td th:text="${usuario.id}" class="id-table"></td>
             <td th:text="${usuario.nome}"></td>
             <td th:text="${usuario.email}"></td>
             <td th:text="${usuario.papel}"></td>

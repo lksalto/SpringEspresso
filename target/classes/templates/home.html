@@ -14,10 +14,6 @@
         <span th:if="${#authentication != null and #authentication.principal != null and #authentication.principal != 'anonymousUser'}" th:text="${#authentication.name}">Usuário</span>
         <span th:if="${#authentication == null or #authentication.principal == null or #authentication.principal == 'anonymousUser'}">Visitante</span>!
     </h2>
-    <p>DEBUG Thymeleaf: #authentication é <span th:text="${#authentication}"></span></p>
-    <p>DEBUG Thymeleaf: #authentication.principal é <span th:text="${#authentication.principal}"></span></p>
-    <p>DEBUG Thymeleaf: Tipo do principal é <span th:text="${#authentication.principal != null ? #authentication.principal.getClass().getName() : 'NULO'}"></span></p>
-    <p>DEBUG Thymeleaf: Nome do principal (se não nulo): <span th:if="${#authentication.principal != null}" th:text="${#authentication.principal.getUsername()}"></span></p>
     <p style="text-align: center; margin-bottom: 30px; color: var(--cafe-medio);">Selecione uma opção abaixo para começar:</p>
 
     <div class="dashboard-grid">
@@ -36,7 +32,7 @@
         <div class="card">
             <h3>Minhas Sessões de Teste</h3>
             <p>Acompanhe e gerencie suas sessões de teste ativas.</p>
-            <a th:href="@{/sessoesTeste/listar}" class="button button-primary">Ver Sessões</a>
+            <a th:href="@{/sessoes/minhas-sessoes}" class="button button-primary">Ver Sessões</a>
         </div>
 
         <div class="card">
@@ -47,7 +43,7 @@
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
-        <form th:action="@{/logout}" method="post">
+        <form th:action="@{/logout}" method="post" class="logout">
             <button type="submit" class="button button-secondary">Sair</button>
         </form>
     </div>

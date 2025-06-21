@@ -1,5 +1,3 @@
-// package br.ufscar.dc.dsw.dtos;
-
 package br.ufscar.dc.dsw.dtos;
 
 import br.ufscar.dc.dsw.models.enums.Papel;
@@ -7,7 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.UUID;
+
 public record UsuarioCadastroDTO(
+        UUID id,
         @NotBlank(message = "{usuario.nome.notBlank}")
         @Size(max = 256, message = "{usuario.nome.size}")
         String nome,

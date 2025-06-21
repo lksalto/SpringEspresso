@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID; // Import UUID
+
 @SpringBootApplication
 public class EspressoGamingTestingJpaApplication {
 
@@ -30,8 +32,13 @@ public class EspressoGamingTestingJpaApplication {
 			// Criar usuário 'admin' se não existir
 			UsuarioModel adminExistente = usuarioService.buscarPorEmail("admin@admin.com");
 			if (adminExistente == null) {
-				UsuarioCadastroDTO admin = new UsuarioCadastroDTO("Administrador",
-						"admin@admin.com", "admin", Papel.ADMIN);
+				UsuarioCadastroDTO admin = new UsuarioCadastroDTO(
+						null, // ID is null for new users
+						"Administrador",
+						"admin@admin.com",
+						"admin",
+						Papel.ADMIN
+				);
 				usuarioService.salvarNovoUsuario(admin);
 				System.out.println("Usuário 'admin' criado.");
 			} else {
@@ -40,9 +47,14 @@ public class EspressoGamingTestingJpaApplication {
 
 			// Criar usuário 'tester' se não existir
 			UsuarioModel testerExistente = usuarioService.buscarPorEmail("tester@tester.com");
-			if (testerExistente == null) { //
-				UsuarioCadastroDTO tester = new UsuarioCadastroDTO("Tester", "tester@tester.com",
-						"tester", Papel.TESTER);
+			if (testerExistente == null) {
+				UsuarioCadastroDTO tester = new UsuarioCadastroDTO(
+						null, // ID is null for new users
+						"Tester",
+						"tester@tester.com",
+						"tester",
+						Papel.TESTER
+				);
 				usuarioService.salvarNovoUsuario(tester);
 				System.out.println("Usuário 'tester' criado.");
 			} else {

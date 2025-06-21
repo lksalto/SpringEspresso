@@ -1,6 +1,10 @@
-/* src/main/resources/static/css/main.css (Exemplo adaptado e melhorado) */
+/* src/main/resources/static/css/main.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap');
+
+{
+    background: linear-gradient(to bottom, #f3e5ab, #d7ccc8);
+}
 
 :root {
     --cafe-escuro: #4A2B1E;
@@ -13,8 +17,8 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--creme); /* Fundo cor creme */
+    font-family: 'Maple Mono', monospace;
+    background: linear-gradient(to bottom, #f3e5ab, #d7ccc8);
     color: var(--cafe-escuro);
     margin: 0;
     padding: 0;
@@ -23,11 +27,26 @@ body {
     min-height: 100vh;
 }
 
+/*
+body {
+    font-family: 'Maple Mono', monospace;
+    background: linear-gradient(to bottom, #f3e5ab, #d7ccc8);
+    color: #4e342e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.7;
+    padding: 20px;
+}
+
+*/
+
 .wrapper {
     width: 90%;
     max-width: 960px;
     margin: 40px auto; /* Aumenta o espaçamento superior e inferior */
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 30px;
     box-shadow: 0 4px 12px var(--sombra-leve); /* Sombra mais suave */
     border-radius: var(--borda-arredondada);
@@ -35,7 +54,7 @@ body {
 }
 
 h1, h2, h3 {
-    font-family: 'Merriweather', serif; /* Fonte serifada para títulos */
+    font-family: 'Maple Mono', monospace;
     color: var(--cafe-escuro);
     text-align: center;
     margin-bottom: 25px;
@@ -85,7 +104,7 @@ select:focus {
 
 td:last-of-type {
     display: flex;
-    flex-direction: row;   
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
@@ -317,4 +336,13 @@ tr:hover {
 .card .button {
     width: auto;
     padding: 10px 25px;
+}
+
+.logout {
+    max-width: 40%;
+    margin-left: 27.5%;
+}
+
+.id-table {
+word-break: break-all;
 }

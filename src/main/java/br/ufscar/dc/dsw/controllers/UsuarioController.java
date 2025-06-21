@@ -25,6 +25,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    // Listar todos os usuários
     @GetMapping("/listar")
     public String listar(ModelMap model) {
         List<UsuarioDTO> usuarios = usuarioService.buscarTodos();
@@ -33,49 +34,60 @@ public class UsuarioController {
         return "usuario/lista";
     }
 
+    // Apresentar formulário de cadastro (GET)
     @GetMapping("/cadastro")
-    public String preRenderCadastro(UsuarioCadastroDTO usuarioCadastroDTO) {
+    public String preRenderCadastro(ModelMap model) {
+        if (!model.containsAttribute("usuarioForm")) {
+            // Instantiate UsuarioCadastroDTO with 'null' for id and other fields
+            // Assuming default role for new users is Papel.TESTER or it's selected in the form
+            // If the form provides "papel", you'd initialize with null for that too,
+            // then Thymeleaf would bind it. Let's assume you want to allow selection.
+            model.addAttribute("usuarioForm", new UsuarioCadastroDTO(null, null, null, null, null)); // UUID id, String nome, String email, String senha, Papel papel
+        }
         return "usuario/formulario";
     }
 
+    // Inserir novo usuário (POST)
     @PostMapping("/salvar")
     public String salvar(@Valid UsuarioCadastroDTO usuarioCadastroDTO, BindingResult result, RedirectAttributes attr) {
         if (result.hasErrors()) {
-            attr.addFlashAttribute("usuarioCadastroDTO", usuarioCadastroDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioCadastroDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioCadastroDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/cadastro";
         }
         try {
+            // No need to set Papel here, it's already in the DTO from the form
             usuarioService.salvarNovoUsuario(usuarioCadastroDTO);
             attr.addFlashAttribute("success", "Usuário salvo com sucesso!");
         } catch (IllegalArgumentException e) {
             attr.addFlashAttribute("fail", e.getMessage());
-            attr.addFlashAttribute("usuarioCadastroDTO", usuarioCadastroDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioCadastroDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioCadastroDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/cadastro";
         } catch (RuntimeException e) {
             attr.addFlashAttribute("fail", "Erro ao salvar usuário: " + e.getMessage());
-            attr.addFlashAttribute("usuarioCadastroDTO", usuarioCadastroDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioCadastroDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioCadastroDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/cadastro";
         }
         return "redirect:/usuarios/listar";
     }
 
+    // Apresentar formulário de edição (GET)
     @GetMapping("/editar/{id}")
     public String preRenderEdicao(@PathVariable("id") UUID id, ModelMap model, RedirectAttributes attr) {
         try {
-            UsuarioDTO usuarioDTO = usuarioService.buscarPorId(id);
-            // Convert UsuarioDTO to UsuarioEdicaoDTO for the form
-            UsuarioEdicaoDTO usuarioEdicaoDTO = new UsuarioEdicaoDTO(
-                    usuarioDTO.id(),
-                    usuarioDTO.nome(),
-                    usuarioDTO.email(),
-                    null, // Password is not returned in UsuarioDTO, so set to null for initial edit form load
-                    usuarioDTO.papel()
-            );
-
-            model.addAttribute("usuarioEdicaoDTO", usuarioEdicaoDTO);
+            if (!model.containsAttribute("usuarioForm")) {
+                UsuarioDTO usuarioDTO = usuarioService.buscarPorId(id);
+                UsuarioEdicaoDTO usuarioEdicaoDTO = new UsuarioEdicaoDTO(
+                        usuarioDTO.id(),
+                        usuarioDTO.nome(),
+                        usuarioDTO.email(),
+                        null, // Password is not returned in UsuarioDTO, so set to null for initial edit form load
+                        usuarioDTO.papel()
+                );
+                model.addAttribute("usuarioForm", usuarioEdicaoDTO);
+            }
             return "usuario/formulario";
         } catch (IllegalArgumentException e) {
             attr.addFlashAttribute("fail", e.getMessage());
@@ -83,11 +95,12 @@ public class UsuarioController {
         }
     }
 
+    // Atualizar usuário (POST)
     @PostMapping("/editar")
     public String editar(@Valid UsuarioEdicaoDTO usuarioEdicaoDTO, BindingResult result, RedirectAttributes attr) {
         if (result.hasErrors()) {
-            attr.addFlashAttribute("usuarioEdicaoDTO", usuarioEdicaoDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioEdicaoDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioEdicaoDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/editar/" + usuarioEdicaoDTO.id();
         }
         try {
@@ -95,18 +108,19 @@ public class UsuarioController {
             attr.addFlashAttribute("success", "Usuário atualizado com sucesso!");
         } catch (IllegalArgumentException e) {
             attr.addFlashAttribute("fail", e.getMessage());
-            attr.addFlashAttribute("usuarioEdicaoDTO", usuarioEdicaoDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioEdicaoDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioEdicaoDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/editar/" + usuarioEdicaoDTO.id();
         } catch (RuntimeException e) {
             attr.addFlashAttribute("fail", "Erro ao atualizar usuário: " + e.getMessage());
-            attr.addFlashAttribute("usuarioEdicaoDTO", usuarioEdicaoDTO);
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioEdicaoDTO", result);
+            attr.addFlashAttribute("usuarioForm", usuarioEdicaoDTO);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.usuarioForm", result);
             return "redirect:/usuarios/editar/" + usuarioEdicaoDTO.id();
         }
         return "redirect:/usuarios/listar";
     }
 
+    // Remover usuário (GET ou POST)
     @GetMapping("/remover/{id}")
     public String remover(@PathVariable("id") UUID id, RedirectAttributes attr) {
         try {
