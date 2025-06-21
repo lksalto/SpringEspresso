@@ -123,11 +123,6 @@ public class UsuarioService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UsuarioModel usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
-
-        return new org.springframework.security.core.userdetails.User(
-                usuario.getEmail(),
-                usuario.getSenha(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPapel().toString().toUpperCase()))
-        );
+        return usuario;
     }
 }
