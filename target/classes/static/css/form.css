@@ -231,4 +231,35 @@
     margin-top: 10px;
     width: 100%;
   }
-} 
+}
+
+
+/* Optional: Add some specific styles for the multiselect if needed */
+.multiselect-container {
+  margin-bottom: 20px;
+}
+
+.multiselect-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold; /* Make label stand out more */
+  color: var(--cafe-escuro); /* Adjust color as per your CSS variables */
+}
+
+.multiselect-container select[multiple] {
+  width: 100%; /* Make it span the full width */
+  padding: 10px;
+  border: 1px solid var(--borda-clara); /* Use your existing border color */
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  height: 200px; /* Make it taller to show more options */
+  background-color: var(--branco); /* Consistent background */
+  color: var(--cafe-claro); /* Consistent text color */
+}
+
+.multiselect-instructions {
+  font-size: 0.9em;
+  color: var(--cinza-medio); /* A softer color for instructions */
+  margin-top: 5px;
+  margin-bottom: 15px;
+}

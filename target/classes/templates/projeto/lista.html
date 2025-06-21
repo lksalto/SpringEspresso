@@ -37,7 +37,7 @@
         </thead>
         <tbody>
         <tr th:each="projeto : ${listaProjetos}">
-            <td th:text="${projeto.id}"></td>
+            <td th:text="${projeto.id}" class="id-table2"></td>
             <td th:text="${projeto.nome}"></td>
             <td th:text="${projeto.descricao}"></td>
             <td th:text="${projeto.dataCriacao}"></td>
@@ -48,8 +48,8 @@
             </td>
             <td th:if="${ehAdmin}">
                 <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
-                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-danger"
-                   onclick="return confirm('Tem certeza que deseja remover este projeto?');">Remover</a>
+                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
+                   onclick="return confirm('Tem certeza que deseja remover este projeto?');">Excluir</a>
             </td>
         </tr>
         </tbody>

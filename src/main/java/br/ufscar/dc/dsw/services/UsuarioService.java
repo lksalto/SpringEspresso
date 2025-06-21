@@ -41,8 +41,6 @@ public class UsuarioService implements UserDetailsService {
         }
 
         UsuarioModel usuario = new UsuarioModel();
-        // The DTO now has 'id' but it will be null for new users, which is fine
-        // usuario.setId(usuarioCadastroDTO.id()); // No need to set ID, it's auto-generated
 
         usuario.setNome(usuarioCadastroDTO.nome());
         usuario.setEmail(usuarioCadastroDTO.email());

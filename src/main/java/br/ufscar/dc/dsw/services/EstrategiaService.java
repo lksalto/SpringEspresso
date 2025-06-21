@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.access.prepost.PreAuthorize; // Import for security annotations
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +36,8 @@ public class EstrategiaService {
     }
 
     // Método principal para salvar (cria ou atualiza)
+    // Only ADMINs can save (create or update) strategies
+    @PreAuthorize("hasRole('ADMIN')")
     public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExemplo) {
         EstrategiaModel estrategia = convertDtoToModel(dto);
 
@@ -42,13 +45,16 @@ public class EstrategiaService {
         if (imagensExemplo != null && !imagensExemplo.isEmpty()) {
             int i = 0;
             for (ExemploModel exemplo : estrategia.getExemplos()) {
-                MultipartFile imagem = imagensExemplo.get(i++);
-                if (!imagem.isEmpty()) {
-                    if (exemplo.getUrlImagem() != null && !exemplo.getUrlImagem().isEmpty()) {
-                        deleteFile(exemplo.getUrlImagem());
+                // Ensure there's a corresponding image file for each example
+                if (i < imagensExemplo.size()) {
+                    MultipartFile imagem = imagensExemplo.get(i++);
+                    if (!imagem.isEmpty()) {
+                        if (exemplo.getUrlImagem() != null && !exemplo.getUrlImagem().isEmpty()) {
+                            deleteFile(exemplo.getUrlImagem());
+                        }
+                        String newFilename = saveFile(imagem);
+                        exemplo.setUrlImagem(newFilename);
                     }
-                    String newFilename = saveFile(imagem);
-                    exemplo.setUrlImagem(newFilename);
                 }
             }
         }
@@ -65,6 +71,8 @@ public class EstrategiaService {
         return estrategiaRepository.findAll();
     }
 
+    // Only ADMINs can delete strategies
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(UUID id) {
         EstrategiaModel estrategia = findById(id);
         if (estrategia != null) {
@@ -79,6 +87,8 @@ public class EstrategiaService {
     }
 
     // Funções utilitárias (upload de arquivo e conversão DTO <-> Model)
+    // No need for PreAuthorize on these private helper methods, as they are called
+    // by the public methods which are already secured.
     private String saveFile(MultipartFile file) {
         if (file.isEmpty()) return null;
         String originalFilename = file.getOriginalFilename();

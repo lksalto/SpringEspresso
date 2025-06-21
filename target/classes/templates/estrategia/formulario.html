@@ -16,6 +16,7 @@
     <p th:text="${erro}"></p>
   </div>
 
+
   <form th:action="@{/estrategias/salvar}" method="post" id="estrategiaForm" enctype="multipart/form-data">
     <input type="hidden" name="id" th:value="${estrategia.id}">
 
