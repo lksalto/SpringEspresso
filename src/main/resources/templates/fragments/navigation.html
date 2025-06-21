@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento para seção de navegação padrão (voltar ao menu principal) -->
+    <div th:fragment="navigation-section" class="navigation-section">
+        <a th:href="@{/home}" class="button button-secondary" th:text="#{link.main_menu}">Voltar ao Menu Principal</a>
+    </div>
+    
+    <!-- Fragmento para seção de navegação com botão personalizado -->
+    <div th:fragment="navigation-section-custom(link, text)" class="navigation-section">
+        <a th:href="${link}" class="button button-secondary" th:text="${text}">Voltar</a>
+    </div>
+    
+    <!-- Fragmento para seção de navegação com múltiplos botões -->
+    <div th:fragment="navigation-section-multiple" class="navigation-section">
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a th:href="@{/home}" class="button button-secondary" th:text="#{link.main_menu}">Voltar ao Menu Principal</a>
+            <a th:href="@{/estrategias}" class="button button-secondary" th:text="#{link.voltar_lista}">Voltar para Lista</a>
+        </div>
+    </div>
+</body>
+</html> 

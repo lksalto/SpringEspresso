@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Erro 500 - Erro Interno do Servidor</title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
@@ -18,7 +17,7 @@
         <p th:if="${timestamp}">Data/Hora: <span th:text="${#temporals.format(timestamp, 'dd-MM-yyyy HH:mm:ss')}"></span></p>
 
         <!-- Only display exception details in development/test environments for debugging -->
-        <div th:if="${exception != null and #env.acceptsProfiles('dev', 'test')}">
+        <div th:if="${exception != null}">
             <h3 style="color: var(--cafe-escuro); margin-top: 20px;">Detalhes do Erro (Apenas em Desenvolvimento):</h3>
             <p><strong>Tipo de Erro:</strong> <span th:text="${exception.class.name}"></span></p>
             <p><strong>Mensagem:</strong> <span th:text="${message}"></span></p>
