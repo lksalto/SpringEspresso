@@ -1,56 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title th:text="'Sessões - ' + ${projeto.nome}"></title>-->
-<!--    <link rel="stylesheet" th:href="@{/css/main.css}"/>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div th:replace="~{fragments/header :: header}"></div>-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Sessões de Teste - ' + ${projeto.nome()}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        /* Estilos customizados para os badges de status */
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+        .status-criado { background-color: #007bff; } /* Azul */
+        .status-execucao { background-color: #ffc107; color: #212529;} /* Amarelo */
+        .status-finalizado { background-color: #28a745; } /* Verde */
+    </style>
+</head>
+<body>
 
-<!--<div class="wrapper">-->
-<!--    <h1 th:text="'Sessões de Teste do Projeto: ' + ${projeto.nome}"></h1>-->
+<div th:replace="~{fragments/header :: header}"></div>
 
-<!--    <div th:if="${mensagemSucesso}" class="message-box success">-->
-<!--        <p th:text="${mensagemSucesso}"></p>-->
-<!--    </div>-->
+<div class="wrapper">
+    <h1 th:text="'Sessões de Teste do Projeto: ' + ${projeto.nome()}"></h1>
 
-<!--    <p>-->
-<!--        <a th:href="@{/sessoes/cadastro(projetoId=${projeto.id})}" class="button button-primary">Nova Sessão de Teste</a>-->
-<!--    </p>-->
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
 
-<!--    <table class="table table-striped">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>Tester</th>-->
-<!--            <th>Estratégia</th>-->
-<!--            <th>Duração (min)</th>-->
-<!--            <th>Status</th>-->
-<!--            <th>Ações</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="sessao : ${sessoes}">-->
-<!--            <td th:text="${sessao.tester.nome}"></td>-->
-<!--            <td th:text="${sessao.estrategia.nome}"></td>-->
-<!--            <td th:text="${sessao.duracao.toMinutes()}"></td>-->
-<!--            <td>-->
-<!--                <span th:text="${sessao.status.name()}"-->
-<!--                      th:classappend="${sessao.status.name() == 'CRIADO' ? 'status-criado' : (sessao.status.name() == 'EM_EXECUCAO' ? 'status-exec' : 'status-finalizado')}">-->
-<!--                </span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                <a th:href="@{/sessoes/{id}(id=${sessao.id})}" class="button button-secondary">Ver Detalhes</a>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        <tr th:if="${#lists.isEmpty(sessoes)}">-->
-<!--            <td colspan="5" style="text-align: center;">Nenhuma sessão de teste encontrada para este projeto.</td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--    <p><a th:href="@{/home}" class="button button-secondary">Voltar ao Menu Principal</a></p>-->
-<!--</div>-->
+    <p>
+        <a th:href="@{/sessoes/cadastro(projetoId=${projeto.id()})}" class="button button-primary">Nova Sessão de Teste</a>
+    </p>
 
-<!--<div th:replace="~{fragments/footer :: footer}"></div>-->
-<!--</body>-->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tester Responsável</th>
+            <th>Estratégia</th>
+            <th>Duração (min)</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessao : ${sessoes}">
+            <td th:text="${sessao.tester.nome}"></td>
+            <td th:text="${sessao.estrategia.nome}"></td>
+            <td th:text="${sessao.duracao.toMinutes()}"></td>
+            <td>
+                <span th:text="${sessao.status.name()}" class="status-badge"
+                      th:classappend="${'status-' + #strings.toLowerCase(sessao.status.name())}">
+                </span>
+            </td>
+            <td>
+                <a th:href="@{/sessoes/{id}(id=${sessao.id})}" class="button button-secondary">Ver Detalhes</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sessoes)}">
+            <td colspan="5" style="text-align: center;">Nenhuma sessão de teste encontrada para este projeto.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p><a th:href="@{/projetos/listar}" class="button button-secondary">Voltar para a Lista de Projetos</a></p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
 </html>

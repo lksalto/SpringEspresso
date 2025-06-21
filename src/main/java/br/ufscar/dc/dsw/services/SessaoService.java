@@ -7,11 +7,13 @@ import br.ufscar.dc.dsw.models.enums.StatusSessao;
 import br.ufscar.dc.dsw.repositories.EstrategiaRepository;
 import br.ufscar.dc.dsw.repositories.ProjetoRepository;
 import br.ufscar.dc.dsw.repositories.SessaoRepository;
+import br.ufscar.dc.dsw.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -21,40 +23,43 @@ public class SessaoService {
     private final SessaoRepository sessaoRepository;
     private final ProjetoRepository projetoRepository;
     private final EstrategiaRepository estrategiaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public SessaoService(
             SessaoRepository sessaoRepository,
             ProjetoRepository projetoRepository,
-            EstrategiaRepository estrategiaRepository
+            EstrategiaRepository estrategiaRepository,
+            UsuarioRepository usuarioRepository
     ) {
         this.sessaoRepository = sessaoRepository;
         this.projetoRepository = projetoRepository;
         this.estrategiaRepository = estrategiaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional
-    public SessaoModel criarSessao(SessaoDTO dto, UsuarioModel tester) {
+    public SessaoModel criarSessao(SessaoDTO dto, String emailTester) {
         ProjetoModel projeto = projetoRepository.findById(dto.projetoId())
                 .orElseThrow(() -> new EntityNotFoundException("Projeto não encontrado"));
         EstrategiaModel estrategia = estrategiaRepository.findById(dto.estrategiaId())
                 .orElseThrow(() -> new EntityNotFoundException("Estratégia não encontrada"));
-
-        boolean isMembro = projeto.getMembros().contains(tester);
-        if (tester.getPapel() != Papel.ADMIN && !isMembro) {
+        UsuarioModel testerManaged = usuarioRepository.findByEmail(emailTester)
+                .orElseThrow(() -> new EntityNotFoundException("Tester com email " + emailTester + " não encontrado no banco de dados"));
+        boolean isMembro = projeto.getMembros().contains(testerManaged);
+        if (testerManaged.getPapel() != Papel.ADMIN && !isMembro) {
             throw new AccessDeniedException("Acesso negado. Apenas administradores ou membros do projeto podem criar sessões");
         }
         SessaoModel sessao = new SessaoModel();
         sessao.setProjeto(projeto);
         sessao.setEstrategia(estrategia);
-        sessao.setTester(tester);
-        sessao.setDuracao(dto.duracao());
+        sessao.setTester(testerManaged);
+        sessao.setDuracao(Duration.ofMinutes(dto.duracao()));
         sessao.setDescricao(dto.descricao());
         sessao.setStatus(StatusSessao.CRIADO);
         HistoricoStatusModel historico = new HistoricoStatusModel();
         historico.setSessao(sessao);
         historico.setStatusAnterior(null);
         historico.setStatusNovo(StatusSessao.CRIADO);
-        historico.setDataHora(LocalDateTime.now());
         sessao.getHistorico().add(historico);
         return sessaoRepository.save(sessao);
     }
@@ -87,12 +92,12 @@ public class SessaoService {
 
     @Transactional(Transactional.TxType.SUPPORTS)
     public List<SessaoModel> listarPorProjeto(UUID projetoId) {
-        return sessaoRepository.findByProjeto_Id(projetoId);
+        return sessaoRepository.findAllByProjetoIdWithDetails(projetoId);
     }
 
     @Transactional(Transactional.TxType.SUPPORTS)
-    public List<SessaoModel> listarPorTester(UUID testerId) {
-        return sessaoRepository.findByTester_Id(testerId);
+    public List<SessaoModel> listarPorTester(String emailTester) {
+        return sessaoRepository.findAllByTesterEmailWithDetails(emailTester);
     }
 
     private SessaoModel getSessaoAndCheckOwnership(UUID sessaoId, UsuarioModel usuarioLogado) {

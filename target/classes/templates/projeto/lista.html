@@ -47,6 +47,7 @@
                 </ul>
             </td>
             <td th:if="${ehAdmin}">
+                <a th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary">Ver Sessões</a>
                 <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
                 <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
                    onclick="return confirm('Tem certeza que deseja remover este projeto?');">Excluir</a>

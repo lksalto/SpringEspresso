@@ -9,15 +9,19 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h1 th:text="'Nova Sessão para o Projeto: ' + ${projeto.nome}"></h1>
+    <h1 th:text="'Nova Sessão para o Projeto: ' + ${projeto.nome()}"></h1>
+
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
 
     <form th:action="@{/sessoes/criar}" th:object="${sessaoDTO}" method="post">
 
         <input type="hidden" th:field="*{projetoId}" />
 
         <div>
-            <label for="estrategia">Estratégia de Teste:</label>
-            <select id="estrategia" th:field="*{estrategiaId}" required>
+            <label for="estrategiaId">Estratégia de Teste:</label>
+            <select id="estrategiaId" th:field="*{estrategiaId}" required>
                 <option value="">-- Selecione uma Estratégia --</option>
                 <option th:each="est : ${estrategias}"
                         th:value="${est.id}"
@@ -27,7 +31,6 @@
                 <p th:each="err : ${#fields.errors('estrategiaId')}" th:text="${err}"></p>
             </div>
         </div>
-
         <div>
             <label for="duracao">Duração (em minutos):</label>
             <input type="number" id="duracao" th:field="*{duracao}" placeholder="Ex: 60" required min="1"/>
@@ -45,7 +48,7 @@
         </div>
 
         <button type="submit" class="button button-primary">Criar Sessão</button>
-        <a th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-secondary">Cancelar</a>
+        <a th:href="@{/sessoes/projeto/{id}(id=${projeto.id()})}" class="button button-secondary">Cancelar</a>
     </form>
 </div>
 
