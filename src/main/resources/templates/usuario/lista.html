@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
     <meta charset="UTF-8">
-    <title>Lista de Usuários</title>
+    <title th:text="#{titulo.lista.usuarios}">Lista de Usuários</title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/lista_layout.css}"/>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h1>Lista de Usuários</h1>
+    <h1 th:text="#{titulo.lista.usuarios}">Lista de Usuários</h1>
 
     <div th:if="${success}" class="message-box success">
         <p th:text="${success}"></p>
@@ -20,17 +20,18 @@
     </div>
 
     <p sec:authorize="hasRole('ADMIN')">
-        <a th:href="@{/usuarios/cadastro}" class="button button-primary">Novo Usuário</a>
+        <a th:href="@{/usuarios/cadastro}" class="button button-primary" th:text="#{usuario.novo}">Novo Usuário</a>
     </p>
 
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Papel</th>
-            <th sec:authorize="hasRole('ADMIN')">Ações</th> </tr>
+            <th th:text="#{tabela.coluna.id}">ID</th>
+            <th th:text="#{tabela.coluna.nome}">Nome</th>
+            <th th:text="#{tabela.coluna.email}">Email</th>
+            <th th:text="#{tabela.coluna.papel}">Papel</th>
+            <th sec:authorize="hasRole('ADMIN')" th:text="#{tabela.coluna.acoes}">Ações</th>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="usuario : ${listaUsuarios}">
@@ -38,14 +39,17 @@
             <td th:text="${usuario.nome}"></td>
             <td th:text="${usuario.email}"></td>
             <td th:text="${usuario.papel}"></td>
-            <td sec:authorize="hasRole('ADMIN')"> <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-secondary">Editar</a>
+            <td sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-secondary" th:text="#{acao.editar}">Editar</a>
                 <a th:href="@{/usuarios/remover/{id}(id=${usuario.id})}" class="button button-secondary"
-                   onclick="return confirm('Tem certeza que deseja remover este usuário?');">Remover</a>
+                   th:text="#{acao.excluir}"
+                   th:onclick="return confirm(#{usuario.confirmar.exclusao});">Remover</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <p><a th:href="@{/home}" class="button button-secondary">Voltar ao Menu Principal</a></p>
+    
+    <div th:replace="~{fragments/navigation :: navigation-section}"></div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

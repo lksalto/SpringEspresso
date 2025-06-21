@@ -2,23 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Erro 403 - Acesso Negado</title>
+    <title>Erro 403</title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h1>Erro 403 - Acesso Negado</h1>
-    <div class="message-box error">
-        <p>Você não tem permissão para acessar esta página.</p>
-        <p>Se você acredita que isso é um erro, por favor, entre em contato com o suporte.</p>
-        <p th:if="${path}">Caminho: <span th:text="${path}"></span></p>
-        <p th:if="${timestamp}">Data/Hora: <span th:text="${#temporals.format(timestamp, 'dd-MM-yyyy HH:mm:ss')}"></span></p>
+    <div style="text-align: center; padding: 50px 20px;">
+        <h1 style="color: #e74c3c; font-size: 3em; margin-bottom: 20px;">403</h1>
+        <h2 th:text="#{erro.403.titulo}">Erro 403 - Acesso Negado</h2>
+        <p style="color: #666; font-size: 1.2em; margin-bottom: 30px;" th:text="#{erro.403.mensagem}">Você não tem permissão para acessar este recurso.</p>
+        <a th:href="@{/home}" class="button button-primary" th:text="#{erro.voltar}">Voltar ao Menu Principal</a>
     </div>
-    <p class="text-center"><a th:href="@{/home}" class="button button-primary">Voltar para o Início</a></p>
-    <p sec:authorize="!isAuthenticated()"><a th:href="@{/login}" class="button button-secondary">Fazer Login</a></p>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
