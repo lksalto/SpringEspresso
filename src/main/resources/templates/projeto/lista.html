@@ -18,8 +18,6 @@
     <div th:if="${fail}" class="message-box error">
         <p th:text="${fail}"></p>
     </div>
-
-    <!-- Se for ADMIN, mostra o botão Novo Projeto -->
     <div th:if="${ehAdmin}">
         <p><a th:href="@{/projetos/cadastro}" class="button button-primary">Novo Projeto</a></p>
     </div>
@@ -32,7 +30,7 @@
             <th>Descrição</th>
             <th>Data de Criação</th>
             <th>Membros</th>
-            <th th:if="${ehAdmin}">Ações</th>
+            <th>Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -46,10 +44,11 @@
                     <li th:each="membro : ${projeto.nomesMembros}" th:text="${membro}"></li>
                 </ul>
             </td>
-            <td th:if="${ehAdmin}">
-                <a th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary">Ver Sessões</a>
-                <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
-                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
+            <td>
+                <a th:if="${ehAdmin or projeto.usuarioLogadoEhMembro}"
+                   th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary">Ver Sessões</a>
+                <a th:if="${ehAdmin}" th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
+                <a th:if="${ehAdmin}" th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
                    onclick="return confirm('Tem certeza que deseja remover este projeto?');">Excluir</a>
             </td>
         </tr>

@@ -48,7 +48,7 @@ public class ProjetoSeeder {
         projetoBeta.setNome("Projeto Beta");
         projetoBeta.setDescricao("Campanha de marketing para o lançamento do Q3.");
         Set<UsuarioModel> membrosBeta = new HashSet<>();
-        membrosBeta.add(tester);
+        membrosBeta.add(admin);
         projetoBeta.setMembros(membrosBeta);
         projetoRepository.save(projetoBeta);
         System.out.println("✓ Projetos iniciais criados com sucesso!");

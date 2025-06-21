@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <head>
     <meta charset="UTF-8">
     <title>Detalhes da Sessão</title>
@@ -68,7 +68,7 @@
     </div>
 
     <div class="action-forms">
-        <th:block sec:authorize="hasRole('ADMIN') or authentication.principal.username == sessao.tester.username">
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')') or #authentication.principal.email == sessao.tester.email}">
             <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
                 <h3>Mudar Status</h3>
                 <form th:action="@{/sessoes/atualizarStatus}" method="post">
@@ -107,45 +107,45 @@
                     </button>
                 </form>
             </div>
-        </th:block>
+            </th:block>
+        </div>
+
+        <div class="details-card">
+            <h3>Histórico de Status</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>De</th>
+                    <th>Para</th>
+                    <th>Data/Hora</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="hist : ${sessao.historico}">
+                    <th:block th:switch="${hist.statusAnterior}">
+                        <th:block th:case="null">
+                            <td style="font-style: italic; color: #555;">INEXISTENTE</td>
+                            <td th:text="${hist.statusNovo.name()}"></td>
+                            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                        </th:block>
+                        <th:block th:case="*">
+                            <td th:text="${hist.statusAnterior.name()}"></td>
+                            <td th:text="${hist.statusNovo.name()}"></td>
+                            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                        </th:block>
+                    </th:block>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a
+                Lista de Sessões</a>
+            <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
+        </p>
     </div>
 
-    <div class="details-card">
-        <h3>Histórico de Status</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>De</th>
-                <th>Para</th>
-                <th>Data/Hora</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="hist : ${sessao.historico}">
-                <th:block th:switch="${hist.statusAnterior}">
-                    <th:block th:case="null">
-                        <td style="font-style: italic; color: #555;">INEXISTENTE</td>
-                        <td th:text="${hist.statusNovo.name()}"></td>
-                        <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                    </th:block>
-                    <th:block th:case="*">
-                        <td th:text="${hist.statusAnterior.name()}"></td>
-                        <td th:text="${hist.statusNovo.name()}"></td>
-                        <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                    </th:block>
-                </th:block>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <p>
-        <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a
-            Lista de Sessões</a>
-        <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
-    </p>
-</div>
-
-<div th:replace="~{fragments/footer :: footer}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

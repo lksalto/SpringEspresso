@@ -9,5 +9,6 @@ public record ProjetoDTO(
         String nome,
         String descricao,
         LocalDate dataCriacao,
-        List<String> nomesMembros
+        List<String> nomesMembros,
+        boolean usuarioLogadoEhMembro
 ) {}

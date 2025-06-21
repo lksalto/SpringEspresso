@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <head>
     <meta charset="UTF-8">
     <title th:text="'Sessões de Teste - ' + ${projeto.nome()}"></title>
@@ -21,10 +21,12 @@
             text-align: center;
             vertical-align: middle;
         }
+
         a.button-secondary:hover,
         button.button-secondary:hover {
             background-color: #d4d4d4;
         }
+
         .status-badge {
             padding: 3px 8px;
             border-radius: 12px;
@@ -87,8 +89,8 @@
         </span>
             </td>
             <td>
-                <th:block th:if="${sessao.status.name() == 'CRIADO'}"
-                          sec:authorize="hasRole('ADMIN') or authentication.principal.username == sessao.tester.username">
+                <th:block
+                        th:if="${sessao.status.name() == 'CRIADO' and (#authorization.expression('hasRole(''ADMIN'')') or #authentication.principal.email == sessao.tester.email)}">
                     <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary">Editar</a>
                     <form th:action="@{/sessoes/deletar}" method="post"
                           style="display: inline-block; margin: 0; padding: 0;">
