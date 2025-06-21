@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes da Sessão</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+  <h1>Detalhes da Sessão de Teste</h1>
+
+  <div th:if="${mensagemSucesso}" class="message-box success">
+    <p th:text="${mensagemSucesso}"></p>
+  </div>
+
+  <div class="card" style="text-align: left; margin-bottom: 20px;">
+    <h3>Informações Gerais</h3>
+    <p><strong>Projeto:</strong> <span th:text="${sessao.projeto.nome}"></span></p>
+    <p><strong>Tester:</strong> <span th:text="${sessao.tester.nome}"></span></p>
+    <p><strong>Estratégia Utilizada:</strong> <span th:text="${sessao.estrategia.nome}"></span></p>
+    <p><strong>Duração Definida:</strong> <span th:text="${sessao.duracao.toMinutes()} + ' minutos'"></span></p>
+    <p><strong>Status Atual:</strong> <span th:text="${sessao.status.name()}"></span></p>
+    <p><strong>Descrição/Objetivos:</strong></p>
+    <p style="white-space: pre-wrap;" th:text="${sessao.descricao}"></p>
+  </div>
+
+  <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}" style="margin-bottom: 20px;">
+    <h3>Mudar Status da Sessão</h3>
+    <form th:action="@{/sessoes/atualizarStatus}" method="post">
+      <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
+      <select name="novoStatus" required>
+        <option value="">-- Selecione o novo status --</option>
+        <option th:each="st : ${todosStatus}"
+                th:if="${st.name() != sessao.status.name()}"
+                th:value="${st}"
+                th:text="${st.name()}"></option>
+      </select>
+      <button type="submit" class="button button-primary">Atualizar Status</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-bottom: 20px;">
+    <h3>Histórico de Status</h3>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Status Anterior</th>
+        <th>Status Novo</th>
+        <th>Data/Hora da Mudança</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="hist : ${sessao.historico}">
+        <td th:text="${hist.statusAnterior != null ? hist.statusAnterior.name() : 'N/A'}"></td>
+        <td th:text="${hist.statusNovo.name()}"></td>
+        <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align: right;">
+    <form th:action="@{/sessoes/deletar}" method="post" style="display: inline-block;">
+      <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
+      <input type="hidden" name="projetoId" th:value="${sessao.projeto.id}" />
+      <button type="submit" class="button button-danger"
+              onclick="return confirm('Tem certeza que deseja remover esta sessão? Esta ação não pode ser desfeita.');">
+        Deletar Sessão
+      </button>
+    </form>
+  </div>
+
+  <p><a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a Lista de Sessões</a></p>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
