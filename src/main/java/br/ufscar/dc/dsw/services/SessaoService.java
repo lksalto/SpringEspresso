@@ -118,7 +118,7 @@ public class SessaoService {
     private SessaoModel getSessaoAndCheckOwnership(UUID sessaoId, UsuarioModel usuarioLogado) {
         SessaoModel sessao = sessaoRepository.findById(sessaoId)
                 .orElseThrow(() -> new EntityNotFoundException("Sessão não encontrada"));
-        if (usuarioLogado.getPapel() != Papel.ADMIN && !sessao.getTester().equals(usuarioLogado)) {
+        if (usuarioLogado.getPapel() != Papel.ADMIN && !sessao.getTester().getEmail().equals(usuarioLogado.getEmail())) {
             throw new AccessDeniedException("Acesso negado. O usuário não é o dono do recurso ou um administrador");
         }
         return sessao;
