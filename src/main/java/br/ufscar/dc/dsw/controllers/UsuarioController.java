@@ -38,10 +38,6 @@ public class UsuarioController {
     @GetMapping("/cadastro")
     public String preRenderCadastro(ModelMap model) {
         if (!model.containsAttribute("usuarioForm")) {
-            // Instantiate UsuarioCadastroDTO with 'null' for id and other fields
-            // Assuming default role for new users is Papel.TESTER or it's selected in the form
-            // If the form provides "papel", you'd initialize with null for that too,
-            // then Thymeleaf would bind it. Let's assume you want to allow selection.
             model.addAttribute("usuarioForm", new UsuarioCadastroDTO(null, null, null, null, null)); // UUID id, String nome, String email, String senha, Papel papel
         }
         return "usuario/formulario";

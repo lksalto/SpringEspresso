@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Projetos</title>
+    <title th:text="#{projeto.lista.titulo}">Lista de Projetos</title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h1>Lista de Projetos</h1>
+    <h1 th:text="#{projeto.lista.titulo}">Lista de Projetos</h1>
 
     <div th:if="${success}" class="message-box success">
         <p th:text="${success}"></p>
@@ -19,18 +19,18 @@
         <p th:text="${fail}"></p>
     </div>
     <div th:if="${ehAdmin}">
-        <p><a th:href="@{/projetos/cadastro}" class="button button-primary">Novo Projeto</a></p>
+        <p><a th:href="@{/projetos/cadastro}" class="button button-primary" th:text="#{projeto.botao.novo}">Novo Projeto</a></p>
     </div>
 
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Data de Criação</th>
-            <th>Membros</th>
-            <th>Ações</th>
+            <th th:text="#{projeto.tabela.id}">ID</th>
+            <th th:text="#{projeto.tabela.nome}">Nome</th>
+            <th th:text="#{projeto.tabela.descricao}">Descrição</th>
+            <th th:text="#{projeto.tabela.dataCriacao}">Data de Criação</th>
+            <th th:text="#{projeto.tabela.membros}">Membros</th>
+            <th th:text="#{projeto.tabela.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +38,7 @@
             <td th:text="${projeto.id}" class="id-table2"></td>
             <td th:text="${projeto.nome}"></td>
             <td th:text="${projeto.descricao}"></td>
-            <td th:text="${projeto.dataCriacao}"></td>
+            <td th:text="${#temporals.format(projeto.dataCriacao, 'dd/MM/yyyy')}"></td>
             <td>
                 <ul>
                     <li th:each="membro : ${projeto.nomesMembros}" th:text="${membro}"></li>
@@ -46,16 +46,16 @@
             </td>
             <td>
                 <a th:if="${ehAdmin or projeto.usuarioLogadoEhMembro}"
-                   th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary">Ver Sessões</a>
-                <a th:if="${ehAdmin}" th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
+                   th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary" th:text="#{projeto.botao.verSessoes}">Ver Sessões</a>
+                <a th:if="${ehAdmin}" th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary" th:text="#{projeto.botao.editar}">Editar</a>
                 <a th:if="${ehAdmin}" th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
-                   onclick="return confirm('Tem certeza que deseja remover este projeto?');">Excluir</a>
+                   onclick="return confirm([[#{projeto.confirm.remover}]]);" th:text="#{projeto.botao.excluir}">Excluir</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <p><a th:href="@{/home}" class="button button-secondary">Voltar ao Menu Principal</a></p>
+    <p><a th:href="@{/home}" class="button button-secondary" th:text="#{link.voltarMenu}">Voltar ao Menu Principal</a></p>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
