@@ -3,7 +3,6 @@
 ---
 
 ## 🚀 Tecnologias utilizadas
-
 **Back-end:**
 
 - Spring MVC
@@ -52,14 +51,18 @@ O banco de dados será criado automaticamente na primeira execução.
 ## 3️⃣ Build do projeto com Maven
 No terminal, na raiz do projeto:  
 **Execute esse comando:**  
-mvn clean install
+**mvn clean install**
 
 ---
 
 ## 4️⃣ Rodar o projeto
 Agora, para iniciar a aplicação  
 **Execute esse comando:**  
-mvn spring-boot:run  
+
+
+**mvn spring-boot:run**  
 A aplicação Spring Boot iniciará na porta padrão 8080.  
+
+
 Acesse no navegador:  
-http://localhost:8080
+**http://localhost:8080**
