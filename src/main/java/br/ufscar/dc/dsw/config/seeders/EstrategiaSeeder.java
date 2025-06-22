@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EstrategiaSeeder {
+    private final EstrategiaRepository estrategiaRepository;
+    private final DicaRepository dicaRepository;
+    private final ExemploRepository exemploRepository;
 
-    @Autowired
-    private EstrategiaRepository estrategiaRepository;
-
-    @Autowired
-    private DicaRepository dicaRepository;
-
-    @Autowired
-    private ExemploRepository exemploRepository;
+    public EstrategiaSeeder(EstrategiaRepository estrategiaRepository, DicaRepository dicaRepository, ExemploRepository exemploRepository) {
+        this.estrategiaRepository = estrategiaRepository;
+        this.dicaRepository = dicaRepository;
+        this.exemploRepository = exemploRepository;
+    }
 
     public void seedEstrategias() {
         if (estrategiaRepository.count() > 0) {

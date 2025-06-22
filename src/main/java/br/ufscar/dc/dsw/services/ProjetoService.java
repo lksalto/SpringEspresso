@@ -1,16 +1,22 @@
 package br.ufscar.dc.dsw.services;
 
-import br.ufscar.dc.dsw.dtos.*;
+import br.ufscar.dc.dsw.dtos.ProjetoCadastroDTO;
+import br.ufscar.dc.dsw.dtos.ProjetoDTO;
+import br.ufscar.dc.dsw.dtos.ProjetoEdicaoDTO;
 import br.ufscar.dc.dsw.models.ProjetoModel;
 import br.ufscar.dc.dsw.models.UsuarioModel;
 import br.ufscar.dc.dsw.repositories.ProjetoRepository;
 import br.ufscar.dc.dsw.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,14 +59,13 @@ public class ProjetoService {
     public List<ProjetoDTO> listarParaUsuarioLogado() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(email);
-
         if (usuarioLogado.getPapel().name().equals("ADMIN")) {
             return projetoRepository.findAll().stream().map(this::converterParaDTO).toList();
         }
-        return projetoRepository.findAll().stream()
-                .filter(p -> p.getMembros().contains(usuarioLogado))
+        return projetoRepository.findAllByMembro(usuarioLogado).stream()
                 .map(this::converterParaDTO)
                 .toList();
+
     }
 
     @Transactional(readOnly = true)
@@ -83,6 +88,19 @@ public class ProjetoService {
         List<String> nomes = projeto.getMembros().stream()
                 .map(UsuarioModel::getNome)
                 .toList();
-        return new ProjetoDTO(projeto.getId(), projeto.getNome(), projeto.getDescricao(), projeto.getDataCriacao(), nomes);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean usuarioLogadoEhMembro = false;
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(authentication.getName());
+            usuarioLogadoEhMembro = projeto.getMembros().contains(usuarioLogado);
+        }
+        return new ProjetoDTO(
+                projeto.getId(),
+                projeto.getNome(),
+                projeto.getDescricao(),
+                projeto.getDataCriacao(),
+                nomes,
+                usuarioLogadoEhMembro
+        );
     }
 }

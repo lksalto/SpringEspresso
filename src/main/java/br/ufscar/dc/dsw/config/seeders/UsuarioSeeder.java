@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UsuarioSeeder {
+    private final UsuarioService usuarioService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+    public UsuarioSeeder(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     public void seedUsuarios() {
         System.out.println("Verificando usuários iniciais...");

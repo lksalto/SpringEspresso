@@ -1,9 +1,14 @@
 package br.ufscar.dc.dsw.controllers;
 
+import br.ufscar.dc.dsw.dtos.ProjetoDTO;
 import br.ufscar.dc.dsw.dtos.SessaoDTO;
+import br.ufscar.dc.dsw.dtos.SessaoEdicaoDTO;
+import br.ufscar.dc.dsw.models.EstrategiaModel;
 import br.ufscar.dc.dsw.models.SessaoModel;
 import br.ufscar.dc.dsw.models.UsuarioModel;
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
+import br.ufscar.dc.dsw.services.EstrategiaService;
+import br.ufscar.dc.dsw.services.ProjetoService;
 import br.ufscar.dc.dsw.services.SessaoService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,27 +24,28 @@ import java.util.UUID;
 @RequestMapping("/sessoes")
 public class SessaoController {
     private final SessaoService sessaoService;
-    // private final ProjetoService projetoService;
-    // private final EstrategiaService estrategiaService;
+    private final ProjetoService projetoService;
+    private final EstrategiaService estrategiaService;
 
     public SessaoController(
-            SessaoService sessaoService
-            // ProjetoService projetoService,
-            // EstrategiaService estrategiaService
+            SessaoService sessaoService,
+            ProjetoService projetoService,
+            EstrategiaService estrategiaService
     ) {
         this.sessaoService = sessaoService;
-        // this.projetoService = projetoService;
-        // this.estrategiaService = estrategiaService;
+        this.projetoService = projetoService;
+        this.estrategiaService = estrategiaService;
     }
 
-    // @GetMapping("/cadastro")
-    // public String exibirFormularioCadastro(@RequestParam("projetoId") UUID projetoId, Model model) {
-    //     ProjetoModel projeto = projetoService.buscarPorId(projetoId);
-    //     model.addAttribute("sessaoDTO", new SessaoDTO(projetoId, null, null, ""));
-    //     model.addAttribute("projeto", projeto);
-    //     model.addAttribute("estrategias", estrategiaService.listarTodos());
-    //     return "sessao/formulario";
-    // }
+    @GetMapping("/cadastro")
+    public String exibirFormularioCadastro(@RequestParam("projetoId") UUID projetoId, Model model) {
+        ProjetoDTO projeto = projetoService.buscarPorId(projetoId);
+        List<EstrategiaModel> estrategias = estrategiaService.findAll();
+        model.addAttribute("sessaoDTO", new SessaoDTO(projetoId, null, null, ""));
+        model.addAttribute("projeto", projeto);
+        model.addAttribute("estrategias", estrategias);
+        return "sessao/formulario";
+    }
 
     @PostMapping("/criar")
     public String criarSessao(
@@ -47,9 +53,39 @@ public class SessaoController {
             RedirectAttributes redirectAttrs,
             @AuthenticationPrincipal UsuarioModel usuarioLogado
     ) {
-        SessaoModel novaSessao = sessaoService.criarSessao(sessaoDto, usuarioLogado);
+        SessaoModel novaSessao = sessaoService.criarSessao(sessaoDto, usuarioLogado.getEmail());
         redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão criada com sucesso!");
         return "redirect:/sessoes/" + novaSessao.getId();
+    }
+
+    @GetMapping("/editar/{id}")
+    public String exibirFormularioEdicao(@PathVariable UUID id, Model model, RedirectAttributes redirectAttrs, @AuthenticationPrincipal UsuarioModel usuarioLogado) {
+        SessaoModel sessao = sessaoService.buscarParaEdicao(id, usuarioLogado);
+
+        SessaoEdicaoDTO dto = new SessaoEdicaoDTO(
+                sessao.getId(),
+                sessao.getProjeto().getId(),
+                sessao.getEstrategia().getId(),
+                sessao.getDuracao().toMinutes(),
+                sessao.getDescricao()
+        );
+
+        model.addAttribute("sessaoEdicaoDTO", dto);
+        model.addAttribute("estrategias", estrategiaService.findAll());
+        return "sessao/formulario";
+
+    }
+
+    @PostMapping("/editar")
+    public String editarSessao(
+            @ModelAttribute @Valid SessaoEdicaoDTO sessaoEdicaoDTO,
+            RedirectAttributes redirectAttrs,
+            @AuthenticationPrincipal UsuarioModel usuarioLogado
+    ) {
+
+        sessaoService.atualizarSessao(sessaoEdicaoDTO, usuarioLogado);
+        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão atualizada com sucesso!");
+        return "redirect:/sessoes/" + sessaoEdicaoDTO.id();
     }
 
     @GetMapping("/{id}")
@@ -60,14 +96,14 @@ public class SessaoController {
         return "sessao/detalhes";
     }
 
-    // @GetMapping("/projeto/{projetoId}")
-    // public String listarPorProjeto(@PathVariable UUID projetoId, Model model) {
-    //     List<SessaoModel> sessoes = sessaoService.listarPorProjeto(projetoId);
-    //     ProjetoModel projeto = projetoService.buscarPorId(projetoId);
-    //     model.addAttribute("sessoes", sessoes);
-    //     model.addAttribute("projeto", projeto);
-    //     return "sessao/lista";
-    // }
+    @GetMapping("/projeto/{projetoId}")
+    public String listarPorProjeto(@PathVariable UUID projetoId, Model model) {
+        List<SessaoModel> sessoes = sessaoService.listarPorProjeto(projetoId);
+        ProjetoDTO projeto = projetoService.buscarPorId(projetoId);
+        model.addAttribute("sessoes", sessoes);
+        model.addAttribute("projeto", projeto);
+        return "sessao/lista";
+    }
 
     @PostMapping("/atualizarStatus")
     public String atualizarStatus(
@@ -88,15 +124,15 @@ public class SessaoController {
             @AuthenticationPrincipal UsuarioModel usuarioLogado
     ) {
         sessaoService.deletarSessao(sessaoId, usuarioLogado);
-        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão foi removida");
-        return "redirect:/";
+        redirectAttrs.addFlashAttribute("mensagemSucesso", "Sessão foi removida com sucesso.");
+        return "redirect:/sessoes/projeto/" + projetoId;
     }
 
     @GetMapping("/minhas-sessoes")
     public String listarMinhasSessoes(Model model, @AuthenticationPrincipal UsuarioModel usuarioLogado) {
-        List<SessaoModel> minhasSessoes = sessaoService.listarPorTester(usuarioLogado.getId());
+        List<SessaoModel> minhasSessoes = sessaoService.listarPorTester(usuarioLogado.getEmail());
         model.addAttribute("sessoes", minhasSessoes);
         model.addAttribute("tituloPagina", "Minhas Sessões de Teste");
-        return "sessao/lista";
+        return "sessao/minhas_sessoes";
     }
 }
