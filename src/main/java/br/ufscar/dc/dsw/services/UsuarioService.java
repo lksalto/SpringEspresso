@@ -33,7 +33,6 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // Modified to receive Papel from the DTO
     public UsuarioDTO salvarNovoUsuario(UsuarioCadastroDTO usuarioCadastroDTO) {
         Optional<UsuarioModel> existingUser = usuarioRepository.findByEmail(usuarioCadastroDTO.email());
         if (existingUser.isPresent()) {

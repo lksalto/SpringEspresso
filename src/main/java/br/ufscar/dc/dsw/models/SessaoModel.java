@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import java.util.Objects;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -133,5 +134,18 @@ public class SessaoModel implements Serializable {
 
     public void setBugs(Set<BugModel> bugs) {
         this.bugs = bugs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessaoModel that = (SessaoModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

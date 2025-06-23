@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -70,5 +71,18 @@ public class EstrategiaModel implements Serializable {
 
     public void setExemplos(Set<ExemploModel> exemplos) {
         this.exemplos = exemplos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EstrategiaModel that = (EstrategiaModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Objects;
 
 @Entity
 @Table(name = "projeto")
@@ -71,5 +72,18 @@ public class ProjetoModel {
 
     public void setMembros(Set<UsuarioModel> membros) {
         this.membros = membros;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProjetoModel that = (ProjetoModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

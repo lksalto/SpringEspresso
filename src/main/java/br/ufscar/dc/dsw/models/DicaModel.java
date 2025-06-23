@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -46,5 +47,18 @@ public class DicaModel implements Serializable {
 
     public void setEstrategia(EstrategiaModel estrategia) {
         this.estrategia = estrategia;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DicaModel that = (DicaModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

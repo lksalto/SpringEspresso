@@ -10,6 +10,8 @@ import br.ufscar.dc.dsw.models.enums.StatusSessao;
 import br.ufscar.dc.dsw.services.EstrategiaService;
 import br.ufscar.dc.dsw.services.ProjetoService;
 import br.ufscar.dc.dsw.services.SessaoService;
+import br.ufscar.dc.dsw.services.BugService; 
+import br.ufscar.dc.dsw.dtos.BugDTO; 
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -26,15 +28,18 @@ public class SessaoController {
     private final SessaoService sessaoService;
     private final ProjetoService projetoService;
     private final EstrategiaService estrategiaService;
+    private final BugService bugService; 
 
     public SessaoController(
             SessaoService sessaoService,
             ProjetoService projetoService,
-            EstrategiaService estrategiaService
+            EstrategiaService estrategiaService,
+            BugService bugService 
     ) {
         this.sessaoService = sessaoService;
         this.projetoService = projetoService;
         this.estrategiaService = estrategiaService;
+        this.bugService = bugService; 
     }
 
     @GetMapping("/cadastro")
@@ -89,10 +94,14 @@ public class SessaoController {
     }
 
     @GetMapping("/{id}")
-    public String detalhesSessao(@PathVariable UUID id, Model model) {
+    public String detalhesSessao(@PathVariable UUID id, Model model, @AuthenticationPrincipal UsuarioModel usuarioLogado) {
         SessaoModel sessao = sessaoService.buscarPorId(id);
+        
+        List<BugDTO> listaBugs = bugService.buscarTodosBugsPorSessao(id, usuarioLogado); 
+
         model.addAttribute("sessao", sessao);
         model.addAttribute("todosStatus", StatusSessao.values());
+        model.addAttribute("listaBugs", listaBugs); 
         return "sessao/detalhes";
     }
 
