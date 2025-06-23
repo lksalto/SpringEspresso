@@ -5,9 +5,11 @@ import br.ufscar.dc.dsw.dtos.ProjetoDTO;
 import br.ufscar.dc.dsw.dtos.ProjetoEdicaoDTO;
 import br.ufscar.dc.dsw.models.ProjetoModel;
 import br.ufscar.dc.dsw.models.UsuarioModel;
+import br.ufscar.dc.dsw.models.enums.Papel;
 import br.ufscar.dc.dsw.repositories.ProjetoRepository;
 import br.ufscar.dc.dsw.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,16 +58,28 @@ public class ProjetoService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProjetoDTO> listarParaUsuarioLogado() {
+    public List<ProjetoDTO> listarParaUsuarioLogado(String sortBy, String sortOrder) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(email);
-        if (usuarioLogado.getPapel().name().equals("ADMIN")) {
-            return projetoRepository.findAll().stream().map(this::converterParaDTO).toList();
-        }
-        return projetoRepository.findAllByMembro(usuarioLogado).stream()
-                .map(this::converterParaDTO)
-                .toList();
 
+        Sort sort = buildSort(sortBy, sortOrder);
+
+        List<ProjetoModel> projetos;
+        if (usuarioLogado.getPapel() == Papel.ADMIN) {
+            projetos = projetoRepository.findAll(sort);
+        } else {
+            projetos = projetoRepository.findAllByMembrosContains(usuarioLogado, sort);
+        }
+        return projetos.stream().map(this::converterParaDTO).toList();
+    }
+
+    // New method to handle sorting for members specifically
+    // You might need to add this method to your ProjetoRepository interface:
+    // List<ProjetoModel> findAllByMembrosContains(UsuarioModel membro, Sort sort);
+    @Transactional(readOnly = true)
+    public List<ProjetoDTO> listarParaUsuarioLogado() {
+        // This existing method will now default to sorting by name ascending
+        return listarParaUsuarioLogado("nome", "asc");
     }
 
     @Transactional(readOnly = true)
@@ -102,5 +116,23 @@ public class ProjetoService {
                 nomes,
                 usuarioLogadoEhMembro
         );
+    }
+
+    private Sort buildSort(String sortBy, String sortOrder) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        // Default sorting
+        if (sortBy == null || sortBy.isEmpty()) {
+            sortBy = "nome"; // Default sort by name
+        }
+
+        switch (sortBy) {
+            case "nome":
+                return Sort.by(direction, "nome");
+            case "dataCriacao":
+                return Sort.by(direction, "dataCriacao");
+            default:
+                return Sort.by(Sort.Direction.ASC, "nome"); // Fallback to default
+        }
     }
 }

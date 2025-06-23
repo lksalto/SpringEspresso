@@ -31,7 +31,8 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/css/**", "/images/**", "/", "/error", "/login", "/language", "/estrategias").permitAll()
-                        .requestMatchers("/projetos/**", "/sessoes/**", "/bugs/**", "/usuarios/**").hasAnyRole("ADMIN", "TESTER")
+                        .requestMatchers("/bugs/**").authenticated()
+                        .requestMatchers("/projetos/**", "/sessoes/**", "/usuarios/**").hasAnyRole("ADMIN", "TESTER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

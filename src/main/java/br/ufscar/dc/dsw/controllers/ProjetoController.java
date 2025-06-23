@@ -28,8 +28,14 @@ public class ProjetoController {
     private UsuarioService usuarioService;
 
     @GetMapping("/listar")
-    public String listar(ModelMap model, Authentication authentication) {
-        List<ProjetoDTO> projetos = projetoService.listarParaUsuarioLogado();
+    public String listar(
+            ModelMap model,
+            Authentication authentication,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "sortOrder", required = false) String sortOrder
+    ) {
+        // If sortBy or sortOrder are null, the service will apply its defaults
+        List<ProjetoDTO> projetos = projetoService.listarParaUsuarioLogado(sortBy, sortOrder);
         model.addAttribute("listaProjetos", projetos);
         UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(authentication.getName());
         model.addAttribute("ehAdmin", usuarioLogado.getPapel() == Papel.ADMIN);

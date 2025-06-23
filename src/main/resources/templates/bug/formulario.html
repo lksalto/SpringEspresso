@@ -24,6 +24,7 @@
             <input type="hidden" th:field="*{idSessao}" />
 
             <div>
+                <p>A descrição precisa de no mínimo 10 caracteres.</p>
                 <label for="descricao-cadastro">Descrição do Bug:</label>
                 <textarea id="descricao-cadastro" th:field="*{descricao}" rows="5" placeholder="Descreva detalhadamente o comportamento inesperado..." required></textarea>
                 <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">

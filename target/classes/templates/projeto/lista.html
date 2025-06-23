@@ -26,9 +26,17 @@
         <thead>
         <tr>
             <th th:text="#{projeto.tabela.id}">ID</th>
-            <th th:text="#{projeto.tabela.nome}">Nome</th>
+            <th>
+                <span th:text="#{projeto.tabela.nome}">Nome</span>
+                <a th:href="@{/projetos/listar(sortBy='nome', sortOrder='asc')}" title="Ordenar por Nome Crescente">&#9650;</a>
+                <a th:href="@{/projetos/listar(sortBy='nome', sortOrder='desc')}" title="Ordenar por Nome Decrescente">&#9660;</a>
+            </th>
             <th th:text="#{projeto.tabela.descricao}">Descrição</th>
-            <th th:text="#{projeto.tabela.dataCriacao}">Data de Criação</th>
+            <th>
+                <span th:text="#{projeto.tabela.dataCriacao}">Data de Criação</span>
+                <a th:href="@{/projetos/listar(sortBy='dataCriacao', sortOrder='asc')}" title="Ordenar por Data de Criação Crescente">&#9650;</a>
+                <a th:href="@{/projetos/listar(sortBy='dataCriacao', sortOrder='desc')}" title="Ordenar por Data de Criação Decrescente">&#9660;</a>
+            </th>
             <th th:text="#{projeto.tabela.membros}">Membros</th>
             <th th:text="#{projeto.tabela.acoes}">Ações</th>
         </tr>
