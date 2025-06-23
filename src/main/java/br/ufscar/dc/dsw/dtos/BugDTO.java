@@ -1,5 +1,3 @@
-// package br.ufscar.dc.dsw.dtos;
-
 package br.ufscar.dc.dsw.dtos;
 
 import java.time.LocalDateTime;

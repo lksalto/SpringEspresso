@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Detalhes da Sessão</title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <style>
+        /* Seus estilos CSS personalizados */
         .details-card {
             text-align: left;
             margin-bottom: 25px;
@@ -48,11 +48,11 @@
 <div class="wrapper">
     <h1>Detalhes da Sessão de Teste</h1>
 
-    <div th:if="${mensagemSucesso}" class="message-box success">
-        <p th:text="${mensagemSucesso}"></p>
+    <div th:if="${success}" class="message-box success">
+        <p th:text="${success}"></p>
     </div>
-    <div th:if="${mensagemFalha}" class="message-box error">
-        <p th:text="${mensagemFalha}"></p>
+    <div th:if="${fail}" class="message-box error">
+        <p th:text="${fail}"></p>
     </div>
 
     <div class="details-card">
@@ -68,7 +68,16 @@
     </div>
 
     <div class="action-forms">
-        <div th:if="${#authorization.expression('hasRole(''ADMIN'')') or #authentication.principal.email == sessao.tester.email}">
+        <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')') or #authentication.principal.email == sessao.tester.email}">
+
+            <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
+                <h3>Adicionar Bug</h3>
+                <p>Registrar um novo bug para esta sessão.</p>
+                <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" class="button button-primary">
+                    Registrar Bug
+                </a>
+            </div>
+
             <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
                 <h3>Mudar Status</h3>
                 <form th:action="@{/sessoes/atualizarStatus}" method="post">
@@ -107,45 +116,73 @@
                     </button>
                 </form>
             </div>
-            </th:block>
-        </div>
-
-        <div class="details-card">
-            <h3>Histórico de Status</h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>De</th>
-                    <th>Para</th>
-                    <th>Data/Hora</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="hist : ${sessao.historico}">
-                    <th:block th:switch="${hist.statusAnterior}">
-                        <th:block th:case="null">
-                            <td style="font-style: italic; color: #555;">INEXISTENTE</td>
-                            <td th:text="${hist.statusNovo.name()}"></td>
-                            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                        </th:block>
-                        <th:block th:case="*">
-                            <td th:text="${hist.statusAnterior.name()}"></td>
-                            <td th:text="${hist.statusNovo.name()}"></td>
-                            <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                        </th:block>
-                    </th:block>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <p>
-            <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a
-                Lista de Sessões</a>
-            <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
-        </p>
+        </th:block>
     </div>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <div class="details-card" style="flex-basis: 100%; margin-top: 20px;">
+        <h3>Bugs Registrados nesta Sessão</h3>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Descrição do Bug</th>
+                <th>Resolvido</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bug : ${listaBugs}">
+                <td th:text="${bug.descricao()}">Descrição</td>
+                <td th:text="${bug.resolvido() ? 'Sim' : 'Não'}">Resolvido</td>
+                <td>
+                    <a th:href="@{/bugs/editar/{id}(id=${bug.id()})}" class="button button-secondary">Editar</a>
+                    <a th:href="@{/bugs/remover/{id}(id=${bug.id()})}" class="button button-danger"
+                       onclick="return confirm('Tem certeza que deseja remover este bug?');">Remover</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(listaBugs)}">
+                <td colspan="3" style="text-align: center;">Nenhum bug encontrado nesta sessão.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="details-card" style="flex-basis: 100%; margin-top: 20px;">
+        <h3>Histórico de Status</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>De</th>
+                <th>Para</th>
+                <th>Data/Hora</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="hist : ${sessao.historico}">
+                <th:block th:switch="${hist.statusAnterior}">
+                    <th:block th:case="null">
+                        <td style="font-style: italic; color: #555;">INEXISTENTE</td>
+                        <td th:text="${hist.statusNovo.name()}"></td>
+                        <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                    </th:block>
+                    <th:block th:case="*">
+                        <td th:text="${hist.statusAnterior.name()}"></td>
+                        <td th:text="${hist.statusNovo.name()}"></td>
+                        <td th:text="${#temporals.format(hist.dataHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                    </th:block>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/sessoes/projeto/{id}(id=${sessao.projeto.id})}" class="button button-secondary">Voltar para a
+            Lista de Sessões</a>
+        <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

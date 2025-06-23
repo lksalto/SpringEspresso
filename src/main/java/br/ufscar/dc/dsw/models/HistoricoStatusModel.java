@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw.models;
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -77,5 +78,18 @@ public class HistoricoStatusModel implements Serializable {
 
     public void setSessao(SessaoModel sessao) {
         this.sessao = sessao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HistoricoStatusModel that = (HistoricoStatusModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

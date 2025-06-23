@@ -10,17 +10,14 @@ import java.util.UUID;
 @Repository
 public interface BugRepository extends JpaRepository<BugModel, UUID> {
 
-    
-    List<BugModel> findBySessaoIdOrderByDataDesc(UUID sessaoId);
+    List<BugModel> findBySessaoIdOrderByDataRegistroDesc(UUID sessaoId);
 
     List<BugModel> findByResolvido(boolean resolvido);
 
-    List<BugModel> findByResolvidoFalseOrderByDataDesc();
+    List<BugModel> findByResolvidoFalseOrderByDataRegistroDesc();
 
     List<BugModel> findBySessaoIdAndResolvido(UUID sessaoId, boolean resolvido);
 
     long countBySessaoId(UUID sessaoId);
-
     long countBySessaoIdAndResolvidoFalse(UUID sessaoId);
-
 }

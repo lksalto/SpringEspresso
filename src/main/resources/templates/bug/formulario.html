@@ -4,51 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${isEditModeBug ? 'Editar Bug' : 'Registrar Novo Bug'}"></title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 
-    <main>
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${fail}" class="alert alert-danger" th:text="${fail}"></div>
+<div class="wrapper">
+    <h1 th:text="${isEditModeBug ? 'Editar Bug' : 'Registrar Novo Bug'}"></h1>
+    <p style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
+        Para a Sessão: <strong th:text="${sessao.descricao}"></strong>
+    </p>
 
-        <h2 th:text="${isEditModeBug ? 'Editar Bug' : 'Registrar Novo Bug'}"></h2>
-
-        <p th:text="'Sessão de Teste: ' + ${sessao.titulo}"></p>
-
-        <form th:if="${!isEditModeBug}" th:action="@{/bugs/salvar}" th:object="${bugCadastroDTO}" method="post">
+    <!-- Mensagem de falha geral, se houver -->
+    <div th:if="${fail}" class="message-box error" th:text="${fail}"></div>
+    
+    <!-- Formulário de CADASTRO -->
+    <th:block th:if="${!isEditModeBug}">
+        <form th:action="@{/bugs/salvar}" th:object="${bugCadastroDTO}" method="post">
             <input type="hidden" th:field="*{idSessao}" />
 
             <div>
-                <label for="descricao">Descrição do Bug:</label>
-                <textarea id="descricao" th:field="*{descricao}" rows="5" cols="50"></textarea>
-                <span th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></span>
+                <label for="descricao-cadastro">Descrição do Bug:</label>
+                <textarea id="descricao-cadastro" th:field="*{descricao}" rows="5" placeholder="Descreva detalhadamente o comportamento inesperado..." required></textarea>
+                <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('descricao')}" th:text="${err}"></p>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salvar Bug</button>
-            <a th:href="@{/bugs/lista-sessao(idSessao=${sessao.id})}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="button button-primary">Registrar Bug</button>
+            <a th:href="@{/bugs/lista-sessao(idSessao=${sessao.id})}" class="button button-secondary">Cancelar</a>
         </form>
+    </th:block>
 
-        <form th:if="${isEditModeBug}" th:action="@{/bugs/atualizar}" th:object="${bugEdicaoDTO}" method="post">
+    <!-- Formulário de EDIÇÃO -->
+    <th:block th:if="${isEditModeBug}">
+        <form th:action="@{/bugs/atualizar}" th:object="${bugEdicaoDTO}" method="post">
             <input type="hidden" th:field="*{id}" />
             <input type="hidden" th:field="*{idSessao}" />
 
             <div>
-                <label for="descricao">Descrição do Bug:</label>
-                <textarea id="descricao" th:field="*{descricao}" rows="5" cols="50"></textarea>
-                <span th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></span>
+                <label for="descricao-edicao">Descrição do Bug:</label>
+                <textarea id="descricao-edicao" th:field="*{descricao}" rows="5" required></textarea>
+                <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
+                    <p th:each="err : ${#fields.errors('descricao')}" th:text="${err}"></p>
+                </div>
             </div>
 
-            <div>
+            <div class="checkbox-container">
                 <input type="checkbox" id="resolvido" th:field="*{resolvido}" />
-                <label for="resolvido">Bug Resolvido</label>
+                <label for="resolvido">Marcar como Resolvido</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">Atualizar Bug</button>
-            <a th:href="@{/bugs/lista-sessao(idSessao=${sessao.id})}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="button button-primary">Atualizar Bug</button>
+            <a th:href="@{/bugs/lista-sessao(idSessao=${sessao.id})}" class="button button-secondary">Cancelar</a>
         </form>
-    </main>
+    </th:block>
+</div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>

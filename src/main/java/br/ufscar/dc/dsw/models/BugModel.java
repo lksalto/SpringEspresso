@@ -2,6 +2,8 @@ package br.ufscar.dc.dsw.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
+import java.util.Objects; 
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,15 +15,16 @@ public class BugModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_bug", columnDefinition = "binary(16)")
+    @GeneratedValue 
+    @UuidGenerator 
+    @Column(name = "id_bug", updatable = false, nullable = false, columnDefinition = "binary(16)")
     private UUID id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(nullable = false)
-    private LocalDateTime data;
+    @Column(name = "data_registro", nullable = false, updatable = false)
+    private LocalDateTime dataRegistro;
 
     @Column(nullable = false)
     private boolean resolvido = false;
@@ -33,9 +36,13 @@ public class BugModel implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        data = LocalDateTime.now();
+        if (dataRegistro == null) { 
+            dataRegistro = LocalDateTime.now();
+        }
     }
 
+    // --- Getters e Setters ---
+    
     public UUID getId() {
         return id;
     }
@@ -52,12 +59,12 @@ public class BugModel implements Serializable {
         this.descricao = descricao;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public LocalDateTime getDataRegistro() {
+        return dataRegistro;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setDataRegistro(LocalDateTime dataRegistro) {
+        this.dataRegistro = dataRegistro;
     }
 
     public boolean isResolvido() {
@@ -74,5 +81,18 @@ public class BugModel implements Serializable {
 
     public void setSessao(SessaoModel sessao) {
         this.sessao = sessao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BugModel that = (BugModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
