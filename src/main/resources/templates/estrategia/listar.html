@@ -30,19 +30,20 @@
         <th th:text="#{tabela.coluna.id}">ID</th>
         <th th:text="#{tabela.coluna.nome}">Nome</th>
         <th th:text="#{tabela.coluna.descricao}">Descrição</th>
-        <th th:text="#{tabela.coluna.acoes}">Ações</th> </tr>
+        <th sec:authorize="hasRole('ADMIN')" th:text="#{tabela.coluna.acoes}">Ações</th>
+      </tr>
       </thead>
       <tbody>
       <tr th:each="estrategia : ${listaEstrategias}">
         <td th:text="${estrategia.id}" class="id-table"></td>
         <td th:text="${estrategia.nome}"></td>
         <td th:text="${estrategia.descricao}"></td>
-        <td> <a th:href="@{/estrategias/detalhes/{id}(id=${estrategia.id})}" class="button button-primary" th:text="#{acao.detalhes}">Detalhes</a>
-          <th:block sec:authorize="hasRole('ADMIN')"> <a th:href="@{/estrategias/editar/{id}(id=${estrategia.id})}" class="button button-secondary" th:text="#{acao.editar}">Editar</a>
-            <a th:href="@{/estrategias/remover/{id}(id=${estrategia.id})}" class="button button-secondary"
-               th:text="#{acao.excluir}"
-               th:onclick="return confirm(#{estrategia.confirmar.exclusao})">Excluir</a>
-          </th:block>
+        <td sec:authorize="hasRole('ADMIN')">
+          <a th:href="@{/estrategias/editar/{id}(id=${estrategia.id})}" class="button button-secondary" th:text="#{acao.editar}">Editar</a>
+          <a th:href="@{/estrategias/remover/{id}(id=${estrategia.id})}" class="button button-secondary"
+             th:text="#{acao.excluir}"
+             th:onclick="return confirm(#{estrategia.confirmar.exclusao})">Excluir</a>
+          <a th:href="@{/estrategias/detalhes/{id}(id=${estrategia.id})}" class="button button-primary" th:text="#{acao.detalhes}">Detalhes</a>
         </td>
       </tr>
       </tbody>

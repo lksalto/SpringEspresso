@@ -232,7 +232,7 @@ th {
 
 
 .table th:nth-child(1) {
-    width: 40%;
+    width: 20%;
 }
 
 .table th:nth-child(3) {

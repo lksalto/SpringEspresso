@@ -6,8 +6,6 @@ import br.ufscar.dc.dsw.dtos.UsuarioEdicaoDTO;
 import br.ufscar.dc.dsw.models.enums.Papel;
 import br.ufscar.dc.dsw.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize; // Import for @PreAuthorize
-import org.springframework.security.core.Authentication; // Keep if you use it for model attributes
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,29 +26,24 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     // Listar todos os usuários
-    // No @PreAuthorize here, as anyone might be able to view the list (or it's handled by other security configs)
     @GetMapping("/listar")
     public String listar(ModelMap model) {
         List<UsuarioDTO> usuarios = usuarioService.buscarTodos();
         model.addAttribute("listaUsuarios", usuarios);
         model.addAttribute("contextPath", "/usuarios");
-        // You might want to add a flag for showing admin-only buttons/links in the template
-        // e.g., model.addAttribute("ehAdmin", usuarioService.isCurrentUserAdmin()); if you have a service method for that
         return "usuario/lista";
     }
 
-    // Apresentar formulário de cadastro (GET) - Only ADMIN can access this page
-    @PreAuthorize("hasRole('ADMIN')") // Requires ADMIN role to access this GET endpoint
+    // Apresentar formulário de cadastro (GET)
     @GetMapping("/cadastro")
     public String preRenderCadastro(ModelMap model) {
         if (!model.containsAttribute("usuarioForm")) {
-            model.addAttribute("usuarioForm", new UsuarioCadastroDTO(null, null, null, null, null));
+            model.addAttribute("usuarioForm", new UsuarioCadastroDTO(null, null, null, null, null)); // UUID id, String nome, String email, String senha, Papel papel
         }
         return "usuario/formulario";
     }
 
-    // Inserir novo usuário (POST) - Only ADMIN can perform this action
-    @PreAuthorize("hasRole('ADMIN')") // Requires ADMIN role to submit this form
+    // Inserir novo usuário (POST)
     @PostMapping("/salvar")
     public String salvar(@Valid UsuarioCadastroDTO usuarioCadastroDTO, BindingResult result, RedirectAttributes attr) {
         if (result.hasErrors()) {
@@ -59,6 +52,7 @@ public class UsuarioController {
             return "redirect:/usuarios/cadastro";
         }
         try {
+            // No need to set Papel here, it's already in the DTO from the form
             usuarioService.salvarNovoUsuario(usuarioCadastroDTO);
             attr.addFlashAttribute("success", "Usuário salvo com sucesso!");
         } catch (IllegalArgumentException e) {
@@ -75,8 +69,7 @@ public class UsuarioController {
         return "redirect:/usuarios/listar";
     }
 
-    // Apresentar formulário de edição (GET) - Only ADMIN can access this page
-    @PreAuthorize("hasRole('ADMIN')") // Requires ADMIN role to access this GET endpoint
+    // Apresentar formulário de edição (GET)
     @GetMapping("/editar/{id}")
     public String preRenderEdicao(@PathVariable("id") UUID id, ModelMap model, RedirectAttributes attr) {
         try {
@@ -98,8 +91,7 @@ public class UsuarioController {
         }
     }
 
-    // Atualizar usuário (POST) - Only ADMIN can perform this action
-    @PreAuthorize("hasRole('ADMIN')") // Requires ADMIN role to submit this form
+    // Atualizar usuário (POST)
     @PostMapping("/editar")
     public String editar(@Valid UsuarioEdicaoDTO usuarioEdicaoDTO, BindingResult result, RedirectAttributes attr) {
         if (result.hasErrors()) {
@@ -124,8 +116,7 @@ public class UsuarioController {
         return "redirect:/usuarios/listar";
     }
 
-    // Remover usuário (GET) - Only ADMIN can perform this action
-    @PreAuthorize("hasRole('ADMIN')") // Requires ADMIN role to perform this deletion
+    // Remover usuário (GET ou POST)
     @GetMapping("/remover/{id}")
     public String remover(@PathVariable("id") UUID id, RedirectAttributes attr) {
         try {

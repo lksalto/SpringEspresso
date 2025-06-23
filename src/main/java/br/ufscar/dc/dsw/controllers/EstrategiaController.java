@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList; // Change from HashSet to ArrayList
 import java.util.List;
 import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/estrategias")
@@ -32,8 +33,8 @@ public class EstrategiaController {
     @GetMapping("/novo")
     public String exibirFormularioNovo(Model model) {
         EstrategiaDto estrategiaDto = new EstrategiaDto();
-        estrategiaDto.setDicas(new ArrayList<>()); // Change HashSet to ArrayList
-        estrategiaDto.setExemplos(new ArrayList<>()); // Change HashSet to ArrayList
+        estrategiaDto.setDicas(new java.util.HashSet<>());
+        estrategiaDto.setExemplos(new java.util.HashSet<>());
         model.addAttribute("estrategia", estrategiaDto);
         return "estrategia/formulario";
     }
@@ -65,9 +66,9 @@ public class EstrategiaController {
             }
             dto.setNome(nome);
             dto.setDescricao(descricao);
-
+            
             // Processar exemplos
-            List<ExemploDto> exemplos = new ArrayList<>(); // Change HashSet to ArrayList
+            Set<ExemploDto> exemplos = new HashSet<>();
             if (exemplosTexto != null) {
                 for (int i = 0; i < exemplosTexto.length; i++) {
                     if (exemplosTexto[i] != null && !exemplosTexto[i].trim().isEmpty()) {
@@ -84,9 +85,9 @@ public class EstrategiaController {
                 }
             }
             dto.setExemplos(exemplos);
-
+            
             // Processar dicas
-            List<DicaDto> dicas = new ArrayList<>(); // Change HashSet to ArrayList
+            Set<DicaDto> dicas = new HashSet<>();
             if (dicasTexto != null) {
                 for (int i = 0; i < dicasTexto.length; i++) {
                     if (dicasTexto[i] != null && !dicasTexto[i].trim().isEmpty()) {
@@ -100,7 +101,7 @@ public class EstrategiaController {
                 }
             }
             dto.setDicas(dicas);
-
+            
             service.save(dto, imagensExemplo);
             redirectAttributes.addFlashAttribute("success", "Estratégia salva com sucesso!");
         } catch (Exception e) {
