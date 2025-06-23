@@ -1,6 +1,9 @@
 package br.ufscar.dc.dsw.services;
 
+import br.ufscar.dc.dsw.dtos.DicaDto;
 import br.ufscar.dc.dsw.dtos.EstrategiaDto;
+import br.ufscar.dc.dsw.dtos.ExemploDto;
+import br.ufscar.dc.dsw.models.DicaModel;
 import br.ufscar.dc.dsw.models.EstrategiaModel;
 import br.ufscar.dc.dsw.models.ExemploModel;
 import br.ufscar.dc.dsw.repositories.EstrategiaRepository;
@@ -8,14 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.security.access.prepost.PreAuthorize; // Import for security annotations
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
+import java.util.ArrayList; // Change from HashSet to ArrayList
+import java.util.List;    // Change from Set to List
 import java.util.UUID;
 
 @Service
@@ -35,24 +39,26 @@ public class EstrategiaService {
         }
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
     public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExemplo) {
+        // Convert DTO to Model, handling existing entities for updates
         EstrategiaModel estrategia = convertDtoToModel(dto);
 
+        // Handle image uploads for examples
         if (imagensExemplo != null && !imagensExemplo.isEmpty()) {
             int i = 0;
-            for (ExemploModel exemplo : estrategia.getExemplos()) {
+            for (ExemploModel exemplo : estrategia.getExemplos()) { // Iterate through the model's examples
                 if (i < imagensExemplo.size()) {
-                    MultipartFile imagem = imagensExemplo.get(i++);
-                    if (!imagem.isEmpty()) {
+                    MultipartFile imagem = imagensExemplo.get(i);
+                    if (imagem != null && !imagem.isEmpty()) { // Check for null or empty file
                         if (exemplo.getUrlImagem() != null && !exemplo.getUrlImagem().isEmpty()) {
-                            deleteFile(exemplo.getUrlImagem());
+                            deleteFile(exemplo.getUrlImagem()); // Delete old image if exists during update
                         }
                         String newFilename = saveFile(imagem);
                         exemplo.setUrlImagem(newFilename);
                     }
                 }
+                i++; // Increment counter for both successful and skipped image assignments
             }
         }
         return estrategiaRepository.save(estrategia);
@@ -68,12 +74,10 @@ public class EstrategiaService {
         return estrategiaRepository.findAll();
     }
 
-    // Only ADMINs can delete strategies
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(UUID id) {
         EstrategiaModel estrategia = findById(id);
         if (estrategia != null) {
-            // Apaga os arquivos de imagem associados antes de deletar a entidade
             estrategia.getExemplos().forEach(ex -> {
                 if (ex.getUrlImagem() != null && !ex.getUrlImagem().isEmpty()) {
                     deleteFile(ex.getUrlImagem());
@@ -111,58 +115,76 @@ public class EstrategiaService {
 
     // Converte DTO para Model para salvar no banco
     private EstrategiaModel convertDtoToModel(EstrategiaDto dto) {
-        final EstrategiaModel model;
+        EstrategiaModel model;
         if (dto.getId() != null) {
-            EstrategiaModel existente = findById(dto.getId()); // Carrega a entidade existente para atualização
-            if (existente == null) {
+            // Load existing entity for updates
+            model = findById(dto.getId());
+            if (model == null) {
+                // This case should ideally be handled before calling save with an ID
+                // that doesn't exist, but defensive coding:
                 model = new EstrategiaModel();
-            } else {
-                model = existente;
+                // For new instances created here, ensure ID is null to allow generation
+                model.setId(null);
             }
         } else {
+            // For new entities
             model = new EstrategiaModel();
         }
 
         model.setNome(dto.getNome());
         model.setDescricao(dto.getDescricao());
 
+        // --- Handle Dicas ---
+        // Clear existing dicas and add new ones from DTO
+        // This is crucial for handling deletions/updates of child entities
         model.getDicas().clear();
         if (dto.getDicas() != null) {
-            dto.getDicas().forEach(dicaDto -> {
-                br.ufscar.dc.dsw.models.DicaModel dicaModel = new br.ufscar.dc.dsw.models.DicaModel();
-                dicaModel.setId(dicaDto.getId());
+            for (DicaDto dicaDto : dto.getDicas()) {
+                DicaModel dicaModel = new DicaModel();
+                // ONLY set ID if it's not null, meaning it's an existing Dica being updated
+                if (dicaDto.getId() != null) {
+                    dicaModel.setId(dicaDto.getId());
+                }
                 dicaModel.setTexto(dicaDto.getDica());
+                // *** CRITICAL FIX: Set the bidirectional relationship ***
                 dicaModel.setEstrategia(model);
                 model.getDicas().add(dicaModel);
-            });
+            }
         }
 
+        // --- Handle Exemplos ---
+        // Clear existing exemplos and add new ones from DTO
         model.getExemplos().clear();
         if (dto.getExemplos() != null) {
-            dto.getExemplos().forEach(exemploDto -> {
-                br.ufscar.dc.dsw.models.ExemploModel exemploModel = new br.ufscar.dc.dsw.models.ExemploModel();
-                exemploModel.setId(exemploDto.getId());
+            for (ExemploDto exemploDto : dto.getExemplos()) {
+                ExemploModel exemploModel = new ExemploModel();
+                // ONLY set ID if it's not null, meaning it's an existing Exemplo being updated
+                if (exemploDto.getId() != null) {
+                    exemploModel.setId(exemploDto.getId());
+                }
                 exemploModel.setTexto(exemploDto.getTexto());
-                exemploModel.setUrlImagem(exemploDto.getUrlImagem());
+
+                if (exemploDto.getUrlImagem() != null && !exemploDto.getUrlImagem().isEmpty()) {
+                    exemploModel.setUrlImagem(exemploDto.getUrlImagem());
+                }
                 exemploModel.setEstrategia(model);
                 model.getExemplos().add(exemploModel);
-            });
+            }
         }
-
         return model;
     }
 
-    // Converte Model para DTO para exibir no formulário
+    // Converte Model para DTO para exibir no formulário (no changes needed here)
     public EstrategiaDto convertModelToDto(EstrategiaModel model) {
         EstrategiaDto dto = new EstrategiaDto();
         dto.setId(model.getId());
         dto.setNome(model.getNome());
         dto.setDescricao(model.getDescricao());
 
-        java.util.Set<br.ufscar.dc.dsw.dtos.DicaDto> dicasDto = new java.util.HashSet<>();
+        List<DicaDto> dicasDto = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
         if (model.getDicas() != null) {
             model.getDicas().forEach(dicaModel -> {
-                br.ufscar.dc.dsw.dtos.DicaDto dicaDto = new br.ufscar.dc.dsw.dtos.DicaDto();
+                DicaDto dicaDto = new DicaDto();
                 dicaDto.setId(dicaModel.getId());
                 dicaDto.setDica(dicaModel.getTexto());
                 dicasDto.add(dicaDto);
@@ -170,10 +192,10 @@ public class EstrategiaService {
         }
         dto.setDicas(dicasDto);
 
-        java.util.Set<br.ufscar.dc.dsw.dtos.ExemploDto> exemplosDto = new java.util.HashSet<>();
+        List<ExemploDto> exemplosDto = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
         if (model.getExemplos() != null) {
             model.getExemplos().forEach(exemploModel -> {
-                br.ufscar.dc.dsw.dtos.ExemploDto exemploDto = new br.ufscar.dc.dsw.dtos.ExemploDto();
+                ExemploDto exemploDto = new ExemploDto();
                 exemploDto.setId(exemploModel.getId());
                 exemploDto.setTexto(exemploModel.getTexto());
                 exemploDto.setUrlImagem(exemploModel.getUrlImagem());

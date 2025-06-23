@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList; // Add this import
+import java.util.List;   // Change from Set to List
 import java.util.UUID;
 
 @Entity
@@ -27,11 +27,11 @@ public class EstrategiaModel implements Serializable {
 
     @JsonManagedReference("estrategia-dicas")
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<DicaModel> dicas = new HashSet<>();
+    private List<DicaModel> dicas = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
 
     @JsonManagedReference("estrategia-exemplos")
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<ExemploModel> exemplos = new HashSet<>();
+    private List<ExemploModel> exemplos = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
 
     public UUID getId() {
         return id;
@@ -57,19 +57,19 @@ public class EstrategiaModel implements Serializable {
         this.descricao = descricao;
     }
 
-    public Set<DicaModel> getDicas() {
+    public List<DicaModel> getDicas() { // Change Set to List
         return dicas;
     }
 
-    public void setDicas(Set<DicaModel> dicas) {
+    public void setDicas(List<DicaModel> dicas) { // Change Set to List
         this.dicas = dicas;
     }
 
-    public Set<ExemploModel> getExemplos() {
+    public List<ExemploModel> getExemplos() { // Change Set to List
         return exemplos;
     }
 
-    public void setExemplos(Set<ExemploModel> exemplos) {
+    public void setExemplos(List<ExemploModel> exemplos) { // Change Set to List
         this.exemplos = exemplos;
     }
 
@@ -84,5 +84,15 @@ public class EstrategiaModel implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addExemplo(ExemploModel exemplo) {
+        this.exemplos.add(exemplo);
+        exemplo.setEstrategia(this);
+    }
+
+    public void addDica(DicaModel dica) {
+        this.dicas.add(dica);
+        dica.setEstrategia(this);
     }
 }
