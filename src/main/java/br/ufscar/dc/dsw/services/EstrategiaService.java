@@ -35,17 +35,14 @@ public class EstrategiaService {
         }
     }
 
-    // Método principal para salvar (cria ou atualiza)
-    // Only ADMINs can save (create or update) strategies
+
     @PreAuthorize("hasRole('ADMIN')")
     public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExemplo) {
         EstrategiaModel estrategia = convertDtoToModel(dto);
 
-        // Processa as imagens de exemplo
         if (imagensExemplo != null && !imagensExemplo.isEmpty()) {
             int i = 0;
             for (ExemploModel exemplo : estrategia.getExemplos()) {
-                // Ensure there's a corresponding image file for each example
                 if (i < imagensExemplo.size()) {
                     MultipartFile imagem = imagensExemplo.get(i++);
                     if (!imagem.isEmpty()) {
@@ -86,9 +83,6 @@ public class EstrategiaService {
         }
     }
 
-    // Funções utilitárias (upload de arquivo e conversão DTO <-> Model)
-    // No need for PreAuthorize on these private helper methods, as they are called
-    // by the public methods which are already secured.
     private String saveFile(MultipartFile file) {
         if (file.isEmpty()) return null;
         String originalFilename = file.getOriginalFilename();
