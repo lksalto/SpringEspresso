@@ -6,13 +6,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import java.util.Objects;
+
+import java.util.*;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "sessao")
@@ -49,9 +47,10 @@ public class SessaoModel implements Serializable {
     @Column(nullable = false)
     private StatusSessao status;
 
+    @OrderBy("dataHora desc")
     @JsonManagedReference("sessao-historico")
     @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<HistoricoStatusModel> historico = new HashSet<>();
+    private List<HistoricoStatusModel> historico = new ArrayList<>();
 
     @JsonManagedReference("sessao-bugs")
     @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -120,11 +119,11 @@ public class SessaoModel implements Serializable {
         this.status = status;
     }
 
-    public Set<HistoricoStatusModel> getHistorico() {
+    public List<HistoricoStatusModel> getHistorico() {
         return historico;
     }
 
-    public void setHistorico(Set<HistoricoStatusModel> historico) {
+    public void setHistorico(List<HistoricoStatusModel> historico) {
         this.historico = historico;
     }
 

@@ -11,7 +11,7 @@
 - Thymeleaf
 
 **Front-end:**
-
+- Javascript
 - HTML
 - CSS
 
