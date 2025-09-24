@@ -30,8 +30,9 @@ public class EstrategiaModel implements Serializable {
     private List<DicaModel> dicas = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
 
     @JsonManagedReference("estrategia-exemplos")
-    @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ExemploModel> exemplos = new ArrayList<>(); // Change Set to List and HashSet to ArrayList
+    @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("ordem ASC")
+    private List<ExemploModel> exemplos = new ArrayList<>();
 
     public UUID getId() {
         return id;

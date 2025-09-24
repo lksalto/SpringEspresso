@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +24,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Sort;
 
 @Service
 @Transactional
@@ -39,29 +44,42 @@ public class EstrategiaService {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExemplo) {
-        EstrategiaModel estrategia = convertDtoToModel(dto);
+@PreAuthorize("hasRole('ADMIN')")
+public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExemplo) {
+    EstrategiaModel estrategia = convertDtoToModel(dto);
 
+    // garante lista inicializada
+    if (estrategia.getExemplos() == null) {
+        estrategia.setExemplos(new ArrayList<>());
+    }
 
-        if (imagensExemplo != null && !imagensExemplo.isEmpty()) {
-            int i = 0;
-            for (ExemploModel exemplo : estrategia.getExemplos()) { // Iterate through the model's examples
-                if (i < imagensExemplo.size()) {
-                    MultipartFile imagem = imagensExemplo.get(i);
-                    if (imagem != null && !imagem.isEmpty()) { // Check for null or empty file
-                        if (exemplo.getUrlImagem() != null && !exemplo.getUrlImagem().isEmpty()) {
-                            deleteFile(exemplo.getUrlImagem()); // Delete old image if exists during update
-                        }
-                        String newFilename = saveFile(imagem);
-                        exemplo.setUrlImagem(newFilename);
+    // baseName sanitizado (usa o nome da estratégia)
+    String baseName = sanitize(estrategia.getNome());
+
+    if (imagensExemplo != null && !imagensExemplo.isEmpty()) {
+        int i = 0;
+        for (ExemploModel exemplo : estrategia.getExemplos()) {
+            if (exemplo == null) continue;
+            if (i < imagensExemplo.size()) {
+                MultipartFile imagem = imagensExemplo.get(i);
+                if (imagem != null && !imagem.isEmpty()) {
+                    // exclui imagem antiga se existir
+                    if (exemplo.getUrlImagem() != null && !exemplo.getUrlImagem().isEmpty()) {
+                        deleteFile(exemplo.getUrlImagem());
                     }
+                    // salva com sequência baseada no nome da estratégia
+                    String newFilename = saveFileWithSequence(imagem, baseName);
+                    exemplo.setUrlImagem(newFilename);
                 }
-                i++;
             }
+            i++;
         }
+    }
+
         return estrategiaRepository.save(estrategia);
     }
+
+
 
     @Transactional(readOnly = true)
     public EstrategiaModel findById(UUID id) {
@@ -70,7 +88,7 @@ public class EstrategiaService {
 
     @Transactional(readOnly = true)
     public List<EstrategiaModel> findAll() {
-        return estrategiaRepository.findAll();
+        return estrategiaRepository.findAll(Sort.by(Sort.Direction.ASC, "nome"));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -96,6 +114,7 @@ public class EstrategiaService {
         String newFilename = UUID.randomUUID().toString() + extension;
         try {
             Path destinationFile = this.uploadLocation.resolve(newFilename).normalize().toAbsolutePath();
+            System.out.println(destinationFile + "    " + newFilename);
             Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
             return newFilename;
         } catch (IOException e) {
@@ -112,84 +131,176 @@ public class EstrategiaService {
         }
     }
 
-    // Converte DTO para Model para salvar no banco
-    private EstrategiaModel convertDtoToModel(EstrategiaDto dto) {
-        EstrategiaModel model;
-        if (dto.getId() != null) {
-            model = findById(dto.getId());
-            if (model == null) {
+private EstrategiaModel convertDtoToModel(EstrategiaDto dto) {
+    EstrategiaModel model;
 
-                model = new EstrategiaModel();
-                model.setId(null);
-            }
-        } else {
+    if (dto.getId() != null) {
+        model = findById(dto.getId());
+        if (model == null) {
             model = new EstrategiaModel();
+            model.setId(null);
         }
-
-        model.setNome(dto.getNome());
-        model.setDescricao(dto.getDescricao());
-        model.getDicas().clear();
-        if (dto.getDicas() != null) {
-            for (DicaDto dicaDto : dto.getDicas()) {
-                DicaModel dicaModel = new DicaModel();
-                if (dicaDto.getId() != null) {
-                    dicaModel.setId(dicaDto.getId());
-                }
-                dicaModel.setTexto(dicaDto.getDica());
-                dicaModel.setEstrategia(model);
-                model.getDicas().add(dicaModel);
-            }
-        }
-
-
-        model.getExemplos().clear();
-        if (dto.getExemplos() != null) {
-            for (ExemploDto exemploDto : dto.getExemplos()) {
-                ExemploModel exemploModel = new ExemploModel();
-                if (exemploDto.getId() != null) {
-                    exemploModel.setId(exemploDto.getId());
-                }
-                exemploModel.setTexto(exemploDto.getTexto());
-
-                if (exemploDto.getUrlImagem() != null && !exemploDto.getUrlImagem().isEmpty()) {
-                    exemploModel.setUrlImagem(exemploDto.getUrlImagem());
-                }
-                exemploModel.setEstrategia(model);
-                model.getExemplos().add(exemploModel);
-            }
-        }
-        return model;
+    } else {
+        model = new EstrategiaModel();
     }
+
+    model.setNome(dto.getNome());
+    model.setDescricao(dto.getDescricao());
+
+    // Dicas
+    model.getDicas().clear();
+    if (dto.getDicas() != null) {
+        for (DicaDto dicaDto : dto.getDicas()) {
+            DicaModel dicaModel = new DicaModel();
+            if (dicaDto.getId() != null) {
+                dicaModel.setId(dicaDto.getId());
+            }
+            dicaModel.setTexto(dicaDto.getDica());
+            dicaModel.setEstrategia(model);
+            model.getDicas().add(dicaModel);
+        }
+    }
+
+    // Exemplos
+    List<ExemploModel> existentes = new ArrayList<>();
+    if (model.getExemplos() != null) {
+        existentes.addAll(model.getExemplos());
+    }
+    model.getExemplos().clear();
+
+    int ordem = existentes.stream()
+                          .mapToInt(ExemploModel::getOrdem)
+                          .max()
+                          .orElse(0) + 1;
+
+    if (dto.getExemplos() != null) {
+        for (ExemploDto exemploDto : dto.getExemplos()) {
+            ExemploModel exemploModel = null;
+
+            // Se já existe, reutiliza
+            if (exemploDto.getId() != null) {
+                final UUID id = exemploDto.getId();
+                exemploModel = existentes.stream()
+                        .filter(e -> e.getId().equals(id))
+                        .findFirst()
+                        .orElse(null);
+            }
+
+            // Se não existe, cria novo
+            if (exemploModel == null) {
+                exemploModel = new ExemploModel();
+                exemploModel.setOrdem(ordem++);
+            }
+
+            exemploModel.setTexto(exemploDto.getTexto());
+
+            if (exemploDto.getUrlImagem() != null && !exemploDto.getUrlImagem().isEmpty()) {
+                exemploModel.setUrlImagem(exemploDto.getUrlImagem());
+            }
+
+            exemploModel.setEstrategia(model);
+            model.getExemplos().add(exemploModel);
+        }
+    }
+
+    // Opcional: ordenar por ordem antes de salvar
+    model.getExemplos().sort((a, b) -> Integer.compare(a.getOrdem(), b.getOrdem()));
+
+    return model;
+}
+
 
     public EstrategiaDto convertModelToDto(EstrategiaModel model) {
-        EstrategiaDto dto = new EstrategiaDto();
-        dto.setId(model.getId());
-        dto.setNome(model.getNome());
-        dto.setDescricao(model.getDescricao());
+    EstrategiaDto dto = new EstrategiaDto();
+    dto.setId(model.getId());
+    dto.setNome(model.getNome());
+    dto.setDescricao(model.getDescricao());
 
-        List<DicaDto> dicasDto = new ArrayList<>();
-        if (model.getDicas() != null) {
-            model.getDicas().forEach(dicaModel -> {
-                DicaDto dicaDto = new DicaDto();
-                dicaDto.setId(dicaModel.getId());
-                dicaDto.setDica(dicaModel.getTexto());
-                dicasDto.add(dicaDto);
-            });
-        }
-        dto.setDicas(dicasDto);
-
-        List<ExemploDto> exemplosDto = new ArrayList<>();
-        if (model.getExemplos() != null) {
-            model.getExemplos().forEach(exemploModel -> {
-                ExemploDto exemploDto = new ExemploDto();
-                exemploDto.setId(exemploModel.getId());
-                exemploDto.setTexto(exemploModel.getTexto());
-                exemploDto.setUrlImagem(exemploModel.getUrlImagem());
-                exemplosDto.add(exemploDto);
-            });
-        }
-        dto.setExemplos(exemplosDto);
-
-        return dto;
+    // Dicas
+    List<DicaDto> dicasDto = new ArrayList<>();
+    if (model.getDicas() != null) {
+        model.getDicas().forEach(dicaModel -> {
+            DicaDto dicaDto = new DicaDto();
+            dicaDto.setId(dicaModel.getId());
+            dicaDto.setDica(dicaModel.getTexto());
+            dicasDto.add(dicaDto);
+        });
     }
+    dto.setDicas(dicasDto);
+
+    // Exemplos - ordenados por ID (ou data de criação, se houver)
+    List<ExemploDto> exemplosDto = new ArrayList<>();
+    if (model.getExemplos() != null) {
+        model.getExemplos().stream()
+             .sorted((e1, e2) -> e1.getId().compareTo(e2.getId())) // ordena por ID
+             .forEach(exemploModel -> {
+                 ExemploDto exemploDto = new ExemploDto();
+                 exemploDto.setId(exemploModel.getId());
+                 exemploDto.setTexto(exemploModel.getTexto());
+                 exemploDto.setUrlImagem(exemploModel.getUrlImagem());
+                 exemplosDto.add(exemploDto);
+             });
+    }
+    dto.setExemplos(exemplosDto);
+
+    return dto;
+}
+
+private String sanitize(String input) {
+    if (input == null) return "estrategia";
+    // remove acentos, normaliza, remove chars não permitidos e troca espaços por '-'
+    String s = java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD)
+            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+            .toLowerCase();
+    s = s.replaceAll("[^a-z0-9\\-\\_ ]", ""); // mantém letras, números, - _ e espaços
+    s = s.trim().replaceAll("\\s+", "-");     // espaços -> '-'
+    if (s.isEmpty()) s = "estrategia";
+    return s;
+}
+
+private int getNextSequenceForBaseName(String baseName) {
+    try (Stream<Path> files = Files.list(this.uploadLocation)) {
+        // padrão: baseName_<num>.<ext>
+        Pattern p = Pattern.compile(Pattern.quote(baseName) + "_(\\d+)\\.[^\\.]+$");
+        int max = 0;
+        for (Path f : (Iterable<Path>) files::iterator) {
+            String name = f.getFileName().toString();
+            Matcher m = p.matcher(name);
+            if (m.find()) {
+                try {
+                    int num = Integer.parseInt(m.group(1));
+                    if (num > max) max = num;
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return max + 1;
+    } catch (IOException e) {
+        // em caso de erro, começamos do 1
+        return 1;
+    }
+}
+
+private String saveFileWithSequence(MultipartFile file, String baseName) {
+    if (file == null || file.isEmpty()) return null;
+
+    String originalFilename = Paths.get(file.getOriginalFilename()).getFileName().toString();
+    if (originalFilename == null || !originalFilename.contains(".")) {
+        throw new RuntimeException("Arquivo sem extensão não é permitido.");
+    }
+    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+    // obter sequência
+    int seq = getNextSequenceForBaseName(baseName);
+    String finalFilename = baseName + "_" + seq + extension;
+
+    try {
+        Path destinationFile = this.uploadLocation.resolve(finalFilename).normalize().toAbsolutePath();
+        Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        return finalFilename; // retorna somente o nome, sem path
+    } catch (IOException e) {
+        throw new RuntimeException("Falha ao salvar o arquivo.", e);
+    }
+}
+
+
+
 }

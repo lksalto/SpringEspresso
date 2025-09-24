@@ -30,18 +30,27 @@ public class EstrategiaSeeder {
         System.out.println("Criando estratégias iniciais...");
 
         // Estratégia 1: Teste de Interface
-        EstrategiaModel estrategia1 = criarEstrategiaInterface();
+        //EstrategiaModel estrategia1 = criarEstrategiaInterface();
         
         // Estratégia 2: Teste de Performance
-        EstrategiaModel estrategia2 = criarEstrategiaPerformance();
+        //EstrategiaModel estrategia2 = criarEstrategiaPerformance();
         
         // Estratégia 3: Teste de Segurança
         EstrategiaModel estrategia3 = criarEstrategiaSeguranca();
 
+        // Estratégias do XPLOIT
+        EstrategiaModel estrategia4 = criarEstrategiaSingleSession();
+        EstrategiaModel estrategia5 = criarEstrategiaGoldenPath();
+        EstrategiaModel estrategia6 = criarEstrategiaNoobJourney();
+        EstrategiaModel estrategia7 = criarEstrategiaCompletionist();
+        EstrategiaModel estrategia8 = criarEstrategiaStressTest();
+        EstrategiaModel estrategia9 = criarEstrategiaSpeedRun();
+        EstrategiaModel estrategia10 = criarEstrategiaUserInterface();
+        EstrategiaModel estrategia11 = criarEstrategiaNeighboring();
+        EstrategiaModel estrategia12 = criarEstrategiaOvertime();
+
         System.out.println("✓ Estratégias iniciais criadas com sucesso!");
-        System.out.println("  - " + estrategia1.getNome());
-        System.out.println("  - " + estrategia2.getNome());
-        System.out.println("  - " + estrategia3.getNome());
+
     }
 
     private EstrategiaModel criarEstrategiaInterface() {
@@ -56,9 +65,9 @@ public class EstrategiaSeeder {
         criarDica(estrategia, "Valide se as cores têm contraste adequado para leitura.");
         criarDica(estrategia, "Teste a funcionalidade em diferentes navegadores.");
 
-        criarExemplo(estrategia, "Botão de login que muda de cor quando o mouse passa por cima", "/uploads/estrategias/exemplo-botao-hover.jpg");
-        criarExemplo(estrategia, "Menu responsivo que se adapta a telas menores", "/uploads/estrategias/exemplo-menu-responsivo.jpg");
-        criarExemplo(estrategia, "Formulário com validação visual em tempo real", "/uploads/estrategias/exemplo-validacao-formulario.jpg");
+        criarExemplo(estrategia, "Botão de login que muda de cor quando o mouse passa por cima", "/uploads/estrategias/exemplo-botao-hover.jpg",0);
+        criarExemplo(estrategia, "Menu responsivo que se adapta a telas menores", "/uploads/estrategias/exemplo-menu-responsivo.jpg",1);
+        criarExemplo(estrategia, "Formulário com validação visual em tempo real", "/uploads/estrategias/exemplo-validacao-formulario.jpg",2);
 
         return estrategia;
     }
@@ -75,9 +84,9 @@ public class EstrategiaSeeder {
         criarDica(estrategia, "Teste a performance de consultas ao banco de dados.");
         criarDica(estrategia, "Monitore o tempo de resposta de APIs externas.");
 
-        criarExemplo(estrategia, "Gráfico de tempo de resposta de uma API", "/uploads/estrategias/exemplo-grafico-performance.jpg");
-        criarExemplo(estrategia, "Monitoramento de uso de memória durante testes de carga", "/uploads/estrategias/exemplo-monitoramento-memoria.jpg");
-        criarExemplo(estrategia, "Análise de consultas lentas no banco de dados", "/uploads/estrategias/exemplo-consultas-lentas.jpg");
+        criarExemplo(estrategia, "Gráfico de tempo de resposta de uma API", "/uploads/estrategias/exemplo-grafico-performance.jpg",0);
+        criarExemplo(estrategia, "Monitoramento de uso de memória durante testes de carga", "/uploads/estrategias/exemplo-monitoramento-memoria.jpg",1);
+        criarExemplo(estrategia, "Análise de consultas lentas no banco de dados", "/uploads/estrategias/exemplo-consultas-lentas.jpg",2);
 
         return estrategia;
     }
@@ -95,11 +104,122 @@ public class EstrategiaSeeder {
         criarDica(estrategia, "Teste proteção contra CSRF (Cross-Site Request Forgery).");
         criarDica(estrategia, "Verifique se senhas são armazenadas de forma segura (hash).");
 
-        criarExemplo(estrategia, "Tentativa de acesso não autorizado a uma área restrita", "/uploads/estrategias/exemplo-acesso-negado.jpg");
-        criarExemplo(estrategia, "Validação de entrada contra XSS", "/uploads/estrategias/exemplo-validacao-xss.jpg");
-        criarExemplo(estrategia, "Teste de força bruta em formulário de login", "/uploads/estrategias/exemplo-forca-bruta.jpg");
-        criarExemplo(estrategia, "Verificação de tokens CSRF em formulários", "/uploads/estrategias/exemplo-token-csrf.jpg");
 
+
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaSingleSession() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Single Session Strategy");
+        estrategia.setDescricao("Estratégia para deixar o tester ter um primeiro contato com o jogo.");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarExemplo(estrategia, "Teste Single Session", "single-session.jpg",0);
+
+        criarDica(estrategia, "O intuito é jogar normalmente, sem se preocupar com detecção de bugs ou jogar de forma otimizada.");
+        criarDica(estrategia, "Seja livre, sem  pressão.");
+
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaGoldenPath() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Golden Path Strategy");
+        estrategia.setDescricao("Estratégia de testes para jogar de maneira otimizada.");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarExemplo(estrategia, "Teste Golden Path", "golden-path.jpg",0);
+
+        criarDica(estrategia, "Agora o intuito é jogar de maneira otimizada, conforme elaborado pelos desenvolvedores.");
+        criarDica(estrategia, "Entre em contato com os desenvolvedores, para saber quais as formas ótimas de se alcançar os objetivos.");
+        
+       
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaNoobJourney() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Noob Journey");
+        estrategia.setDescricao("Estratégia utilizada para se jogar o jogo de maneira 'noob', não seguindo recomendações e errando de propósito.");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarExemplo(estrategia, "Teste Noob Journey", "noob-journey.jpg",0);
+        criarDica(estrategia, "Tente fazer o oposto do que é sugerido.");
+
+        criarDica(estrategia, "Jogue igual aquele seu amigo que você sempre precisa carregar.");
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaCompletionist() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Completionist");
+        estrategia.setDescricao("Estratégia focada em completar o jogo em 100% dos objetivos");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarDica(estrategia, "Busque até a última moeda de todos os mapas.");
+        criarDica(estrategia, "Mate todos os inimigos possíveis.");
+        
+        criarExemplo(estrategia, "Teste Completionist", "completionist.jpg",0);
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaStressTest() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Stress Test");
+        estrategia.setDescricao("Estratégia focada em testar inputs e ações não esperadas pelos desenvolvedores do jogo");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarDica(estrategia, "Tente utilizar comandos inválidos, ou de maneira inesperada.");
+        criarDica(estrategia, "Ataque um personagem enquanto o diálogo está aberto.");
+        
+        criarExemplo(estrategia, "Teste Stress Test", "stress-test.jpg",0);
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaSpeedRun() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Speed Run");
+        estrategia.setDescricao("Estratégia focada em finalizar o jogo da maneira mais rápida possível");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarDica(estrategia, "Não importa a sua pontuação, o importante é acabar com o jogo logo.");
+                
+        criarExemplo(estrategia, "Teste Speed Run", "speed-run.jpg",0);
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaUserInterface() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("User Interface");
+        estrategia.setDescricao("Interaja com a UI, e teste os seus limites");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarDica(estrategia, "Abra menus, tente navegar por eles e veja se estão todos funcionando.");
+                
+        criarExemplo(estrategia, "Teste UI", "user-interface.jpg",0);
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaNeighboring() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Neighboring");
+        estrategia.setDescricao("Uma vez encontrado um bug, o usuário tenta encontrar mais deles realizando ações parecidas e em locais próximos.");
+        estrategia = estrategiaRepository.save(estrategia);
+
+        criarDica(estrategia, "A possibilidade de encontrar mais bugs mostra-se maior em áreas onde já foram encontrados outros anteriormente.");
+                
+        criarExemplo(estrategia, "Teste Neighboring", "neighboring.jpg",0);
+        return estrategia;
+    }
+
+    private EstrategiaModel criarEstrategiaOvertime() {
+        EstrategiaModel estrategia = new EstrategiaModel();
+        estrategia.setNome("Overtime");
+        estrategia.setDescricao("Testar novamente algum bug conhecido, em um outro momento (aplicar o neighboring após melhorias/evoluções).");
+        
+        estrategia = estrategiaRepository.save(estrategia);
+        criarExemplo(estrategia, "Teste Overtime", "overtime.jpg",0);
         return estrategia;
     }
 
@@ -110,11 +230,12 @@ public class EstrategiaSeeder {
         dicaRepository.save(dica);
     }
 
-    private void criarExemplo(EstrategiaModel estrategia, String texto, String urlImagem) {
+    private void criarExemplo(EstrategiaModel estrategia, String texto, String urlImagem, int ordem) {
         ExemploModel exemplo = new ExemploModel();
         exemplo.setTexto(texto);
         exemplo.setUrlImagem(urlImagem);
         exemplo.setEstrategia(estrategia);
+        exemplo.setOrdem(ordem);
         exemploRepository.save(exemplo);
     }
 } 

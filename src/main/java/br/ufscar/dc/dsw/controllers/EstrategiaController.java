@@ -66,6 +66,7 @@ public class EstrategiaController {
             dto.setDescricao(descricao);
 
             List<ExemploDto> exemplos = new ArrayList<>();
+            Integer ordem = 1; // comece do 1
             if (exemplosTexto != null) {
                 for (int i = 0; i < exemplosTexto.length; i++) {
                     if (exemplosTexto[i] != null && !exemplosTexto[i].trim().isEmpty()) {
@@ -77,10 +78,13 @@ public class EstrategiaController {
                         if (exemplosUrlImagem != null && i < exemplosUrlImagem.length && exemplosUrlImagem[i] != null) {
                             exemplo.setUrlImagem(exemplosUrlImagem[i]);
                         }
+                        exemplo.setOrdem(ordem); // atribui ordem incremental
+                        ordem++;
                         exemplos.add(exemplo);
                     }
                 }
             }
+
             dto.setExemplos(exemplos);
 
             List<DicaDto> dicas = new ArrayList<>();

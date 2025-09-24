@@ -20,6 +20,10 @@ public class ExemploModel implements Serializable {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String texto;
 
+    @Column(name = "ordem", nullable = false)
+    private Integer ordem;
+
+
     @Column(name = "url_imagem", length = 1024)
     private String urlImagem;
 
@@ -49,7 +53,18 @@ public class ExemploModel implements Serializable {
     }
 
     public void setUrlImagem(String urlImagem) {
-        this.urlImagem = urlImagem;
+        String url = urlImagem;
+        String prefix = "/uploads/estrategias//";
+        String prefix2 = "/uploads/estrategias/";
+        if (url.startsWith(prefix)) {
+            url = url.substring(prefix.length());
+            
+        }
+        if (url.startsWith(prefix2)) {
+            url = url.substring(prefix2.length());
+            
+        }
+        this.urlImagem = "/uploads/estrategias/" + url;
     }
 
     public EstrategiaModel getEstrategia() {
@@ -71,5 +86,13 @@ public class ExemploModel implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getOrdem() {
+        return ordem;
+    }
+
+    public void setOrdem(Integer ordem) {
+        this.ordem = ordem;
     }
 }

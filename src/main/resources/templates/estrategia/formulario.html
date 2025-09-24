@@ -63,7 +63,7 @@
                    accept="image/png, image/jpeg, image/gif">
 
             <div class="imagem-atual-info" th:if="${exemplo.urlImagem != null}">
-              <img th:src="@{/uploads/estrategias/{img}(img=${exemplo.urlImagem})}" alt="Imagem atual" 
+              <img th:src="${exemplo.urlImagem}" alt="Imagem atual" 
                    style="max-width: 200px; display: block; margin: 0 auto;">
               <p><strong th:text="#{estrategia.imagem.atual}">Arquivo atual:</strong> <span th:text="${exemplo.urlImagem}"></span></p>
             </div>
