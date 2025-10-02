@@ -12,14 +12,21 @@
 <div class="wrapper">
     <h1 th:text="#{projeto.lista.titulo}">Lista de Projetos</h1>
 
+    <!-- Mensagens de sucesso ou erro -->
     <div th:if="${success}" class="message-box success">
         <p th:text="${success}"></p>
     </div>
     <div th:if="${fail}" class="message-box error">
         <p th:text="${fail}"></p>
     </div>
+
+    <!-- Botão de novo projeto para admin -->
     <div th:if="${ehAdmin}">
-        <p><a th:href="@{/projetos/cadastro}" class="button button-primary" th:text="#{projeto.botao.novo}">Novo Projeto</a></p>
+        <p>
+            <a th:href="@{/projetos/cadastro}" 
+               class="button button-primary" 
+               th:text="#{projeto.botao.novo}">Novo Projeto</a>
+        </p>
     </div>
 
     <table class="table table-striped">
@@ -53,17 +60,32 @@
                 </ul>
             </td>
             <td>
+                <!-- Botões de ações -->
                 <a th:if="${ehAdmin or projeto.usuarioLogadoEhMembro}"
-                   th:href="@{/sessoes/projeto/{id}(id=${projeto.id})}" class="button button-primary" th:text="#{projeto.botao.verSessoes}">Ver Sessões</a>
-                <a th:if="${ehAdmin}" th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary" th:text="#{projeto.botao.editar}">Editar</a>
-                <a th:if="${ehAdmin}" th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary"
-                   onclick="return confirm([[#{projeto.confirm.remover}]]);" th:text="#{projeto.botao.excluir}">Excluir</a>
+                   th:href="@{/projetos/bugs/{id}(id=${projeto.id})}" 
+                   class="button button-primary" 
+                   th:text="#{projeto.botao.verBugs}">Ver Bugs</a>
+
+                <a th:if="${ehAdmin}" 
+                   th:href="@{/projetos/editar/{id}(id=${projeto.id})}" 
+                   class="button button-secondary" 
+                   th:text="#{projeto.botao.editar}">Editar</a>
+
+                <!-- Botão Excluir usando data-msg para compatibilidade com Thymeleaf 3.1 -->
+                <a th:if="${ehAdmin}" 
+                   th:href="@{/projetos/remover/{id}(id=${projeto.id})}" 
+                   class="button button-secondary"
+                   th:attr="data-msg=${#messages.msg('projeto.confirm.remover')}"
+                   onclick="return confirm(this.dataset.msg);"
+                   th:text="#{projeto.botao.excluir}">Excluir</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <p><a th:href="@{/home}" class="button button-secondary" th:text="#{link.voltarMenu}">Voltar ao Menu Principal</a></p>
+    <p>
+        <a th:href="@{/home}" class="button button-secondary" th:text="#{link.voltarMenu}">Voltar ao Menu Principal</a>
+    </p>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

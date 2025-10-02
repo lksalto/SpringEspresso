@@ -1,98 +1,57 @@
 package br.ufscar.dc.dsw.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
-import java.util.Objects; 
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import br.ufscar.dc.dsw.models.enums.BugStatus;
 
 @Entity
 @Table(name = "bug")
-public class BugModel implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class BugModel {
 
     @Id
-    @GeneratedValue 
-    @UuidGenerator 
-    @Column(name = "id_bug", updatable = false, nullable = false, columnDefinition = "binary(16)")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
+    private String titulo;
+
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(name = "data_registro", nullable = false, updatable = false)
-    private LocalDateTime dataRegistro;
+    private LocalDateTime dataReporte = LocalDateTime.now();
 
-    @Column(nullable = false)
-    private boolean resolvido = false;
-
-    @JsonBackReference("sessao-bugs")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_sessao", nullable = false)
-    private SessaoModel sessao;
+    @JoinColumn(name = "projeto_id", nullable = false)
+    private ProjetoModel projeto;
 
-    @PrePersist
-    protected void onCreate() {
-        if (dataRegistro == null) { 
-            dataRegistro = LocalDateTime.now();
-        }
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reporter_id", nullable = false)
+    private UsuarioModel reporter;
 
-    // --- Getters e Setters ---
-    
-    public UUID getId() {
-        return id;
-    }
+    @Enumerated(EnumType.STRING) // salva como texto no banco
+    @Column(nullable = false)
+    private BugStatus status = BugStatus.ABERTO; // default
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    // getters e setters
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public String getDescricao() {
-        return descricao;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public LocalDateTime getDataRegistro() {
-        return dataRegistro;
-    }
+    public LocalDateTime getDataReporte() { return dataReporte; }
+    public void setDataReporte(LocalDateTime dataReporte) { this.dataReporte = dataReporte; }
 
-    public void setDataRegistro(LocalDateTime dataRegistro) {
-        this.dataRegistro = dataRegistro;
-    }
+    public ProjetoModel getProjeto() { return projeto; }
+    public void setProjeto(ProjetoModel projeto) { this.projeto = projeto; }
 
-    public boolean isResolvido() {
-        return resolvido;
-    }
+    public UsuarioModel getReporter() { return reporter; }
+    public void setReporter(UsuarioModel reporter) { this.reporter = reporter; }
 
-    public void setResolvido(boolean resolvido) {
-        this.resolvido = resolvido;
-    }
-
-    public SessaoModel getSessao() {
-        return sessao;
-    }
-
-    public void setSessao(SessaoModel sessao) {
-        this.sessao = sessao;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BugModel that = (BugModel) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+    public BugStatus getStatus() { return status; }
+    public void setStatus(BugStatus status) { this.status = status; }
 }

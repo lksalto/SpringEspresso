@@ -91,6 +91,12 @@ public EstrategiaModel save(EstrategiaDto dto, List<MultipartFile> imagensExempl
         return estrategiaRepository.findAll(Sort.by(Sort.Direction.ASC, "nome"));
     }
 
+    @Transactional(readOnly = true)
+    public List<EstrategiaModel> buscarEstrategiasPublicas() {
+        // Estratégias públicas são aquelas sem projeto associado
+        return estrategiaRepository.findByProjetoIsNull();
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(UUID id) {
         EstrategiaModel estrategia = findById(id);

@@ -2,7 +2,9 @@ package br.ufscar.dc.dsw.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Objects;
@@ -31,6 +33,12 @@ public class ProjetoModel {
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private Set<UsuarioModel> membros = new HashSet<>();
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EstrategiaModel> estrategias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BugModel> bugs = new HashSet<>();
 
     // Getters e Setters
 
@@ -72,6 +80,22 @@ public class ProjetoModel {
 
     public void setMembros(Set<UsuarioModel> membros) {
         this.membros = membros;
+    }
+
+    public List<EstrategiaModel> getEstrategias() {
+        return estrategias;
+    }
+
+    public void setEstrategias(List<EstrategiaModel> estrategias) {
+        this.estrategias = estrategias;
+    }
+
+    public Set<BugModel> getBugs() {
+        return bugs;
+    }
+
+    public void setBugs(Set<BugModel> bugs) {
+        this.bugs = bugs;
     }
 
     @Override

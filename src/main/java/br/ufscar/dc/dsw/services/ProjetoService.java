@@ -5,7 +5,9 @@ import br.ufscar.dc.dsw.dtos.ProjetoDTO;
 import br.ufscar.dc.dsw.dtos.ProjetoEdicaoDTO;
 import br.ufscar.dc.dsw.models.ProjetoModel;
 import br.ufscar.dc.dsw.models.UsuarioModel;
+import br.ufscar.dc.dsw.models.EstrategiaModel;
 import br.ufscar.dc.dsw.models.enums.Papel;
+import br.ufscar.dc.dsw.repositories.EstrategiaRepository;
 import br.ufscar.dc.dsw.repositories.ProjetoRepository;
 import br.ufscar.dc.dsw.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,11 +37,17 @@ public class ProjetoService {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private EstrategiaRepository estrategiaRepository;
+
     public ProjetoDTO salvar(ProjetoCadastroDTO dto) {
         ProjetoModel projeto = new ProjetoModel();
         projeto.setNome(dto.nome());
         projeto.setDescricao(dto.descricao());
         projeto.setMembros(buscarMembros(dto.membrosIds()));
+        
+        criarEstrategiasPadraoParaProjeto(projeto); // Adicione esta linha
+
         ProjetoModel salvo = projetoRepository.save(projeto);
         return converterParaDTO(salvo);
     }
@@ -89,6 +98,21 @@ public class ProjetoService {
         return converterParaDTO(projeto);
     }
 
+    public void criarEstrategiasPadraoParaProjeto(ProjetoModel projeto) {
+        List<EstrategiaModel> estrategiasPadrao = estrategiaRepository.findByProjetoIsNull(); // ou carregue de um local fixo
+        // Inicializa a lista se necessário
+        if (projeto.getEstrategias() == null) {
+            projeto.setEstrategias(new ArrayList<>());
+        }
+        for (EstrategiaModel padrao : estrategiasPadrao) {
+            EstrategiaModel nova = new EstrategiaModel();
+            nova.setNome(padrao.getNome());
+            nova.setDescricao(padrao.getDescricao());
+            // clone exemplos e dicas se necessário
+            nova.setProjeto(projeto);
+            projeto.getEstrategias().add(nova);
+        }
+    }
 
     private Set<UsuarioModel> buscarMembros(List<UUID> ids) {
         if (ids == null) return new HashSet<>();

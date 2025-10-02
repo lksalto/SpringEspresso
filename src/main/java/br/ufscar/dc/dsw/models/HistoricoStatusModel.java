@@ -30,10 +30,10 @@ public class HistoricoStatusModel implements Serializable {
     @Column(name = "data_hora", nullable = false)
     private LocalDateTime dataHora;
 
-    @JsonBackReference("sessao-historico")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_sessao", nullable = false)
-    private SessaoModel sessao;
+    //@JsonBackReference("sessao-historico")
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "id_sessao", nullable = false)
+    //private SessaoModel sessao;
 
     @PrePersist
     protected void onCreate() {
@@ -72,13 +72,13 @@ public class HistoricoStatusModel implements Serializable {
         this.dataHora = dataHora;
     }
 
-    public SessaoModel getSessao() {
-        return sessao;
-    }
+   //public SessaoModel getSessao() {
+        //return sessao;
+    //}
 
-    public void setSessao(SessaoModel sessao) {
-        this.sessao = sessao;
-    }
+    //public void setSessao(SessaoModel sessao) {
+    //    this.sessao = sessao;
+    //}
 
     @Override
     public boolean equals(Object o) {

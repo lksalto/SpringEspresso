@@ -1,4 +1,4 @@
-package br.ufscar.dc.dsw.models;
+/*package br.ufscar.dc.dsw.models;
 
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -148,3 +148,4 @@ public class SessaoModel implements Serializable {
         return Objects.hash(id);
     }
 }
+*/

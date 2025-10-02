@@ -1,4 +1,4 @@
-package br.ufscar.dc.dsw.controllers;
+/*package br.ufscar.dc.dsw.controllers;
 
 import br.ufscar.dc.dsw.dtos.ProjetoDTO;
 import br.ufscar.dc.dsw.dtos.SessaoDTO;
@@ -97,11 +97,11 @@ public class SessaoController {
     public String detalhesSessao(@PathVariable UUID id, Model model, @AuthenticationPrincipal UsuarioModel usuarioLogado) {
         SessaoModel sessao = sessaoService.buscarPorId(id);
         
-        List<BugDTO> listaBugs = bugService.buscarTodosBugsPorSessao(id, usuarioLogado); 
+        //List<BugDTO> listaBugs = bugService.buscarTodosBugsPorSessao(id, usuarioLogado); 
 
         model.addAttribute("sessao", sessao);
         model.addAttribute("todosStatus", StatusSessao.values());
-        model.addAttribute("listaBugs", listaBugs); 
+        //model.addAttribute("listaBugs", listaBugs);
         return "sessao/detalhes";
     }
 
@@ -144,4 +144,4 @@ public class SessaoController {
         model.addAttribute("tituloPagina", "Minhas Sessões de Teste");
         return "sessao/minhas_sessoes";
     }
-}
+}*/

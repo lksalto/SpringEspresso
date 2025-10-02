@@ -34,6 +34,10 @@ public class EstrategiaModel implements Serializable {
     @OrderBy("ordem ASC")
     private List<ExemploModel> exemplos = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projeto_id")
+    private ProjetoModel projeto;
+
     public UUID getId() {
         return id;
     }
@@ -72,6 +76,14 @@ public class EstrategiaModel implements Serializable {
 
     public void setExemplos(List<ExemploModel> exemplos) { // Change Set to List
         this.exemplos = exemplos;
+    }
+
+    public ProjetoModel getProjeto() {
+        return projeto;
+    }
+
+    public void setProjeto(ProjetoModel projeto) {
+        this.projeto = projeto;
     }
 
     @Override

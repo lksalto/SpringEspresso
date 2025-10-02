@@ -1,4 +1,4 @@
-package br.ufscar.dc.dsw.repositories;
+/*package br.ufscar.dc.dsw.repositories;
 
 import br.ufscar.dc.dsw.models.SessaoModel;
 import br.ufscar.dc.dsw.models.enums.StatusSessao;
@@ -17,3 +17,4 @@ public interface SessaoRepository extends JpaRepository<SessaoModel, UUID> {
     @Query("SELECT s FROM SessaoModel s JOIN FETCH s.tester JOIN FETCH s.projeto JOIN FETCH s.estrategia WHERE s.projeto.id = :projetoId ORDER BY s.id DESC")
     List<SessaoModel> findAllByProjetoIdWithDetails(@Param("projetoId") UUID projetoId);
 }
+*/

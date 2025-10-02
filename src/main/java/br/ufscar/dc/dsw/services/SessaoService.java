@@ -1,4 +1,4 @@
-package br.ufscar.dc.dsw.services;
+/*package br.ufscar.dc.dsw.services;
 
 import br.ufscar.dc.dsw.dtos.SessaoDTO;
 import br.ufscar.dc.dsw.dtos.SessaoEdicaoDTO;
@@ -145,3 +145,4 @@ public class SessaoService {
         return sessao;
     }
 }
+*/
