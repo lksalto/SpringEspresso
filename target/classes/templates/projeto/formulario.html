@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${projetoCadastroDTO != null} ? #{titulo.cadastro.projeto} : #{titulo.edicao.projeto}"></title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/estrategia-grid.css}"/>
 
 </head>
 <body>
@@ -38,6 +39,16 @@
                 <p class="multiselect-instructions" th:text="#{projeto.instrucoes.multiselect}"></p>
             </div>
 
+            <div class="strategy-grid-container">
+                <label>Estratégias</label>
+                <div class="strategy-grid">
+                    <div th:each="estrategia : ${estrategias}" class="strategy-button">
+                        <input type="checkbox" th:field="*{estrategiasIds}" th:value="${estrategia.id}" th:id="'estrategia-cad-' + ${estrategia.id}" class="hidden-checkbox"/>
+                        <label th:for="'estrategia-cad-' + ${estrategia.id}" th:text="${estrategia.nome}"></label>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="button button-primary" th:text="#{projeto.botao.salvar}"></button>
             <a th:href="@{/projetos/listar}" class="button button-secondary" th:text="#{link.cancelar}">Cancelar</a>
         </form>
@@ -62,9 +73,19 @@
                 <label th:text="#{projeto.label.membros}"></label>
                 <select multiple th:field="*{membrosIds}" size="10">
                     <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"
-                            th:selected="${#lists.contains(projetoEdicaoDTO.membrosIds, usuario.id)}"></option>
+                            th:selected="${projetoEdicaoDTO.membrosIds != null && #lists.contains(projetoEdicaoDTO.membrosIds, usuario.id)}"></option>
                 </select>
                 <p class="multiselect-instructions" th:text="#{projeto.instrucoes.multiselect}"></p>
+            </div>
+
+            <div class="strategy-grid-container">
+                <label>Estratégias</label>
+                <div class="strategy-grid">
+                    <div th:each="estrategia : ${estrategias}" class="strategy-button">
+                        <input type="checkbox" th:field="*{estrategiasIds}" th:value="${estrategia.id}" th:id="'estrategia-edit-' + ${estrategia.id}" class="hidden-checkbox"/>
+                        <label th:for="'estrategia-edit-' + ${estrategia.id}" th:text="${estrategia.nome}"></label>
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="button button-primary" th:text="#{projeto.botao.atualizar}"></button>

@@ -3,31 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Projetos</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<h1>Projetos</h1>
 
-<a th:href="@{/projetos/cadastro}">Novo Projeto</a>
+<div th:replace="~{fragments/header :: header}"></div>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="projeto : ${listaProjetos}">
-        <td th:text="${projeto.id}"></td>
-        <td th:text="${projeto.nome}"></td>
-        <td th:text="${projeto.descricao}"></td>
-        <td>
-            <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}">Excluir</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="wrapper">
+    <h1>Projetos</h1>
+
+    <a th:href="@{/projetos/cadastro}" class="button button-primary">Novo Projeto</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="projeto : ${listaProjetos}">
+            <td th:text="${projeto.id}"></td>
+            <td th:text="${projeto.nome}"></td>
+            <td th:text="${projeto.descricao}"></td>
+            <td>
+                <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
+                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-danger">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 </html>

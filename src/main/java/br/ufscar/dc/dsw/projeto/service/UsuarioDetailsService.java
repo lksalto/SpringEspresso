@@ -1,11 +1,7 @@
 package br.ufscar.dc.dsw.projeto.service;
 
-import java.util.ArrayList;
-
 import br.ufscar.dc.dsw.projeto.model.UsuarioModel;
 import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
-
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,17 +17,11 @@ public class UsuarioDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UsuarioModel usuario = usuarioRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UsuarioModel usuario = usuarioRepository.findByEmail(username);
         if (usuario == null) {
-            throw new UsernameNotFoundException("Usuário não encontrado");
+            throw new UsernameNotFoundException("Usuário não encontrado com o email: " + username);
         }
-
-        // Se você ainda não codificou a senha, use {noop} para texto puro
-        return User.builder()
-                   .username(usuario.getEmail())
-                   .password("{noop}" + usuario.getSenha())
-                   .authorities(new ArrayList<>()) // ou roles, se tiver
-                   .build();
+        return usuario;
     }
 }

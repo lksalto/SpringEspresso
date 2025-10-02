@@ -21,19 +21,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // desativa CSRF para teste; depois pode habilitar
-            .authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll() // libera acesso ao login e recursos estáticos
-                .anyRequest().authenticated() // resto requer autenticação
-            .and()
-            .formLogin()
-                .loginPage("/login") // página de login personalizada
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/", "/login", "/logout", "/css/**", "/js/**", "/webjars/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
                 .defaultSuccessUrl("/", true)
                 .permitAll()
-            .and()
-            .logout()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
-                .permitAll();
+                .permitAll()
+            );
 
         return http.build();
     }

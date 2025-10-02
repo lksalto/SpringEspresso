@@ -3,7 +3,6 @@ package br.ufscar.dc.dsw.projeto.model;
 import jakarta.persistence.*;
 import java.util.*;
 
-
 @Entity
 @Table(name = "projeto")
 public class ProjetoModel {
@@ -15,7 +14,7 @@ public class ProjetoModel {
     private String nome;
     private String descricao;
 
-    @ManyToMany(mappedBy = "projetos")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<EstrategiaModel> estrategias = new ArrayList<>();
 
     // getters e setters
@@ -32,4 +31,7 @@ public class ProjetoModel {
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public List<EstrategiaModel> getEstrategias() { return estrategias; }
+    public void setEstrategias(List<EstrategiaModel> estrategias) { this.estrategias = estrategias; }
 }
+
+
