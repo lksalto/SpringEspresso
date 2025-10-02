@@ -17,28 +17,18 @@
     <p style="text-align: center; margin-bottom: 30px; color: var(--cafe-medio);" th:text="#{home.subtitulo}"></p>
 
     <div class="dashboard-grid">
-        <div class="card">
-            <h3 th:text="#{home.card.usuarios.titulo}"></h3>
-            <p th:text="#{home.card.usuarios.descricao}"></p>
-            <a th:href="@{/usuarios/listar}" class="button button-primary" th:text="#{home.card.usuarios.botao}"></a>
-        </div>
-
+        <!-- Botão para Projetos -->
         <div class="card">
             <h3 th:text="#{home.card.projetos.titulo}"></h3>
             <p th:text="#{home.card.projetos.descricao}"></p>
             <a th:href="@{/projetos/listar}" class="button button-primary" th:text="#{home.card.projetos.botao}"></a>
         </div>
 
+        <!-- Botão para Estratégias -->
         <div class="card">
             <h3 th:text="#{home.card.estrategias.titulo}"></h3>
             <p th:text="#{home.card.estrategias.descricao}"></p>
             <a th:href="@{/estrategias}" class="button button-primary" th:text="#{home.card.estrategias.botao}"></a>
-        </div>
-
-        <div class="card">
-            <h3 th:text="#{home.card.sessoes.titulo}"></h3>
-            <p th:text="#{home.card.sessoes.descricao}"></p>
-            <a th:href="@{/sessoes/minhas-sessoes}" class="button button-primary" th:text="#{home.card.sessoes.botao}"></a>
         </div>
     </div>
 

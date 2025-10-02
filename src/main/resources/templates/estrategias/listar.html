@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="#{titulo.pagina.estrategias}">Gerenciador de Estratégias</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <style>
+    .estrategia-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 16px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+    .estrategia-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+  <h1 th:text="#{titulo.lista.estrategias}">Lista de Estratégias</h1>
+
+  <!-- Mensagens de sucesso ou erro -->
+  <div th:if="${success}" class="message-box success">
+    <p th:text="${success}"></p>
+  </div>
+  <div th:if="${fail}" class="message-box error">
+    <p th:text="${fail}"></p>
+  </div>
+
+  <!-- Botão "Nova Estratégia" só para ADMIN -->
+  <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
+    <a th:href="@{/estrategias/novo}" class="button button-primary" th:text="#{link.nova_estrategia}">Nova Estratégia</a>
+  </div>
+
+  <!-- Lista de estratégias como botões -->
+  <div th:if="${estrategias != null and not #lists.isEmpty(estrategias)}">
+    <div th:each="estrategia : ${estrategias}">
+      <a th:href="@{/estrategias/detalhes/{id}(id=${estrategia.id})}" 
+         class="estrategia-button" 
+         th:text="${estrategia.nome}">Estratégia</a>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há estratégias -->
+  <div th:unless="${estrategias != null and not #lists.isEmpty(estrategias)}">
+    <div style="text-align: center; padding: 40px 20px; color: #666; font-style: italic;">
+      <p th:text="#{estrategia.nenhuma}">Nenhuma estratégia encontrada.</p>
+      <p sec:authorize="hasRole('ADMIN')" style="margin-top: 20px;" th:text="#{estrategia.clique_novo}">Clique em "Nova Estratégia" para adicionar.</p>
+    </div>
+  </div>
+
+  <!-- Navegação -->
+  <div th:replace="~{fragments/navigation :: navigation-section}"></div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
