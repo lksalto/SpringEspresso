@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Detalhes do Projeto: ' + ${projeto.nome}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/estrategia-grid.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${projeto.nome}"></h1>
+    <p th:text="${projeto.descricao}"></p>
+
+    <h2>Estratégias do Projeto</h2>
+    <div class="strategy-grid">
+        <div th:each="estrategia : ${projeto.estrategias}" class="strategy-button">
+            <a th:href="@{/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes(projetoId=${projeto.id}, estrategiaId=${estrategia.id})}"
+               class="strategy-button-link" th:text="${estrategia.nome}"></a>
+        </div>
+    </div>
+
+    <a th:href="@{/projetos/listar}" class="button button-secondary">Voltar para a Lista</a>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

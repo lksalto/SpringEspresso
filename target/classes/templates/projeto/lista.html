@@ -12,7 +12,7 @@
 <div class="wrapper">
     <h1>Projetos</h1>
 
-    <a th:href="@{/projetos/cadastro}" class="button button-primary">Novo Projeto</a>
+    <a th:href="@{/projetos/cadastro}" class="button button-secondary">Novo Projeto</a>
 
     <table class="data-table">
         <thead>
@@ -29,8 +29,9 @@
             <td th:text="${projeto.nome}"></td>
             <td th:text="${projeto.descricao}"></td>
             <td>
+                <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Detalhes</a>
                 <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
-                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-danger">Excluir</a>
+                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary">Excluir</a>
             </td>
         </tr>
         </tbody>

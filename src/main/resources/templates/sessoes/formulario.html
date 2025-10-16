@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Sessão</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Nova Sessão para <span th:text="${sessao.projeto.nome}"></span> - <span th:text="${sessao.estrategia.nome}"></span></h1>
+
+    <form th:action="@{/sessoes/salvar}" method="post">
+        <!-- Envia apenas os IDs -->
+        <input type="hidden" name="projetoId" th:value="${sessao.projeto.id}" />
+        <input type="hidden" name="estrategiaId" th:value="${sessao.estrategia.id}" />
+
+        <div>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="4" required></textarea>
+        </div>
+
+        <div>
+            <label for="duracaoMinutos">Duração (em minutos):</label>
+            <input type="number" id="duracaoMinutos" name="duracaoMinutos" min="1" required />
+        </div>
+
+        <div>
+            <label for="testerId">Tester Responsável:</label>
+            <select id="testerId" name="testerId">
+                <option value="">-- Nenhum --</option>
+                <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nome}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="button button-primary">Salvar Sessão</button>
+        <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" class="button button-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

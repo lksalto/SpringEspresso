@@ -3,12 +3,11 @@ package br.ufscar.dc.dsw.projeto.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import java.util.UUID;
 
 public class ProjetoEdicaoDTO {
 
     @NotNull
-    private UUID id;
+    private Long id;
 
     @NotBlank(message = "{NotBlank.projeto.nome}")
     private String nome;
@@ -20,8 +19,8 @@ public class ProjetoEdicaoDTO {
     private List<Long> estrategiasIds;
 
     // Getters e Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getDescricao() { return descricao; }
@@ -31,3 +30,4 @@ public class ProjetoEdicaoDTO {
     public List<Long> getEstrategiasIds() { return estrategiasIds; }
     public void setEstrategiasIds(List<Long> estrategiasIds) { this.estrategiasIds = estrategiasIds; }
 }
+

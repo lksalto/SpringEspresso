@@ -8,13 +8,13 @@ import java.util.*;
 public class ProjetoModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nome;
     private String descricao;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<EstrategiaModel> estrategias = new ArrayList<>();
 
     // getters e setters
@@ -25,7 +25,7 @@ public class ProjetoModel {
         this.descricao = descricao;
         this.estrategias = new ArrayList<>();
     }
-    public UUID getId() { return id; }
+    public Long getId() { return id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getDescricao() { return descricao; }

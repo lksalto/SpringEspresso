@@ -16,7 +16,11 @@
 }
 
 .strategy-button .hidden-checkbox {
-    display: none; /* Esconde o checkbox real */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    cursor: pointer;
 }
 
 .strategy-button label {
@@ -44,9 +48,9 @@
 
 /* Estilo para quando o botão (checkbox) está selecionado */
 .strategy-button .hidden-checkbox:checked + label {
-    background-color: #007bff;
+    background-color: #3b82f6; /* Azul */
     color: white;
-    border-color: #0056b3;
+    border-color: #2563eb;
 }
 
 /* Novo estilo para os links na página de listagem de estratégias */

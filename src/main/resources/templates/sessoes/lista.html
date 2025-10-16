@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tituloPagina != null ? tituloPagina : 'Sessões de Teste'}"></title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+        .status-criado { background-color: #007bff; }
+        .status-em_execucao { background-color: #ffc107; color: #212529; }
+        .status-finalizado { background-color: #28a745; }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+        .table th, .table td {
+            padding: 12px 8px;
+            word-break: break-word;
+        }
+        .table .actions {
+            white-space: nowrap;
+            width: 1%;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1 th:text="${tituloPagina != null ? tituloPagina : 'Sessões de Teste'}"></h1>
+
+    <div th:if="${mensagemSucesso}" class="message-box success">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+    <div th:if="${mensagemFalha}" class="message-box error">
+        <p th:text="${mensagemFalha}"></p>
+    </div>
+
+    <p>
+        <a th:href="@{/sessoes/cadastro(projetoId=${projeto.id}, estrategiaId=${estrategia.id})}" class="button button-primary">Nova Sessão</a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Tester</th>
+            <th>Duração (min)</th>
+            <th>Status</th>
+            <th class="actions">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessao : ${sessoes}">
+            <td th:text="${sessao.descricao}"></td>
+            <td th:text="${sessao.tester != null ? sessao.tester.nome : 'Não atribuído'}"></td>
+            <td th:text="${sessao.duracao != null ? sessao.duracao.toMinutes() : 'N/A'}"></td>
+            <td>
+                <span th:text="${sessao.status.getDescricao()}"
+                      th:classappend="'status-' + ${#strings.toLowerCase(sessao.status.name())}"
+                      class="status-badge">
+                </span>
+            </td>
+            <td class="actions">
+                <!-- Garanta que o ID aqui é o da SESSÃO -->
+                <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" class="button button-info small">Detalhes</a>
+
+                <!-- Bloco de Edição/Exclusão -->
+                <th:block
+                        th:if="${sessao.status.name() == 'CRIADO' and (#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.principal.email == sessao.tester.email))}">
+                    <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary small">Editar</a>
+                    <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta sessão?');">
+                        <button type="submit" class="button button-danger small">Excluir</button>
+                    </form>
+                </th:block>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(sessoes)}">
+            <td colspan="5" style="text-align: center;">Nenhuma sessão encontrada.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Voltar ao Projeto</a>
+    </p>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

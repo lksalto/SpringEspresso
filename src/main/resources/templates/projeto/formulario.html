@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${projetoCadastroDTO != null} ? #{titulo.cadastro.projeto} : #{titulo.edicao.projeto}"></title>
+    <title th:text="${projetoEdicaoDTO == null} ? #{titulo.cadastro.projeto} : #{titulo.edicao.projeto}"></title>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" th:href="@{/css/estrategia-grid.css}"/>
 
@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <h1 th:text="${projetoCadastroDTO != null} ? #{titulo.cadastro.projeto} : #{titulo.edicao.projeto}"></h1>
+    <h1 th:text="${projetoEdicaoDTO == null} ? #{titulo.cadastro.projeto} : #{titulo.edicao.projeto}"></h1>
 
     <div th:if="${fail}" class="message-box error">
         <p th:text="${fail}"></p>
@@ -43,7 +43,7 @@
                 <label>Estratégias</label>
                 <div class="strategy-grid">
                     <div th:each="estrategia : ${estrategias}" class="strategy-button">
-                        <input type="checkbox" th:field="*{estrategiasIds}" th:value="${estrategia.id}" th:id="'estrategia-cad-' + ${estrategia.id}" class="hidden-checkbox"/>
+                        <input type="checkbox" th:field="*{estrategiasIds}" th:value="${estrategia.id}" th:id="'estrategia-cad-' + ${estrategia.id}"/>
                         <label th:for="'estrategia-cad-' + ${estrategia.id}" th:text="${estrategia.nome}"></label>
                     </div>
                 </div>
