@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Bug</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+        .details-card {
+            text-align: left;
+            margin-bottom: 25px;
+            background-color: #fff;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .details-card h3 {
+            text-align: left;
+            margin-top: 0;
+        }
+        .details-card p { margin: 10px 0; }
+        .details-card strong { color: #333; }
+        .bug-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Detalhes do Bug</h1>
+
+    <div class="details-card">
+        <h3>Informações do Bug</h3>
+        <p><strong>ID do Bug:</strong> <span th:text="${bug.id}"></span></p>
+        <p><strong>Sessão de Teste:</strong> <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" th:text="${bug.sessao.descricao}"></a></p>
+        <p><strong>Data do Registro:</strong> <span th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Descrição:</strong></p>
+        <p style="white-space: pre-wrap; background-color: #f9f9f9; padding: 10px; border-radius: 5px;"
+           th:text="${bug.descricao}"></p>
+
+        <div th:if="${bug.caminhoImagem != null}">
+            <h3>Imagem Anexada</h3>
+            <img th:src="@{'/uploads/' + ${bug.caminhoImagem}}" alt="Imagem do Bug" class="bug-image"/>
+        </div>
+        <div th:if="${bug.caminhoImagem == null}">
+            <p><i>Nenhuma imagem foi anexada a este bug.</i></p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" class="button button-secondary">Voltar para a Sessão</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

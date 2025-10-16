@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw.projeto.controller;
 import br.ufscar.dc.dsw.projeto.model.EstrategiaModel;
 import br.ufscar.dc.dsw.projeto.model.ProjetoModel;
 import br.ufscar.dc.dsw.projeto.model.SessaoModel;
+import br.ufscar.dc.dsw.projeto.model.StatusSessao; // Verifique se o nome do seu Enum de Status está correto
 import br.ufscar.dc.dsw.projeto.model.UsuarioModel;
 import br.ufscar.dc.dsw.projeto.service.EstrategiaService;
 import br.ufscar.dc.dsw.projeto.service.ProjetoService;
@@ -22,13 +23,13 @@ public class SessaoController {
     private final SessaoService sessaoService;
     private final ProjetoService projetoService;
     private final EstrategiaService estrategiaService;
-    private final UsuarioService usuarioService; // Adicionar serviço de usuário
+    private final UsuarioService usuarioService; 
 
     public SessaoController(SessaoService sessaoService, ProjetoService projetoService, EstrategiaService estrategiaService, UsuarioService usuarioService) {
         this.sessaoService = sessaoService;
         this.projetoService = projetoService;
         this.estrategiaService = estrategiaService;
-        this.usuarioService = usuarioService; // Injetar no construtor
+        this.usuarioService = usuarioService; 
     }
 
     @GetMapping("/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes")
@@ -117,5 +118,32 @@ public class SessaoController {
 
         model.addAttribute("sessao", sessao);
         return "sessoes/formulario";
+    }
+
+    // CORREÇÃO: Adicionar "/sessoes" ao mapeamento
+    @PostMapping("/sessoes/atualizarStatus")
+    public String atualizarStatus(@RequestParam("sessaoId") Long sessaoId,
+                                  @RequestParam("novoStatus") String novoStatus,
+                                  RedirectAttributes attr) {
+
+        SessaoModel sessao = sessaoService.buscarPorId(sessaoId);
+
+        if (sessao == null) {
+            attr.addFlashAttribute("mensagemFalha", "Sessão não encontrada.");
+            return "redirect:/home";
+        }
+
+        try {
+            // Converte a String recebida do formulário para o tipo Enum
+            StatusSessao status = StatusSessao.valueOf(novoStatus);
+            sessao.setStatus(status);
+            sessaoService.salvar(sessao);
+            attr.addFlashAttribute("mensagemSucesso", "Status da sessão atualizado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            // Caso o valor do status seja inválido
+            attr.addFlashAttribute("mensagemFalha", "O status selecionado é inválido.");
+        }
+
+        return "redirect:/sessoes/detalhes/" + sessaoId;
     }
 }

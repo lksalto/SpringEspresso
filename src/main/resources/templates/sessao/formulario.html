@@ -22,7 +22,7 @@
             <input type="hidden" th:field="*{id}" />
             <input type="hidden" th:field="*{projetoId}" />
 
-            <div>
+            <div class="form-group">
                 <label for="estrategiaId-edit">Estratégia de Teste:</label>
                 <select id="estrategiaId-edit" th:field="*{estrategiaId}" required>
                     <option value="">-- Selecione uma Estratégia --</option>
@@ -34,14 +34,14 @@
                     <p th:each="err : ${#fields.errors('estrategiaId')}" th:text="${err}"></p>
                 </div>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="duracao-edit">Duração (em minutos):</label>
                 <input type="number" id="duracao-edit" th:field="*{duracao}" placeholder="Ex: 60" required min="1"/>
                 <div th:if="${#fields.hasErrors('duracao')}" class="message-box error">
                     <p th:each="err : ${#fields.errors('duracao')}" th:text="${err}"></p>
                 </div>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="descricao-edit">Descrição / Objetivos da Sessão:</label>
                 <textarea id="descricao-edit" th:field="*{descricao}" rows="4" placeholder="Descreva o que será focado nesta sessão de teste..." required></textarea>
                 <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
@@ -60,27 +60,25 @@
         <form th:action="@{/sessoes/criar}" th:object="${sessaoDTO}" method="post">
             <input type="hidden" th:field="*{projetoId}" />
 
-            <div>
-                <label for="estrategiaId">Estratégia de Teste:</label>
-                <select id="estrategiaId" th:field="*{estrategiaId}" required>
-                    <option value="">-- Selecione uma Estratégia --</option>
-                    <option th:each="est : ${estrategias}"
-                            th:value="${est.id}"
-                            th:text="${est.nome}"></option>
+            <div class="form-group">
+                <label for="estrategia">Estratégia de Teste:</label>
+                <select id="estrategia" th:field="*{estrategia}" required>
+                    <option th:each="est : ${estrategias}" th:value="${est.id}" th:text="${est.nome}"></option>
                 </select>
-                <div th:if="${#fields.hasErrors('estrategiaId')}" class="message-box error">
-                    <p th:each="err : ${#fields.errors('estrategiaId')}" th:text="${err}"></p>
-                </div>
             </div>
-            <div>
-                <label for="duracao">Duração (em minutos):</label>
-                <input type="number" id="duracao" th:field="*{duracao}" placeholder="Ex: 60" required min="1"/>
-                <div th:if="${#fields.hasErrors('duracao')}" class="message-box error">
-                    <p th:each="err : ${#fields.errors('duracao')}" th:text="${err}"></p>
-                </div>
+
+            <!-- NOVO CAMPO: Atribuir Tester (Visível apenas para ADMIN) -->
+            <div class="form-group" sec:authorize="hasRole('ADMIN')">
+                <label for="tester">Atribuir Tester:</label>
+                <select id="tester" th:field="*{tester}">
+                    <option value="">-- Nenhum Tester Atribuído --</option>
+                    <option th:each="t : ${testers}" th:value="${t.id}" th:text="${t.nome + ' (' + t.email + ')'}"></option>
+                </select>
+                <small>Deixe em branco para não atribuir um tester.</small>
             </div>
-            <div>
-                <label for="descricao">Descrição / Objetivos da Sessão:</label>
+
+            <div class="form-group">
+                <label for="descricao">Descrição / Objetivos:</label>
                 <textarea id="descricao" th:field="*{descricao}" rows="4" placeholder="Descreva o que será focado nesta sessão de teste..." required></textarea>
                 <div th:if="${#fields.hasErrors('descricao')}" class="message-box error">
                     <p th:each="err : ${#fields.errors('descricao')}" th:text="${err}"></p>
@@ -97,3 +95,9 @@
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+<!-- Cria usuários
+UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", "admin");
+UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", "user");
+usuarioRepository.saveAll(List.of(admin, user));
+-->

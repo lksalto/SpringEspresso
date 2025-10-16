@@ -1,11 +1,13 @@
 package br.ufscar.dc.dsw.projeto.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority; // <-- ADICIONE ESTE IMPORT
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -21,6 +23,9 @@ public class UsuarioModel implements UserDetails {
     private String nome;
     private String email;
     private String senha;
+
+    @Column(nullable = false, length = 10)
+    private String role;
 
     // Construtores
     public UsuarioModel() {
@@ -65,11 +70,23 @@ public class UsuarioModel implements UserDetails {
         this.senha = senha;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     // Métodos da interface UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Por enquanto, não estamos usando roles (papéis), então retornamos uma lista vazia.
-        return Collections.emptyList();
+        // AGORA ESTAMOS USANDO ROLES!
+        // O Spring Security espera que os papéis comecem com o prefixo "ROLE_".
+        if (this.role == null) {
+            return Collections.emptyList();
+        }
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role));
     }
 
     @Override

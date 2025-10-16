@@ -2,6 +2,9 @@ package br.ufscar.dc.dsw.projeto.util;
 
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.ufscar.dc.dsw.projeto.model.EstrategiaModel;
@@ -11,6 +14,7 @@ import br.ufscar.dc.dsw.projeto.repository.EstrategiaRepository;
 import br.ufscar.dc.dsw.projeto.repository.ProjetoRepository;
 import br.ufscar.dc.dsw.projeto.repository.SessaoRepository;
 import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder; // <-- ADICIONE ESTE IMPORT
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +26,20 @@ public class DatabaseSeeder implements CommandLineRunner {
     private final ProjetoRepository projetoRepository;
     private final EstrategiaRepository estrategiaRepository;
     private final SessaoRepository sessaoRepository;
+    private final PasswordEncoder passwordEncoder; // <-- ADICIONE ESTA LINHA
 
     public DatabaseSeeder(
         UsuarioRepository usuarioRepository,
         ProjetoRepository projetoRepository,
         EstrategiaRepository estrategiaRepository,
-        SessaoRepository sessaoRepository
+        SessaoRepository sessaoRepository,
+        PasswordEncoder passwordEncoder // <-- ADICIONE ESTA LINHA
     ) {
         this.usuarioRepository = usuarioRepository;
         this.projetoRepository = projetoRepository;
         this.estrategiaRepository = estrategiaRepository;
         this.sessaoRepository = sessaoRepository;
+        this.passwordEncoder = passwordEncoder; // <-- ADICIONE ESTA LINHA
     }
 
     @Override
@@ -43,9 +50,14 @@ public class DatabaseSeeder implements CommandLineRunner {
         projetoRepository.deleteAll();    
         estrategiaRepository.deleteAll(); 
         usuarioRepository.deleteAll();    
-        // Cria usuários
-        UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", "admin");
-        UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", "user");
+        
+        // Cria usuários com senha criptografada
+        UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", passwordEncoder.encode("admin")); // <-- MODIFIQUE AQUI
+        admin.setRole("ADMIN"); 
+
+        UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", passwordEncoder.encode("user")); // <-- MODIFIQUE AQUI
+        user.setRole("USER");
+
         usuarioRepository.saveAll(List.of(admin, user));
         
         // Cria estratégias padrão

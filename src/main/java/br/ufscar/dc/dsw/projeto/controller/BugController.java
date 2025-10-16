@@ -4,13 +4,15 @@ import br.ufscar.dc.dsw.projeto.model.BugModel;
 import br.ufscar.dc.dsw.projeto.model.SessaoModel;
 import br.ufscar.dc.dsw.projeto.service.BugService;
 import br.ufscar.dc.dsw.projeto.service.SessaoService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,66 +24,92 @@ import java.util.UUID;
 @RequestMapping("/bugs")
 public class BugController {
 
-    private final BugService bugService;
-    private final SessaoService sessaoService;
+    @Autowired
+    private BugService bugService;
 
-    // Diretório para salvar as imagens. Crie esta pasta na raiz do seu projeto.
+    @Autowired
+    private SessaoService sessaoService;
+
+    // Diretório para salvar as imagens de upload
     private static final String UPLOAD_DIR = "uploads/";
 
-    public BugController(BugService bugService, SessaoService sessaoService) {
-        this.bugService = bugService;
-        this.sessaoService = sessaoService;
-    }
-
     @GetMapping("/cadastro")
-    public String formCadastro(@RequestParam Long idSessao, Model model) {
+    public String exibirFormularioCadastro(@RequestParam("idSessao") Long idSessao, ModelMap model) {
         SessaoModel sessao = sessaoService.buscarPorId(idSessao);
         if (sessao == null) {
-            // Lidar com erro de sessão não encontrada
+            // Lidar com o caso de sessão não encontrada
             return "redirect:/home";
         }
-        model.addAttribute("bug", new BugModel());
-        model.addAttribute("sessao", sessao);
-        return "bug/formulario"; // Usaremos um formulário genérico
+        BugModel bug = new BugModel();
+        bug.setSessao(sessao);
+        model.addAttribute("bug", bug);
+        // CORREÇÃO: Retornar o nome do seu arquivo de formulário
+        return "bug/formulario";
     }
 
     @PostMapping("/salvar")
-    public String salvarBug(@ModelAttribute BugModel bug, @RequestParam Long idSessao,
-                            @RequestParam("imagem") MultipartFile imagem, RedirectAttributes redirectAttributes) {
-        SessaoModel sessao = sessaoService.buscarPorId(idSessao);
+    public String salvarBug(@Valid @ModelAttribute("bug") BugModel bug,
+                            BindingResult result,
+                            // CORREÇÃO: O nome do parâmetro deve ser "imagem", como no formulário
+                            @RequestParam("imagem") MultipartFile imagemFile,
+                            RedirectAttributes attr, ModelMap model) { // Adicionado ModelMap
+
+        // Recarrega a sessão para evitar problemas de desanexação
+        SessaoModel sessao = sessaoService.buscarPorId(bug.getSessao().getId());
         if (sessao == null) {
-            redirectAttributes.addFlashAttribute("fail", "Sessão não encontrada.");
+            attr.addFlashAttribute("mensagemFalha", "Sessão não encontrada.");
             return "redirect:/home";
         }
+        bug.setSessao(sessao); // Garante que a sessão está no objeto
 
-        bug.setSessao(sessao);
-        bug.setDataRegistro(LocalDateTime.now());
+        if (result.hasErrors()) {
+            // Se houver erros de validação, retorna para o formulário
+            // É necessário adicionar o objeto bug de volta ao modelo
+            model.addAttribute("bug", bug);
+            return "bug/formulario";
+        }
 
-        if (!imagem.isEmpty()) {
+        // Lógica de upload de imagem
+        if (!imagemFile.isEmpty()) {
             try {
-                // Garante que o diretório de upload existe
-                File uploadDir = new File(UPLOAD_DIR);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
+                String nomeArquivoOriginal = imagemFile.getOriginalFilename();
+                String extensao = "";
+                if (nomeArquivoOriginal != null && nomeArquivoOriginal.contains(".")) {
+                    extensao = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf("."));
+                }
+                String nomeArquivoUnico = UUID.randomUUID().toString() + extensao;
+
+                Path diretorioUpload = Paths.get(UPLOAD_DIR);
+                if (!Files.exists(diretorioUpload)) {
+                    Files.createDirectories(diretorioUpload);
                 }
 
-                // Gera um nome de arquivo único para evitar conflitos
-                String nomeArquivo = UUID.randomUUID().toString() + "_" + imagem.getOriginalFilename();
-                Path caminhoArquivo = Paths.get(UPLOAD_DIR + nomeArquivo);
-                Files.write(caminhoArquivo, imagem.getBytes());
-                bug.setCaminhoImagem(nomeArquivo); // Salva apenas o nome do arquivo no banco
+                Path caminhoArquivo = diretorioUpload.resolve(nomeArquivoUnico);
+                Files.write(caminhoArquivo, imagemFile.getBytes());
+                bug.setCaminhoImagem(nomeArquivoUnico);
 
             } catch (IOException e) {
                 e.printStackTrace();
-                redirectAttributes.addFlashAttribute("fail", "Falha ao salvar a imagem.");
-                return "redirect:/sessoes/detalhes/" + idSessao;
+                attr.addFlashAttribute("mensagemFalha", "Falha ao fazer upload da imagem.");
+                return "redirect:/bugs/cadastro?idSessao=" + bug.getSessao().getId();
             }
         }
 
+        bug.setDataRegistro(LocalDateTime.now());
         bugService.salvar(bug);
-        redirectAttributes.addFlashAttribute("success", "Bug registrado com sucesso!");
-        return "redirect:/sessoes/detalhes/" + idSessao;
+
+        attr.addFlashAttribute("mensagemSucesso", "Bug reportado com sucesso!");
+        return "redirect:/sessoes/detalhes/" + bug.getSessao().getId();
     }
-    
-    // Adicione aqui métodos para editar, visualizar e deletar bugs conforme necessário.
+
+    @GetMapping("/detalhes/{id}")
+    public String exibirDetalhes(@PathVariable("id") Long id, ModelMap model) {
+        BugModel bug = bugService.buscarPorId(id);
+        if (bug == null) {
+            // Adicionar mensagem de erro e redirecionar
+            return "redirect:/home"; 
+        }
+        model.addAttribute("bug", bug);
+        return "bug/detalhes";
+    }
 }

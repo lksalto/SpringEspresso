@@ -11,24 +11,31 @@
 <div class="wrapper">
     <h1>Registrar Novo Bug</h1>
     <p style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
-        Para a Sessão: <strong th:text="${sessao.descricao}"></strong>
+        <!-- CORREÇÃO: Acessar a sessão através do objeto bug -->
+        Para a Sessão: <strong th:text="${bug.sessao.descricao}"></strong>
     </p>
 
     <form th:action="@{/bugs/salvar}" th:object="${bug}" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="idSessao" th:value="${sessao.id}" />
+        <!-- CORREÇÃO: Usar th:field para vincular o ID da sessão ao objeto bug -->
+        <input type="hidden" th:field="*{sessao.id}" />
 
-        <div>
+        <div class="form-group">
             <label for="descricao">Descrição do Bug:</label>
             <textarea id="descricao" th:field="*{descricao}" rows="5" placeholder="Descreva detalhadamente o comportamento inesperado..." required></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></div>
         </div>
 
-        <div>
+        <div class="form-group">
             <label for="imagem">Anexar Imagem (Opcional):</label>
+            <!-- O nome "imagem" já está correto e corresponde ao controller -->
             <input type="file" id="imagem" name="imagem" accept="image/*">
         </div>
 
-        <button type="submit" class="button button-primary">Registrar Bug</button>
-        <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" class="button button-secondary">Cancelar</a>
+        <div class="form-actions">
+            <button type="submit" class="button button-primary">Registrar Bug</button>
+            <!-- CORREÇÃO: Usar o ID da sessão a partir do objeto bug -->
+            <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" class="button button-secondary">Cancelar</a>
+        </div>
     </form>
 </div>
 
