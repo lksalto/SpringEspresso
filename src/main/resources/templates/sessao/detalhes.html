@@ -74,12 +74,10 @@
            th:text="${sessao.descricao}"></p>
     </div>
 
-    <!-- REMOVIDO: Bloco de botões movido para baixo -->
 
-    <!-- Ações disponíveis -->
     <div class="action-forms">
 
-        <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
+        <div class="card" th:if="${sessao.status.name() == 'EM_EXECUCAO'}">
             <h3>Adicionar Bug</h3>
             <p>Registrar um novo bug para esta sessão.</p>
             <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" class="button button-primary">
@@ -87,13 +85,13 @@
             </a>
         </div>
 
-        <!-- Formulário para Mudar Status (precisa de um método no controller) -->
+
         <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
             <h3>Mudar Status</h3>
             <form th:action="@{/sessoes/atualizarStatus}" method="post">
                 <input type="hidden" name="sessaoId" th:value="${sessao.id}"/>
                 <select name="novoStatus" required>
-                    <!-- CORREÇÃO: A primeira opção agora é o status atual e já vem selecionada -->
+
                     <option th:value="${sessao.status.name()}" 
                             th:text="${sessao.status.getDescricao()}" 
                             selected="selected">
@@ -127,12 +125,12 @@
                 <td th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}"></td>
                 <td>
                     <!-- CORREÇÃO: Link "Ver Imagem" substituído por "Visualizar" -->
-                    <a th:href="@{/bugs/detalhes/{id}(id=${bug.id})}" class="button button-info small">Visualizar</a>
+                    <a th:href="@{/bugs/detalhes/{id}(id=${bug.id})}" class="button button-secondary small">Visualizar</a>
                     
                     <!-- Ações de Edição e Remoção de Bug -->
                     <a th:href="@{/bugs/editar/{id}(id=${bug.id})}" class="button button-secondary small">Editar</a>
-                    <form th:action="@{/bugs/excluir/{id}(id=${bug.id})}" method="post" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover este bug?');">
-                        <button type="submit" class="button button-danger small">Remover</button>
+                    <form th:action="@{/bugs/excluir/{id}(id=${bug.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja remover este bug?');">
+                        <button type="submit" class="button button-secondary small">Remover</button>
                     </form>
                 </td>
             </tr>

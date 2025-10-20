@@ -27,6 +27,9 @@ public class SessaoModel {
     @JoinColumn(name = "estrategia_id", nullable = false)
     private EstrategiaModel estrategia;
 
+    @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BugModel> bugs = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tester_id") // Adicione esta anotação
     private UsuarioModel tester; // Adicione este campo
@@ -35,8 +38,6 @@ public class SessaoModel {
     @Column(nullable = false)
     private StatusSessao status = StatusSessao.CRIADO;
 
-    @OneToMany(mappedBy = "sessao", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<BugModel> bugs = new java.util.ArrayList<>();
 
     public SessaoModel() {
     }

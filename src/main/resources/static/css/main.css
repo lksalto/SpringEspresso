@@ -42,17 +42,7 @@ h1, h2, h3 {
     letter-spacing: 0.5px;
 }
 
-/* Formulários */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 20px;
-    border: 1px solid var(--cinza-claro);
-    border-radius: var(--borda-arredondada);
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+
 
 label {
     font-weight: 600;
@@ -91,7 +81,7 @@ td:last-of-type {
     justify-content: flex-start;
 }
 
-/* Botões */
+
 .button,
 button[type="submit"] {
     display: inline-block;
@@ -127,7 +117,7 @@ button[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Mensagens */
+
 .message-box {
     padding: 15px;
     margin-bottom: 20px;
@@ -147,7 +137,7 @@ button[type="submit"]:hover {
     border: 1px solid #f5c6cb;
 }
 
-/* Header */
+
 header {
     background-color: var(--cafe-escuro);
     color: var(--creme);
@@ -171,7 +161,7 @@ header h1 {
     width: auto;
 }
 
-/* Footer */
+
 footer {
     background-color: var(--cafe-escuro);
     color: var(--creme);
@@ -181,7 +171,7 @@ footer {
     font-size: 0.9em;
 }
 
-/* Estilos para lista */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -189,7 +179,7 @@ table {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     border-radius: var(--borda-arredondada);
     overflow: hidden;
-    table-layout: fixed; /* Add this to ensure fixed column widths */
+    table-layout: fixed; 
 }
 
 th, td {
@@ -205,10 +195,10 @@ th {
     text-transform: uppercase;
 }
 
-/* --- Sorting Styles --- */
+
 .table th span {
     margin-right: 5px;
-    display: inline-block; /* Ensure span behaves well with inline-block for icons */
+    display: inline-block; 
 }
 
 .table th a {
@@ -246,15 +236,15 @@ th {
 }
 
 
-.table th:nth-child(5) { /* Membros column */
+.table th:nth-child(5) {
     width: 60%;
 }
 
-.table th:nth-child(6) { /* Ações column */
+.table th:nth-child(6) {
     width: 50%;
 }
 
-/* --- End Sorting Styles --- */
+
 
 tr:nth-child(even) {
     background-color: #f9f9f9;
@@ -264,7 +254,7 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Responsividade básica */
+
 @media (max-width: 768px) {
     .wrapper {
         margin: 20px auto;
@@ -275,10 +265,10 @@ tr:hover {
         padding: 8px 10px;
     }
 
-    /* Adjust column widths for smaller screens if table-layout: fixed is used */
+    
     .table th:nth-child(2),
     .table th:nth-child(4) {
-        min-width: unset; /* Remove min-width on smaller screens */
+        min-width: unset; 
         width: auto;
     }
 }
@@ -294,7 +284,7 @@ tr:hover {
         font-size: 0.9em;
     }
 
-    /* Reduzir o tamanho da fonte da tabela em telas pequenas */
+    
     table, thead, tbody, th, td, tr {
         display: block;
     }
@@ -327,7 +317,6 @@ tr:hover {
         color: var(--cafe-medio);
     }
 
-    /* Updated content for project list on mobile */
     td:nth-of-type(1):before { content: "ID:"; }
     td:nth-of-type(2):before { content: "Nome:"; }
     td:nth-of-type(3):before { content: "Descrição:"; }
@@ -336,7 +325,7 @@ tr:hover {
     td:nth-of-type(6):before { content: "Ações:"; }
 }
 
-/* Estilos para o Dashboard Home */
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -387,7 +376,7 @@ tr:hover {
     word-break: break-all;
 }
 
-/* Estilos para seção de navegação modularizada */
+
 .navigation-section {
     margin-top: 40px;
     padding-top: 20px;
@@ -405,7 +394,7 @@ tr:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-/* Responsividade para seção de navegação */
+
 @media (max-width: 480px) {
     .navigation-section {
         margin-top: 30px;

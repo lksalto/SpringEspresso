@@ -26,7 +26,7 @@ public class EstrategiaController {
 
     @GetMapping("/estrategias")
     public String listar(Model model) {
-        List<EstrategiaModel> estrategias = estrategiaService.buscarTodas(); // ou buscarTodos()
+        List<EstrategiaModel> estrategias = estrategiaService.buscarTodas();
         model.addAttribute("estrategias", estrategias);
         return "estrategias/listar";
     }

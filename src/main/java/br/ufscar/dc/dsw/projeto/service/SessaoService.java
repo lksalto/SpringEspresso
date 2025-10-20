@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.projeto.service;
 
+import br.ufscar.dc.dsw.projeto.model.BugModel;
 import br.ufscar.dc.dsw.projeto.model.SessaoModel;
 import br.ufscar.dc.dsw.projeto.repository.SessaoRepository;
 import org.springframework.stereotype.Service;
@@ -34,4 +35,13 @@ public class SessaoService {
     public SessaoModel salvar(SessaoModel sessao) {
         return sessaoRepository.save(sessao);
     }
+
+    @Transactional
+    public void excluirSessao(Long id) {
+        SessaoModel bug = sessaoRepository.findById(id).orElseThrow(() -> 
+                new RuntimeException("Sessão não encontrada: " + id));
+        sessaoRepository.delete(bug); // Depois de removido da sessão, pode deletar
+
+    }
+
 }

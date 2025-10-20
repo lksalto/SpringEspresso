@@ -14,11 +14,15 @@ public class ProjetoModel {
     private String nome;
     private String descricao;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "projeto_estrategias",
+            joinColumns = @JoinColumn(name = "projeto_id"),
+            inverseJoinColumns = @JoinColumn(name = "estrategia_id")
+    )
     private List<EstrategiaModel> estrategias = new ArrayList<>();
 
     // getters e setters
-
     public ProjetoModel() {}
     public ProjetoModel(String nome, String descricao) {
         this.nome = nome;

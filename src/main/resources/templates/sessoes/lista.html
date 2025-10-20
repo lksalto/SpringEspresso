@@ -72,15 +72,15 @@
                 </span>
             </td>
             <td class="actions">
-                <!-- Garanta que o ID aqui é o da SESSÃO -->
-                <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" class="button button-info small">Detalhes</a>
+                
+                <a th:href="@{/sessoes/detalhes/{id}(id=${sessao.id})}" class="button button-secondary small">Detalhes</a>
 
-                <!-- Bloco de Edição/Exclusão -->
+                
                 <th:block
                         th:if="${sessao.status.name() == 'CRIADO' and (#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.principal.email == sessao.tester.email))}">
-                    <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary small">Editar</a>
-                    <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta sessão?');">
-                        <button type="submit" class="button button-danger small">Excluir</button>
+                    
+                    <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post"  onsubmit="return confirm('Tem certeza que deseja excluir esta sessão?');">
+                        <button type="submit" class="button button-secondary small">Excluir</button>
                     </form>
                 </th:block>
             </td>

@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw.projeto.controller;
 
+import br.ufscar.dc.dsw.projeto.model.BugModel;
 import br.ufscar.dc.dsw.projeto.model.EstrategiaModel;
 import br.ufscar.dc.dsw.projeto.model.ProjetoModel;
 import br.ufscar.dc.dsw.projeto.model.SessaoModel;
@@ -146,4 +147,27 @@ public class SessaoController {
 
         return "redirect:/sessoes/detalhes/" + sessaoId;
     }
+
+
+    @PostMapping("/sessoes/excluir/{id}")
+    public String excluir(@PathVariable("id") Long id, RedirectAttributes attr) {
+        SessaoModel sessao = sessaoService.buscarPorId(id);
+        if (sessao == null) {
+            attr.addFlashAttribute("mensagemFalha", "Sessão não encontrada.");
+            // Redireciona para a home se a sessão não existir mais
+            return "redirect:/";
+        }
+
+        try {
+            sessaoService.excluirSessao(id);
+
+            attr.addFlashAttribute("mensagemSucesso", "Sessão removida com sucesso!");
+        } catch (Exception e) {
+            attr.addFlashAttribute("mensagemFalha", "Erro ao remover a sessão.");
+        }
+
+
+        return "redirect:/projetos/" + sessao.getProjeto().getId() + "/estrategias/" + sessao.getEstrategia().getId() + "/sessoes";
+    }
+
 }
