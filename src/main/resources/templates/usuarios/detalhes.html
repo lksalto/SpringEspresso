@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Detalhes do Usuário - ' + ${usuario.nome}">Detalhes do Usuário</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="wrapper">
+    <h1>Detalhes do Usuário</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-primary">Editar Este Usuário</a>
+    </div>
+
+    <div class="card">
+        <h3>Informações do Usuário</h3>
+        <div style="margin-bottom: 10px;">
+            <strong>ID:</strong> <span th:text="${usuario.id}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Nome:</strong> <span th:text="${usuario.nome}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Email:</strong> <span th:text="${usuario.email}"></span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Perfil de Acesso:</strong> 
+            <span th:text="${usuario.role == 'ADMIN' ? 'Administrador' : 'Usuário'}"></span>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/navigation :: navigation-section-custom('/usuarios', 'Voltar à Lista')}"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

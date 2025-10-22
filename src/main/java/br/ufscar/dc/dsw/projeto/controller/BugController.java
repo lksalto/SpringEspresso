@@ -30,85 +30,74 @@ public class BugController {
     @Autowired
     private SessaoService sessaoService;
 
-    // Diretório para salvar as imagens de upload
     private static final String UPLOAD_DIR = "uploads/";
 
     @GetMapping("/cadastro")
     public String exibirFormularioCadastro(@RequestParam("idSessao") Long idSessao, ModelMap model) {
         SessaoModel sessao = sessaoService.buscarPorId(idSessao);
         if (sessao == null) {
-            // Lidar com o caso de sessão não encontrada
+            
             return "redirect:/home";
         }
         BugModel bug = new BugModel();
         bug.setSessao(sessao);
         model.addAttribute("bug", bug);
-        // CORREÇÃO: Retornar o nome do seu arquivo de formulário
+        
         return "bug/formulario";
     }
 
     @PostMapping("/salvar")
     public String salvarBug(@Valid @ModelAttribute("bug") BugModel bug,
                             BindingResult result,
+                            
                             @RequestParam("imagem") MultipartFile imagemFile,
-                            RedirectAttributes attr, ModelMap model) {
+                            RedirectAttributes attr, ModelMap model) { 
+
 
         SessaoModel sessao = sessaoService.buscarPorId(bug.getSessao().getId());
         if (sessao == null) {
             attr.addFlashAttribute("mensagemFalha", "Sessão não encontrada.");
             return "redirect:/home";
         }
-        bug.setSessao(sessao);
+        bug.setSessao(sessao); // Precisa da sessão
 
         if (result.hasErrors()) {
+
             model.addAttribute("bug", bug);
             return "bug/formulario";
         }
 
-        // Define a data de registro e salva o bug uma primeira vez para obter o ID
-        bug.setDataRegistro(LocalDateTime.now());
-        BugModel bugSalvo = bugService.salvar(bug);
 
-        // Lógica de upload de imagem, agora usando o ID do bug salvo
         if (!imagemFile.isEmpty()) {
             try {
-                // Extrai a extensão do arquivo original
                 String nomeArquivoOriginal = imagemFile.getOriginalFilename();
                 String extensao = "";
                 if (nomeArquivoOriginal != null && nomeArquivoOriginal.contains(".")) {
                     extensao = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf("."));
                 }
+                String nomeArquivoUnico = UUID.randomUUID().toString() + extensao;
 
-                // Constrói o novo nome do arquivo com o formato solicitado
-                Long bugId = bugSalvo.getId();
-                Long estrategiaId = bugSalvo.getSessao().getEstrategia().getId();
-                Long projetoId = bugSalvo.getSessao().getProjeto().getId();
-                String nomeArquivoFormatado = String.format("bug_%d_E%d_P%d%s", bugId, estrategiaId, projetoId, extensao);
-
-                // Garante que o diretório de upload exista
                 Path diretorioUpload = Paths.get(UPLOAD_DIR);
                 if (!Files.exists(diretorioUpload)) {
                     Files.createDirectories(diretorioUpload);
                 }
 
-                // Salva o arquivo no disco
-                Path caminhoArquivo = diretorioUpload.resolve(nomeArquivoFormatado);
+                Path caminhoArquivo = diretorioUpload.resolve(nomeArquivoUnico);
                 Files.write(caminhoArquivo, imagemFile.getBytes());
-                
-                // Atualiza o objeto bug com o caminho da imagem e salva novamente
-                bugSalvo.setCaminhoImagem(nomeArquivoFormatado);
-                bugService.salvar(bugSalvo);
+                bug.setCaminhoImagem(nomeArquivoUnico);
 
             } catch (IOException e) {
                 e.printStackTrace();
                 attr.addFlashAttribute("mensagemFalha", "Falha ao fazer upload da imagem.");
-                // Se falhar, redireciona de volta para a edição do bug recém-criado
-                return "redirect:/bugs/editar/" + bugSalvo.getId();
+                return "redirect:/bugs/cadastro?idSessao=" + bug.getSessao().getId();
             }
         }
 
+        bug.setDataRegistro(LocalDateTime.now());
+        bugService.salvar(bug);
+
         attr.addFlashAttribute("mensagemSucesso", "Bug reportado com sucesso!");
-        return "redirect:/sessoes/detalhes/" + bugSalvo.getSessao().getId();
+        return "redirect:/sessoes/detalhes/" + bug.getSessao().getId();
     }
 
     @GetMapping("/detalhes/{id}")

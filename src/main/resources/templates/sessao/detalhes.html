@@ -96,8 +96,7 @@
                             th:text="${sessao.status.getDescricao()}" 
                             selected="selected">
                     </option>
-                    
-                    <!-- Opções para o próximo estado -->
+
                     <option th:if="${sessao.status.name() == 'CRIADO'}" value="EM_EXECUCAO">Iniciar Execução</option>
                     <option th:if="${sessao.status.name() == 'EM_EXECUCAO'}" value="FINALIZADO">Finalizar Sessão</option>
                 </select>
@@ -152,7 +151,7 @@
 
     <div style="text-align: center; margin-top: 20px;">
         <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" class="button button-secondary">Voltar para a Lista de Sessões</a>
-        <a th:href="@{/home}" class="button button-secondary">Voltar ao Início</a>
+        <a th:href="@{/}" class="button button-secondary">Voltar ao Início</a>
     </div>
 
 </div>

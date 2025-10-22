@@ -21,8 +21,7 @@ public class BugModel {
     private boolean resolvido = false;
 
     @Column(name = "caminho_imagem")
-    private String caminhoImagem; // Armazena o caminho para a imagem no servidor
-
+    private String caminhoImagem; // Armazena o caminho para a imagem
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessao_id", nullable = false)
     private SessaoModel sessao;

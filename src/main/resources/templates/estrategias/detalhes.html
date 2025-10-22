@@ -45,8 +45,9 @@
           <div th:if="${exemplo.urlImagem != null and not #strings.isEmpty(exemplo.urlImagem)}">
             <strong th:text="#{estrategia.exemplo.label.imagem}">Imagem:</strong>
             <div style="margin-top: 10px;">
-              <a th:href="@{${exemplo.urlImagem}}" target="_blank" th:title="'Ver imagem: ' + ${exemplo.urlImagem}">
-                <img th:src="@{${exemplo.urlImagem}}" th:alt="'Imagem do exemplo: ' + ${exemplo.texto}" style="max-width: 300px; border-radius: 5px;">
+
+              <a th:href="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" target="_blank" th:title="'Ver imagem: ' + ${exemplo.urlImagem}">
+                <img th:src="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" th:alt="'Imagem do exemplo: ' + ${exemplo.texto}" style="max-width: 300px; border-radius: 5px;">
               </a>
             </div>
           </div>

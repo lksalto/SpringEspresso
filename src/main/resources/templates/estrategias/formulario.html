@@ -17,8 +17,8 @@
   </div>
 
 
-  <form th:action="@{/estrategias/salvar}" method="post" id="estrategiaForm" enctype="multipart/form-data">
-    <input type="hidden" name="id" th:value="${estrategia.id}">
+  <form th:action="@{/estrategias/salvar}" th:object="${estrategia}" method="post" id="estrategiaForm" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}">
 
     <!-- Informações Básicas -->
     <div class="form-section">
@@ -26,13 +26,13 @@
       
       <div class="form-group">
         <label for="nome" th:text="#{estrategia.label.nome}">Nome da Estratégia</label>
-        <input type="text" id="nome" name="nome" th:value="${estrategia.nome}" 
+        <input type="text" id="nome" th:field="*{nome}" 
                th:placeholder="#{estrategia.placeholder.nome}" required>
       </div>
 
       <div class="form-group">
         <label for="descricao" th:text="#{estrategia.label.descricao}">Descrição</label>
-        <textarea id="descricao" name="descricao" th:text="${estrategia.descricao}" 
+        <textarea id="descricao" th:field="*{descricao}" 
                   th:placeholder="#{estrategia.placeholder.descricao}" 
                   rows="5"></textarea>
       </div>
@@ -63,7 +63,8 @@
                    accept="image/png, image/jpeg, image/gif">
 
             <div class="imagem-atual-info" th:if="${exemplo.urlImagem != null}">
-              <img th:src="${exemplo.urlImagem}" alt="Imagem atual" 
+              <!-- CORREÇÃO: Adicionado o caminho base /uploads/estrategias/ -->
+              <img th:src="@{'/uploads/estrategias/' + ${exemplo.urlImagem}}" alt="Imagem atual" 
                    style="max-width: 200px; display: block; margin: 0 auto;">
               <p><strong th:text="#{estrategia.imagem.atual}">Arquivo atual:</strong> <span th:text="${exemplo.urlImagem}"></span></p>
             </div>

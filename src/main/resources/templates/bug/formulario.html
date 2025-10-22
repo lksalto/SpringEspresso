@@ -11,12 +11,12 @@
 <div class="wrapper">
     <h1>Registrar Novo Bug</h1>
     <p style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
-        <!-- CORREÇÃO: Acessar a sessão através do objeto bug -->
+
         Para a Sessão: <strong th:text="${bug.sessao.descricao}"></strong>
     </p>
 
     <form th:action="@{/bugs/salvar}" th:object="${bug}" method="post" enctype="multipart/form-data">
-        <!-- CORREÇÃO: Usar th:field para vincular o ID da sessão ao objeto bug -->
+
         <input type="hidden" th:field="*{sessao.id}" />
 
         <div class="form-group">

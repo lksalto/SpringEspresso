@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Projetos</title>
@@ -12,32 +14,52 @@
 <div class="wrapper">
     <h1>Projetos</h1>
 
-    <a th:href="@{/projetos/cadastro}" class="button button-secondary">Novo Projeto</a>
+    <!-- Botão de novo projeto apenas para ADMINs -->
+    <div style="margin-bottom: 20px;">
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/projetos/novo}" class="button button-primary">Novo Projeto</a>
+        </span>
+    </div>
 
     <table class="data-table">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Ações</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Estratégias</th>
+                <th>Membros</th>
+                <th>Ações</th>
+            </tr>
         </thead>
         <tbody>
-        <tr th:each="projeto : ${listaProjetos}">
-            <td th:text="${projeto.id}"></td>
-            <td th:text="${projeto.nome}"></td>
-            <td th:text="${projeto.descricao}"></td>
-            <td>
-                <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Detalhes</a>
-                <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-secondary">Editar</a>
-                <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" class="button button-secondary">Excluir</a>
-            </td>
-        </tr>
+            <tr th:each="projeto : ${projetos}">
+                <td th:text="${projeto.id}"></td>
+                <td th:text="${projeto.nome}"></td>
+                <td th:text="${projeto.descricao}"></td>
+                <td th:text="${#lists.size(projeto.estrategias)}"></td>
+                <td th:text="${#lists.size(projeto.membros)} + ' membros'"></td>
+                <td class="actions">
+                    <a th:href="@{/projetos/detalhes/{id}(id=${projeto.id})}" class="button button-secondary">Ver</a>
+                    
+                    <!-- Mostrar botões de edição/remoção apenas para ADMINs -->
+                    <span sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/projetos/editar/{id}(id=${projeto.id})}" class="button button-primary">Editar</a>
+                        <a th:href="@{/projetos/remover/{id}(id=${projeto.id})}" 
+                           class="button button-danger"
+                           onclick="return confirm('Tem certeza que deseja remover este projeto?')">Remover</a>
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(projetos)}">
+                <td colspan="6" style="text-align: center; color: #666;">Nenhum projeto cadastrado.</td>
+            </tr>
         </tbody>
     </table>
+    
 </div>
 
+<div th:replace="~{fragments/navigation :: navigation-section-multiple}"></div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>

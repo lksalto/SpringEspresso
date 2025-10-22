@@ -6,9 +6,13 @@ import br.ufscar.dc.dsw.projeto.model.EstrategiaModel;
 import br.ufscar.dc.dsw.projeto.model.ProjetoModel;
 import br.ufscar.dc.dsw.projeto.repository.EstrategiaRepository;
 import br.ufscar.dc.dsw.projeto.repository.ProjetoRepository;
+import br.ufscar.dc.dsw.projeto.model.UsuarioModel;
+import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +21,9 @@ public class ProjetoService {
 
     private final ProjetoRepository projetoRepository;
     private final EstrategiaRepository estrategiaRepository;
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository; // Certifique-se de que está injetado
 
     public ProjetoService(ProjetoRepository projetoRepository, EstrategiaRepository estrategiaRepository) {
         this.projetoRepository = projetoRepository;
@@ -24,6 +31,10 @@ public class ProjetoService {
     }
 
     public List<ProjetoModel> listar() {
+        return projetoRepository.findAll();
+    }
+
+    public List<ProjetoModel> listarTodos() {
         return projetoRepository.findAll();
     }
 
@@ -48,45 +59,50 @@ public class ProjetoService {
         projetoRepository.delete(projeto);
     }
 
-    public ProjetoModel salvar(ProjetoCadastroDTO dto) {
+    public void salvar(ProjetoCadastroDTO dto) {
         ProjetoModel projeto = new ProjetoModel();
         projeto.setNome(dto.getNome());
         projeto.setDescricao(dto.getDescricao());
 
+        // Associar estratégias
         if (dto.getEstrategiasIds() != null && !dto.getEstrategiasIds().isEmpty()) {
-            List<EstrategiaModel> estrategias = dto.getEstrategiasIds().stream()
-                    .map(estrategiaRepository::findById)
-                    .filter(java.util.Optional::isPresent)
-                    .map(java.util.Optional::get)
-                    .collect(Collectors.toList());
+            List<EstrategiaModel> estrategias = estrategiaRepository.findAllById(dto.getEstrategiasIds());
             projeto.setEstrategias(estrategias);
         }
 
-        return salvar(projeto);
+        // ADICIONAR: Associar membros
+        if (dto.getMembrosIds() != null && !dto.getMembrosIds().isEmpty()) {
+            List<UsuarioModel> membros = usuarioRepository.findAllById(dto.getMembrosIds());
+            projeto.setMembros(membros);
+        }
+
+        projetoRepository.save(projeto);
     }
 
-    @Transactional
-    public ProjetoModel atualizar(ProjetoEdicaoDTO dto) {
-        ProjetoModel projeto = buscar(dto.getId());
-        if (projeto == null) {
-            throw new RuntimeException("Projeto não encontrado");
+    public void atualizar(ProjetoEdicaoDTO dto) {
+        ProjetoModel projeto = projetoRepository.findById(dto.getId()).orElse(null);
+        if (projeto != null) {
+            projeto.setNome(dto.getNome());
+            projeto.setDescricao(dto.getDescricao());
+
+            // Atualizar estratégias
+            if (dto.getEstrategiasIds() != null) {
+                List<EstrategiaModel> estrategias = estrategiaRepository.findAllById(dto.getEstrategiasIds());
+                projeto.setEstrategias(estrategias);
+            } else {
+                projeto.setEstrategias(new ArrayList<>());
+            }
+
+            // ADICIONAR: Atualizar membros
+            if (dto.getMembrosIds() != null) {
+                List<UsuarioModel> membros = usuarioRepository.findAllById(dto.getMembrosIds());
+                projeto.setMembros(membros);
+            } else {
+                projeto.setMembros(new ArrayList<>());
+            }
+
+            projetoRepository.save(projeto);
         }
-
-        projeto.setNome(dto.getNome());
-        projeto.setDescricao(dto.getDescricao());
-
-        if (dto.getEstrategiasIds() != null) {
-            List<EstrategiaModel> estrategias = dto.getEstrategiasIds().stream()
-                    .map(estrategiaRepository::findById)
-                    .filter(java.util.Optional::isPresent)
-                    .map(java.util.Optional::get)
-                    .collect(Collectors.toList());
-            projeto.setEstrategias(estrategias);
-        } else {
-            projeto.getEstrategias().clear();
-        }
-
-        return salvar(projeto);
     }
 
     public ProjetoModel criarProjetoComEstrategiasPadrao(String nome, String descricao) {
@@ -95,4 +111,6 @@ public class ProjetoService {
         projeto.getEstrategias().addAll(estrategiasPadrao);
         return projetoRepository.save(projeto);
     }
+
+
 }

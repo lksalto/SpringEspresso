@@ -53,10 +53,10 @@ public class DatabaseSeeder implements CommandLineRunner {
         
         // Cria usuários com senha criptografada
         UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", passwordEncoder.encode("admin")); // <-- MODIFIQUE AQUI
-        admin.setRole("ADMIN"); 
+        admin.setRole("ROLE_ADMIN"); 
 
         UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", passwordEncoder.encode("user")); // <-- MODIFIQUE AQUI
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
 
         usuarioRepository.saveAll(List.of(admin, user));
         

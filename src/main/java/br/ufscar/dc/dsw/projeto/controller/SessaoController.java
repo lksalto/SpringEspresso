@@ -135,7 +135,6 @@ public class SessaoController {
         }
 
         try {
-            // Converte a String recebida do formulário para o tipo Enum
             StatusSessao status = StatusSessao.valueOf(novoStatus);
             sessao.setStatus(status);
             sessaoService.salvar(sessao);
@@ -154,7 +153,7 @@ public class SessaoController {
         SessaoModel sessao = sessaoService.buscarPorId(id);
         if (sessao == null) {
             attr.addFlashAttribute("mensagemFalha", "Sessão não encontrada.");
-            // Redireciona para a home se a sessão não existir mais
+            
             return "redirect:/";
         }
 
