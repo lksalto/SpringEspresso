@@ -170,7 +170,7 @@
         
         <div th:if="${sessao.status != null and sessao.status.name() == 'EM_EXECUCAO'}" sec:authorize="hasRole('ROLE_ADMIN')">
             <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" 
-               class="button button-primary">
+               class="button button-primary" style="margin-top:12px;">
                 <i class="fas fa-plus"></i> Adicionar Bug
             </a>
         </div>

@@ -30,7 +30,7 @@ public class SessaoExpiracaoService {
     public void init() {
     }
 
-    @Scheduled(fixedRate = 10000) // Executa a cada 10 segundos
+    @Scheduled(fixedRate = 20000) // Executa a cada 10 segundos
     @Transactional
     public void verificarSessoesExpiradas() {
         
