@@ -29,12 +29,13 @@ public class BugService {
 
     @Transactional
     public BugModel salvar(BugModel bug, MultipartFile arquivo) throws IOException {
-        
+        // Salva o bug inicialmente para gerar o id
+        BugModel bugSalvo = bugRepository.save(bug);
+
         if (arquivo != null && !arquivo.isEmpty()) {
-            // Verificar tipo do arquivo
             String contentType = arquivo.getContentType();
             TipoArquivo tipoArquivo = null;
-            
+
             if (contentType != null) {
                 if (contentType.startsWith("image/")) {
                     tipoArquivo = TipoArquivo.IMAGEM;
@@ -44,31 +45,29 @@ public class BugService {
                     throw new IOException("Tipo de arquivo não suportado: " + contentType);
                 }
             }
-            
-            // Criar diretório se não existir
+
+            // GERAR ARQUIVO COM PADRÃO NO NOME BUG_ID_BUG_S+ID_SESSAO
+            String extensao = "";
+            String nomeArquivoOriginal = arquivo.getOriginalFilename();
+            if (nomeArquivoOriginal != null && nomeArquivoOriginal.contains(".")) {
+                extensao = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf("."));
+            }
+            String nomeArquivo = String.format("bugs/Bug_%d_S%d%s", bugSalvo.getId(), bugSalvo.getSessao().getId(), extensao);
+
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            
-            // Gerar nome único para o arquivo
-            String nomeArquivoOriginal = arquivo.getOriginalFilename();
-            String extensao = "";
-            if (nomeArquivoOriginal != null && nomeArquivoOriginal.contains(".")) {
-                extensao = nomeArquivoOriginal.substring(nomeArquivoOriginal.lastIndexOf("."));
-            }
-            String nomeArquivo = UUID.randomUUID().toString() + extensao;
             Path caminhoArquivo = uploadPath.resolve(nomeArquivo);
-            
-            // Salvar arquivo
+
             Files.copy(arquivo.getInputStream(), caminhoArquivo);
-            
-            // Definir no objeto bug
-            bug.setCaminhoArquivo(nomeArquivo);
-            bug.setTipoArquivo(tipoArquivo);
+
+            bugSalvo.setCaminhoArquivo(nomeArquivo);
+            bugSalvo.setTipoArquivo(tipoArquivo);
+            bugRepository.save(bugSalvo);
         }
-        
-        return bugRepository.save(bug);
+
+        return bugSalvo;
     }
 
     @Transactional(readOnly = true)

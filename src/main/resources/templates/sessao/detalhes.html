@@ -26,9 +26,9 @@
             font-size: 0.8em;
             font-weight: bold;
         }
-        .status-criado { background-color: #007bff; color: white; }
-        .status-em_execucao { background-color: #ffc107; color: #212529; }
-        .status-finalizado { background-color: #28a745; color: white; }
+        .status-criado { background-color: #007bff; color: white; border-radius: 8px;}
+        .status-em_execucao { background-color: #ffc107; color: #212529; border-radius: 8px;}
+        .status-finalizado { background-color: #28a745; color: white; border-radius: 8px;}
     </style>
 </head>
 <body>
@@ -45,7 +45,7 @@
         <p th:text="${mensagemFalha}"></p>
     </div>
 
-    <!-- Informações básicas -->
+    <!-- INFORMACOES -->
     <div class="card" style="margin-bottom: 20px;">
         <h3>Informações Gerais</h3>
         <div style="margin-bottom: 10px;">
@@ -59,7 +59,7 @@
             <span th:text="${sessao.tester != null ? sessao.tester.nome : 'Não atribuído'}"></span>
         </div>
         <div style="margin-bottom: 10px;">
-            <strong>Duração Estimada:</strong> 
+            <strong>Duração:</strong> 
             <span th:text="${sessao.duracao != null ? sessao.duracao.toMinutes() + ' minutos' : 'N/A'}"></span>
         </div>
         <div style="margin-bottom: 10px;">
@@ -70,7 +70,7 @@
             </span>
         </div>
 
-        <!-- Histórico de Status -->
+        <!-- HISTORICO -->
         <div class="card" style="margin-bottom: 20px;">
             <h3>Histórico da Sessão</h3>
             <table class="historico-table">
@@ -108,14 +108,14 @@
         </div>
     </div>
 
-    <!-- Descrição -->
+    <!-- DESCRICAO -->
     <div class="card" style="margin-bottom: 20px;">
         <h3>Descrição</h3>
         <div style="white-space: pre-wrap; padding: 10px; background-color: #f9f9f9; border-radius: 4px;" 
              th:text="${sessao.descricao}"></div>
     </div>
 
-    <!-- Bugs Encontrados -->
+    <!-- BUGS -->
     <div class="card" style="margin-bottom: 20px;">
         <h3>Bugs Encontrados</h3>
         <div th:if="${#lists.isEmpty(sessao.bugs)}" class="message-box info">
@@ -145,7 +145,7 @@
                         <td>
                             <span th:if="${bug.criticidade != null}" 
                                   class="status-badge" 
-                                  th:style="'background-color: ' + ${bug.criticidade.cor} + '; color: white;'"
+                                  th:style="'background-color: ' + ${bug.criticidade.cor} + '; color:coffee;'"
                                   th:text="${bug.criticidade.descricao}"></span>
                             <span th:if="${bug.criticidade == null}" 
                                   class="status-badge" 
@@ -168,15 +168,14 @@
             </table>
         </div>
         
-        <!-- Botão para adicionar bug - CORRIGIDO -->
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div th:if="${sessao.status != null and sessao.status.name() == 'EM_EXECUCAO'}" sec:authorize="hasRole('ROLE_ADMIN')">
             <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" 
                class="button button-primary">
                 <i class="fas fa-plus"></i> Adicionar Bug
             </a>
         </div>
-        
-        <div th:if="${sessao.tester != null and #authentication.principal.email == sessao.tester.email}" sec:authorize="!hasRole('ROLE_ADMIN')">
+
+        <div th:if="${sessao.tester != null and #authentication.principal.email == sessao.tester.email and sessao.status.name() == 'EM_EXECUCAO'}" sec:authorize="!hasRole('ROLE_ADMIN')">
             <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" 
                class="button button-primary" style="margin-top: 12px;">
                 <i class="fas fa-plus"></i> Adicionar Bug
@@ -184,7 +183,7 @@
         </div>
     </div>
 
-    <!-- Controles de Status -->
+    <!-- STATUS -->
     <div class="card" th:if="${sessao.status != null and sessao.status.name() != 'FINALIZADO'}">
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <h3>Alterar Status</h3>

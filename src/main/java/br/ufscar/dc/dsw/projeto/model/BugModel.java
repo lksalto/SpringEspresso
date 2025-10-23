@@ -21,12 +21,12 @@ public class BugModel {
     @Column(nullable = false)
     private boolean resolvido = false;
 
-    @Column(name = "caminho_arquivo") // Renomear de caminhoImagem para caminhoArquivo
+    @Column(name = "caminho_arquivo")
     private String caminhoArquivo;
 
-    @Column(name = "tipo_arquivo") // Novo campo para identificar se é imagem ou vídeo
+    @Column(name = "tipo_arquivo") // IMAGEM ou VIDEO
     @Enumerated(EnumType.STRING)
-    private TipoArquivo tipoArquivo; // "IMAGEM" ou "VIDEO"
+    private TipoArquivo tipoArquivo; 
 
     @NotNull(message = "A criticidade é obrigatória")
     @Column(name = "criticidade")
@@ -39,8 +39,6 @@ public class BugModel {
 
     public BugModel() {
     }
-
-    // Getters e Setters
 
     public Long getId() {
         return id;

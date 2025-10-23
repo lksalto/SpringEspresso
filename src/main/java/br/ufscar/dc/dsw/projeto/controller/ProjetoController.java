@@ -32,16 +32,14 @@ public class ProjetoController {
 
     @Autowired
     private ProjetoService projetoService;
-
     @Autowired
     private EstrategiaService estrategiaService;
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
-    private SessaoService sessaoService; // NOVA INJEÇÃO - SUBSTITUI O SessaoRepository
+    private SessaoService sessaoService; 
 
+    // VISUALIZAR TODOS OS PROJETOS
     @GetMapping("/listar")
     public String listar(Model model, Authentication authentication) {
         try {
@@ -50,7 +48,7 @@ public class ProjetoController {
             String titulo = "Projetos";
 
             if (authentication != null && authentication.getAuthorities() != null) {
-                // Verificar se é ADMIN
+                // PERMISSÕES ADMIN
                 isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
@@ -66,9 +64,10 @@ public class ProjetoController {
                 projetos = new ArrayList<>();
             }
 
-            // ===== CALCULAR MEDALHAS PARA CADA PROJETO =====
+            // CALCULAR MEDALHAS PARA CADA PROJETO
             Map<Long, Map<String, Integer>> medalhasPorProjeto = new HashMap<>();
             
+            // APENAS FINALIZADAS
             for (ProjetoModel projeto : projetos) {
                 Map<Long, Long> sessoesFinalizadas = sessaoService.contarSessoesPorEstrategia(
                     projeto.getId(), 
@@ -103,7 +102,7 @@ public class ProjetoController {
             return "redirect:/projetos/listar";
         }
         
-        // ===== VERSÃO OTIMIZADA - UMA SÓ QUERY =====
+        // CONTAR SESSÕES FINAALIZADAS
         Map<Long, Long> sessoesFinalizadasPorEstrategia = sessaoService.contarSessoesPorEstrategia(
             id, 
             StatusSessao.FINALIZADO
@@ -114,9 +113,8 @@ public class ProjetoController {
         return "projetos/detalhes";
     }
     
-    // ===== REMOVER COMPLETAMENTE ESTE MÉTODO =====
-    // private long contarSessoesFinalizadas(Long projetoId, Long estrategiaId) { ... }
 
+    // CRIAR NOVO PROJETO
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/novo")
     public String novo(Model model) {
@@ -126,7 +124,7 @@ public class ProjetoController {
             List<EstrategiaModel> estrategias = estrategiaService.buscarTodas();
             List<UsuarioModel> usuarios = usuarioService.listarTodos();
 
-            // Pré-selecionar todas as estratégias
+            // CHECKAR TUDO
             List<Long> todasEstrategiasIds = estrategias.stream()
                 .map(EstrategiaModel::getId)
                 .collect(Collectors.toList());
@@ -163,6 +161,7 @@ public class ProjetoController {
         return "redirect:/projetos/listar";
     }
 
+    // EDITAR PROJETO (APENAS ADMIN)
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
@@ -207,6 +206,7 @@ public class ProjetoController {
         return "redirect:/projetos/listar";
     }
 
+    // REMOVER PROJETO
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/remover/{id}")
     public String removerProjeto(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -219,7 +219,7 @@ public class ProjetoController {
         return "redirect:/projetos/listar";
     }
 
-    // ===== NOVO MÉTODO PARA CALCULAR MEDALHAS =====
+    // CALCULAR MEDALHAS (1-4, 5-9, 10+)
     private Map<String, Integer> calcularMedalhas(Map<Long, Long> sessoesFinalizadas) {
         Map<String, Integer> medalhas = new HashMap<>();
         medalhas.put("ouro", 0);

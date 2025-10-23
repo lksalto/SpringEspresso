@@ -8,6 +8,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Retorna o template login.html do Thymeleaf
+        return "login"; 
     }
 }

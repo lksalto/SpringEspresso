@@ -15,6 +15,9 @@ import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// ESTA CLASSE VERIFICA PERIODICAMENTE SESSÕES QUE DEVERIAM TER SIDO FINALIZADAS, 
+// PELO TEMPO QUE FORAM INICIADAS + DURAÇÃO, E AS FINALIZA AUTOMATICAMENTE
+
 @Service
 public class SessaoExpiracaoService {
     
@@ -25,24 +28,22 @@ public class SessaoExpiracaoService {
 
     @PostConstruct
     public void init() {
-        logger.info("SessaoExpiracaoService inicializado com sucesso");
     }
 
     @Scheduled(fixedRate = 10000) // Executa a cada 10 segundos
     @Transactional
     public void verificarSessoesExpiradas() {
-        logger.debug("Executando verificação de sessões expiradas às {}", LocalDateTime.now());
+        
         
         try {
             LocalDateTime agora = LocalDateTime.now();
             
             List<SessaoModel> sessoesEmExecucao = sessaoRepository.findByStatus(StatusSessao.EM_EXECUCAO);
-            logger.debug("Encontradas {} sessões em execução", sessoesEmExecucao.size());
+            
             
             int sessoesFinalizadas = 0;
             
             for (SessaoModel sessao : sessoesEmExecucao) {
-                logger.debug("Verificando sessão ID: {}", sessao.getId());
                 
                 if (sessao.getDataInicioExecucao() != null && 
                     sessao.getDuracao() != null) {
@@ -50,8 +51,7 @@ public class SessaoExpiracaoService {
                     LocalDateTime tempoLimite = sessao.getDataInicioExecucao()
                         .plus(sessao.getDuracao());
                     
-                    logger.debug("Sessão {} - tempo limite: {}, agora: {}", 
-                        sessao.getId(), tempoLimite, agora);
+                    
                     
                     if (agora.isAfter(tempoLimite)) {
                         logger.info("Finalizando sessão {} por expiração", sessao.getId());

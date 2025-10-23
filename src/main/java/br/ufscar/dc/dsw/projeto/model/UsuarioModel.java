@@ -96,7 +96,6 @@ public class UsuarioModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        // O "username" para o Spring Security será o email.
         return this.email;
     }
 

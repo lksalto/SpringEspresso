@@ -65,7 +65,6 @@ public class EstrategiaController {
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam("nome") String nome,
             @RequestParam("descricao") String descricao,
-            
             @RequestParam(value = "dicasId", required = false) List<Long> dicasId,
             @RequestParam(value = "dicasTexto", required = false) List<String> dicasTexto,
             @RequestParam(value = "exemplosId", required = false) List<Long> exemplosId,
@@ -98,8 +97,6 @@ public class EstrategiaController {
                     
                     Long idDica = (dicasId != null && i < dicasId.size()) ? dicasId.get(i) : null;
                     DicaModel dica = (idDica != null) ? dicaRepository.findById(idDica).orElse(new DicaModel()) : new DicaModel();
-                    
-                    
                     dica.setTexto(dicasTexto.get(i));
                     dica.setEstrategia(estrategia);
                     dicasProcessadas.add(dica);
@@ -190,15 +187,15 @@ public class EstrategiaController {
         return "redirect:/estrategias";
     }
 
-    // Endpoint público para visualização de estratégias
-    @GetMapping("/public/estrategias")
+    // Visualização de estratégias
+    @GetMapping("/public/estrategias") // PUBLICO PARA GUEST
     public String listarEstrategiasPublico(Model model) {
         model.addAttribute("estrategias", estrategiaService.buscarTodas());
         model.addAttribute("isGuest", true);
         return "estrategias/list";
     }
 
-    // Endpoint original protegido por autenticação
+    // PROTEGIDO PARA USUARIOS AUTENTICADOS
     @GetMapping("/estrategias")
     public String listarEstrategias(Model model, @RequestParam(value = "guest", defaultValue = "false") boolean guest) {
         if (guest) {
@@ -214,7 +211,7 @@ public class EstrategiaController {
         EstrategiaModel estrategia = estrategiaService.buscarPorId(id);
         if (estrategia != null) {
             model.addAttribute("estrategia", estrategia);
-            return "estrategias/detalhes"; // ou o nome correto do template
+            return "estrategias/detalhes";
         }
         return "redirect:/estrategias";
     }

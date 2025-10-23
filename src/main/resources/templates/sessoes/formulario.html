@@ -14,7 +14,7 @@
     <h1>Nova Sessão para <span th:text="${sessao.projeto.nome}"></span> - <span th:text="${sessao.estrategia.nome}"></span></h1>
 
     <form th:action="@{/sessoes/salvar}" method="post">
-        <!-- Envia apenas os IDs -->
+        
         <input type="hidden" name="projetoId" th:value="${sessao.projeto.id}" />
         <input type="hidden" name="estrategiaId" th:value="${sessao.estrategia.id}" />
 
@@ -46,7 +46,6 @@
         <div class="form-group" style="margin-bottom: 30px;">
             <label for="testerId">Tester Responsável:</label>
             
-            <!-- ADMIN: Pode escolher qualquer tester -->
             <div th:if="${isAdmin}">
                 <select id="testerId" 
                         name="testerId"
@@ -61,7 +60,6 @@
                 </small>
             </div>
             
-            <!-- USER: Informação apenas para visualização -->
             <div th:unless="${isAdmin}">
                 <input type="text" 
                        th:value="${usuarioLogado != null ? usuarioLogado.nome + ' (Você)' : 'Você'}" 
@@ -72,7 +70,6 @@
                 </small>
             </div>
             
-            <!-- Caso não haja membros no projeto -->
             <div th:if="${usuarios == null or usuarios.isEmpty()}" 
                  style="padding: 15px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; color: #856404;">
                 <strong>⚠️ Atenção:</strong> Este projeto não possui membros cadastrados.

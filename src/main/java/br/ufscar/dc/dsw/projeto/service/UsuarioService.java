@@ -36,7 +36,7 @@ public class UsuarioService {
     }
 
     public UsuarioModel salvar(UsuarioModel usuario) {
-        // Criptografar senha apenas se foi fornecida
+
         if (usuario.getSenha() != null && !usuario.getSenha().isEmpty()) {
             usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         }
@@ -50,7 +50,7 @@ public class UsuarioService {
             usuarioExistente.setEmail(usuario.getEmail());
             usuarioExistente.setRole(usuario.getRole());
             
-            // Só atualiza a senha se uma nova foi fornecida
+            // SE FOR FORNECIDA, ATUALIZAR A SENHA
             if (usuario.getSenha() != null && !usuario.getSenha().isEmpty()) {
                 usuarioExistente.setSenha(passwordEncoder.encode(usuario.getSenha()));
             }

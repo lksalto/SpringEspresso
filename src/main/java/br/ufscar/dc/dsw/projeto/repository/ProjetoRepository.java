@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProjetoRepository extends JpaRepository<ProjetoModel, Long> {
     
-    // Buscar projetos onde o usuário é membro
+    // BUSCAR OS PROJETOS QUE UM MEMBRO PARTICIPA (POR EMAIL)
     @Query("SELECT DISTINCT p FROM ProjetoModel p JOIN p.membros m WHERE m.email = :email")
     List<ProjetoModel> findByMembrosEmail(@Param("email") String email);
     

@@ -18,7 +18,7 @@ public class SessaoModel {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    private Duration duracao; // Mude de String para Duration
+    private Duration duracao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projeto_id", nullable = false)
@@ -32,8 +32,8 @@ public class SessaoModel {
     private List<BugModel> bugs = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tester_id") // Adicione esta anotação
-    private UsuarioModel tester; // Adicione este campo
+    @JoinColumn(name = "tester_id")
+    private UsuarioModel tester;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -77,11 +77,11 @@ public class SessaoModel {
         this.descricao = descricao;
     }
 
-    public Duration getDuracao() { // Mude o tipo de retorno
+    public Duration getDuracao() { 
         return duracao;
     }
 
-    public void setDuracao(Duration duracao) { // Mude o tipo do parâmetro
+    public void setDuracao(Duration duracao) {
         this.duracao = duracao;
     }
 
@@ -101,7 +101,6 @@ public class SessaoModel {
         this.estrategia = estrategia;
     }
 
-    // Adicione os getters e setters para o novo campo 'tester'
     public UsuarioModel getTester() {
         return tester;
     }
@@ -126,7 +125,6 @@ public class SessaoModel {
         this.bugs = bugs;
     }
 
-    // Getters e setters
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }

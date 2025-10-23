@@ -41,6 +41,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // CRIA DADOS DO BANCO DE DADOS DE MANEIRA AUTOMÁTICA
+
     @Override
     public void run(String... args) {
 

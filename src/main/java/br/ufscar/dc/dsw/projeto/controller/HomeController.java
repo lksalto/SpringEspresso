@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "home"; // retorna home.html do Thymeleaf
+        return "home"; 
     }
 }

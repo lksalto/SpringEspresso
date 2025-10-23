@@ -36,6 +36,7 @@ public class SessaoController {
         this.usuarioService = usuarioService; 
     }
 
+    // LISTAR SESSÕES DE UMA ESTRATÉGIA EM UM PROJETO
     @GetMapping("/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes")
     public String listarSessoes(@PathVariable Long projetoId, @PathVariable Long estrategiaId, Model model) {
         List<SessaoModel> sessoes = sessaoService.buscarPorProjetoEEstrategia(projetoId, estrategiaId);
@@ -49,6 +50,7 @@ public class SessaoController {
         return "sessoes/lista";
     }
 
+    /*  CADASTRAR NOVA SESSÃO
     @GetMapping("/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes/nova")
     public String novaSessaoForm(@PathVariable Long projetoId, @PathVariable Long estrategiaId, Model model, Authentication authentication) {
         ProjetoModel projeto = projetoService.buscar(projetoId);
@@ -60,23 +62,24 @@ public class SessaoController {
 
         model.addAttribute("sessao", sessao);
 
-        // Passar apenas os membros do projeto
+        // APENAS QUEM ESTÁ REGISTRADO NO PROJETO
         List<UsuarioModel> membrosDisponiveis = projeto.getMembros();
         model.addAttribute("usuarios", membrosDisponiveis);
 
-        // Adicionar usuário logado para USERs
+        // USUARIO LOGADO
         String emailUsuario = authentication.getName();
         UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(emailUsuario);
         model.addAttribute("usuarioLogado", usuarioLogado);
         
-        // Verificar se é admin
+        // VERIFICAR ADMIN
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         model.addAttribute("isAdmin", isAdmin);
 
         return "sessoes/formulario";
-    }
+    }*/
 
+    // DETALHES DA SESSÃO
     @GetMapping("/sessoes/detalhes/{id}")
     public String detalhesSessao(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         SessaoModel sessao = sessaoService.buscarPorIdComBugs(id);
@@ -90,6 +93,7 @@ public class SessaoController {
         return "sessao/detalhes";
     }
 
+    // SALVAR SESSÃO
     @PostMapping("/sessoes/salvar")
     public String salvarSessao(@RequestParam Long projetoId,
                                @RequestParam Long estrategiaId,
@@ -113,18 +117,18 @@ public class SessaoController {
         sessao.setDescricao(descricao);
         sessao.setDuracao(Duration.ofMinutes(duracaoMinutos));
 
-        // Verificar se é admin
+        // APENAS ADMIN
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
         if (isAdmin) {
-            // ADMIN pode escolher qualquer tester ou deixar vazio
+            // ADMIN PODE ESCOLHER QUALQUER UM
             if (testerId != null) {
                 UsuarioModel tester = usuarioService.buscarPorId(testerId);
                 sessao.setTester(tester);
             }
         } else {
-            // USER sempre é definido como tester
+            // USER NORMAL SÓ PODE SER ELE MESMO
             String emailUsuario = authentication.getName();
             UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(emailUsuario);
             sessao.setTester(usuarioLogado);
@@ -135,6 +139,7 @@ public class SessaoController {
         return "redirect:/projetos/" + projetoId + "/estrategias/" + estrategiaId + "/sessoes";
     }
 
+    // CADASTRAR NOVA SESSÃO - FORMULÁRIO
     @GetMapping("/sessoes/cadastro")
     public String formCadastro(@RequestParam Long projetoId, @RequestParam Long estrategiaId, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
         ProjetoModel projeto = projetoService.buscar(projetoId);
@@ -151,21 +156,21 @@ public class SessaoController {
 
         model.addAttribute("sessao", sessao);
         
-        // Passar apenas os membros do projeto
+        // VERIFICAR APENAS MEMBROS DO PROJETO
         List<UsuarioModel> membrosDisponiveis = projeto.getMembros();
         model.addAttribute("usuarios", membrosDisponiveis);
         
-        // Adicionar usuário logado
+        // USUARIO LOGADO
         String emailUsuario = authentication.getName();
         UsuarioModel usuarioLogado = usuarioService.buscarPorEmail(emailUsuario);
         model.addAttribute("usuarioLogado", usuarioLogado);
         
-        // Verificar se é admin
+        // É ADMIN?
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         model.addAttribute("isAdmin", isAdmin);
         
-        // Adicionar uma mensagem informativa se não houver membros
+        // CASO AINDA NÃO HAJA MEMBROS
         if (membrosDisponiveis == null || membrosDisponiveis.isEmpty()) {
             model.addAttribute("avisoSemMembros", true);
         }
@@ -173,6 +178,8 @@ public class SessaoController {
         return "sessoes/formulario";
     }
 
+
+    // ATUALIZAR STATUS DA SESSÃO
     @PostMapping("/sessoes/atualizarStatus")
     public String atualizarStatus(@RequestParam("sessaoId") Long sessaoId,
                                   @RequestParam("novoStatus") String novoStatus,
@@ -186,7 +193,7 @@ public class SessaoController {
             return "redirect:/home";
         }
 
-        // Verificar permissões
+        // APENAS TESTER RESPONSÁVEL OU ADMIN
         if (!temPermissaoParaSessao(sessao, authentication)) {
             attr.addFlashAttribute("mensagemFalha", "Você não tem permissão para alterar esta sessão.");
             return "redirect:/sessoes/detalhes/" + sessaoId;
@@ -196,12 +203,12 @@ public class SessaoController {
             StatusSessao novoStatusEnum = StatusSessao.valueOf(novoStatus);
             StatusSessao statusAtual = sessao.getStatus();
             
-            // Atualizar timestamps baseado na mudança de status
+            // MUDAR DATAS CONFORME O NOVO STATUS (AGORA)
             if (statusAtual == StatusSessao.CRIADO && novoStatusEnum == StatusSessao.EM_EXECUCAO) {
                 sessao.setDataInicioExecucao(LocalDateTime.now());
             } else if (novoStatusEnum == StatusSessao.FINALIZADO) {
                 sessao.setDataFinalizacao(LocalDateTime.now());
-                // Se estava criado e pulou direto para finalizado, marcar início também
+                // SE NUNCA TIVER SIDO INICIADA, INICIAR AGORA
                 if (sessao.getDataInicioExecucao() == null) {
                     sessao.setDataInicioExecucao(LocalDateTime.now());
                 }
@@ -217,6 +224,7 @@ public class SessaoController {
         return "redirect:/sessoes/detalhes/" + sessaoId;
     }
 
+    // EXCLUIR SESSÃO
     @PostMapping("/sessoes/excluir/{id}")
     public String excluir(@PathVariable("id") Long id, Authentication authentication, RedirectAttributes attr) {
         SessaoModel sessao = sessaoService.buscarPorId(id);

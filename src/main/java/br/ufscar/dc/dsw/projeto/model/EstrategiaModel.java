@@ -16,11 +16,11 @@ public class EstrategiaModel {
     @Column(columnDefinition="TEXT")
     private String descricao;
 
-    // NOVO: Relacionamento com Dicas
+    // RELACIONAMENTO COM DICAS (N-N)
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DicaModel> dicas = new ArrayList<>();
 
-    // NOVO: Relacionamento com Exemplos
+    // RELACIONAMENTO COM EXEMPLOS (N-N)
     @OneToMany(mappedBy = "estrategia", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ExemploModel> exemplos = new ArrayList<>();
     
@@ -37,8 +37,6 @@ public class EstrategiaModel {
     public void setNome(String nome) { this.nome = nome; }
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
-
-    // NOVO: Getters e Setters para as listas
     public List<DicaModel> getDicas() { return dicas; }
     public void setDicas(List<DicaModel> dicas) { this.dicas = dicas; }
     public List<ExemploModel> getExemplos() { return exemplos; }

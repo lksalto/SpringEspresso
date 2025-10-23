@@ -16,7 +16,6 @@
         <p th:text="${mensagemFalha}"></p>
     </div>
 
-    <!-- Bloco de EDIÇÃO: Mostrado apenas se o DTO de edição existir -->
     <th:block th:if="${sessaoEdicaoDTO != null}">
         <form th:action="@{/sessoes/editar}" th:object="${sessaoEdicaoDTO}" method="post">
 
@@ -36,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- Campo de Tester na edição - apenas para ADMINs -->
             <div class="form-group" sec:authorize="hasRole('ADMIN')">
                 <label for="testerId-edit">Tester Responsável:</label>
                 <select id="testerId-edit" th:field="*{testerId}">
@@ -69,7 +67,6 @@
         </form>
     </th:block>
 
-    <!-- Bloco de CRIAÇÃO: Mostrado se o DTO de edição NÃO existir -->
     <th:block th:unless="${sessaoEdicaoDTO != null}">
         <form th:action="@{/sessoes/criar}" th:object="${sessaoDTO}" method="post">
             <input type="hidden" th:field="*{projetoId}" />
@@ -82,11 +79,11 @@
                 </select>
             </div>
 
-            <!-- Campo Tester: Apenas ADMIN pode escolher, USER é automaticamente atribuído -->
+            <!-- ADMIN ESCOLHE TESTER E USER É BLOQUEADO, PODENDO ESCOLHER APENAS A SI MESMO -->
             <div class="form-group">
                 <label for="tester">Tester Responsável:</label>
                 
-                <!-- ADMIN: Pode escolher qualquer tester -->
+                <!-- ADMIN ESCOLHE QQER TESTER -->
                 <div sec:authorize="hasRole('ADMIN')">
                     <select id="tester" th:field="*{tester}">
                         <option value="">-- Nenhum Tester Atribuído --</option>
@@ -95,14 +92,14 @@
                     <small style="color: #666;">Como administrador, você pode atribuir qualquer tester ou deixar sem atribuição.</small>
                 </div>
                 
-                <!-- USER: Informação apenas para visualização -->
+                <!-- APENAS VISUALIZAÇÃO PARA USERS -->
                 <div sec:authorize="!hasRole('ADMIN')">
                     <input type="text" 
                            th:value="${usuarioLogado != null ? usuarioLogado.nome + ' (Você)' : 'Você'}" 
                            readonly 
                            style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 8px; border-radius: 4px; width: 100%;">
                     <small style="color: #666;">Você será automaticamente definido como tester responsável por esta sessão.</small>
-                    <!-- Campo oculto para enviar o ID do usuário logado -->
+                    <!-- ID USUARIO -->
                     <input type="hidden" th:field="*{tester}" th:value="${usuarioLogado != null ? usuarioLogado.id : ''}">
                 </div>
             </div>

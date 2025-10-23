@@ -19,10 +19,9 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <!-- Título dinâmico baseado na role -->
+    <!-- TÍTULO BASEADO NA ROLE -->
     <h1 th:text="${titulo}">Projetos</h1>
     
-    <!-- Subtitle informativo -->
     <p th:if="${isAdmin}" style="color: #666; margin-bottom: 20px;">
         <i>Como administrador, você pode visualizar e gerenciar todos os projetos do sistema.</i>
     </p>
@@ -30,7 +29,7 @@
         <i>Exibindo apenas os projetos onde você é membro.</i>
     </p>
 
-    <!-- Botão de novo projeto apenas para ADMINs -->
+    <!-- NOVO PROJETO, APENAS PARA ADMIN -->
     <div style="margin-bottom: 20px;">
         <span sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/projetos/novo}" class="button button-primary">Novo Projeto</a>
@@ -55,7 +54,7 @@
                 <td th:text="${projeto.descricao}"></td>
                 <td th:text="${#lists.size(projeto.estrategias)}"></td>
                 
-                <!-- Mostrar nomes dos membros com scroll -->
+                
                 <td class="membros-cell">
                     <span th:if="${projeto.membros != null and !projeto.membros.isEmpty()}">
                         <div th:each="membro : ${projeto.membros}">

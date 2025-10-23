@@ -62,16 +62,16 @@ public class ProjetoService {
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         try {
-            // Buscar todas as sessões do projeto
+            // TODAS AS SESSÕES DO PROJETO
             List<SessaoModel> sessoes = sessaoRepository.findAll()
                     .stream()
                     .filter(s -> s.getProjeto() != null && s.getProjeto().getId() != null && s.getProjeto().getId().equals(id))
                     .collect(Collectors.toList());
             
-            // Deletar bugs primeiro
+            // DELETAR OS BUGS DAS SESSÕES (PROBLEMA DE FK)
             for (SessaoModel sessao : sessoes) {
                 try {
-                    // Buscar bugs da sessão
+                    // BUSCAR BUGS
                     List<BugModel> bugs = bugRepository.findAll()
                             .stream()
                             .filter(b -> b.getSessao() != null && b.getSessao().getId() != null && b.getSessao().getId().equals(sessao.getId()))
@@ -85,12 +85,12 @@ public class ProjetoService {
                 }
             }
             
-            // Depois deletar as sessões
+            // DELETAR SESSÕES
             if (!sessoes.isEmpty()) {
                 sessaoRepository.deleteAll(sessoes);
             }
 
-            // Limpar relacionamentos (n-n)
+            //  LIMPAR ASSOCIAÇÕES DE ESTRATÉGIAS E MEMBROS
             if (projeto.getEstrategias() != null) {
                 projeto.getEstrategias().clear();
             }
@@ -99,7 +99,7 @@ public class ProjetoService {
             }
             projetoRepository.save(projeto);
 
-            // Finalmente deletar o projeto
+            // AGORA DELETAR PROJETOS (SEM FK)
             projetoRepository.delete(projeto);
             
         } catch (Exception e) {
@@ -112,13 +112,12 @@ public class ProjetoService {
         projeto.setNome(dto.getNome());
         projeto.setDescricao(dto.getDescricao());
 
-        // Associar estratégias
+        // ADD ESTRATEGIAS
         if (dto.getEstrategiasIds() != null && !dto.getEstrategiasIds().isEmpty()) {
             List<EstrategiaModel> estrategias = estrategiaRepository.findAllById(dto.getEstrategiasIds());
             projeto.setEstrategias(estrategias);
         }
 
-        // ADICIONAR: Associar membros
         if (dto.getMembrosIds() != null && !dto.getMembrosIds().isEmpty()) {
             List<UsuarioModel> membros = usuarioRepository.findAllById(dto.getMembrosIds());
             projeto.setMembros(membros);
@@ -127,6 +126,7 @@ public class ProjetoService {
         projetoRepository.save(projeto);
     }
 
+    // ATUALIZAR PROJETO
     public void atualizar(ProjetoEdicaoDTO dto) {
         ProjetoModel projeto = projetoRepository.findById(dto.getId()).orElse(null);
         if (projeto != null) {

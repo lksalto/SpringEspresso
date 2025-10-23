@@ -59,14 +59,14 @@
         <div th:if="${bug.caminhoArquivo != null}" style="margin-bottom: 15px;">
             <strong>Anexo:</strong>
             <div style="margin-top: 10px;">
-                <!-- Se for imagem -->
+                <!-- IMAGEM -->
                 <div th:if="${bug.tipoArquivo != null and bug.tipoArquivo.name() == 'IMAGEM'}">
                     <img th:src="@{'/uploads/' + ${bug.caminhoArquivo}}" 
                          alt="Screenshot do bug" 
                          style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;"/>
                 </div>
                 
-                <!-- Se for vídeo -->
+                <!-- VIDEO -->
                 <div th:if="${bug.tipoArquivo != null and bug.tipoArquivo.name() == 'VIDEO'}">
                     <video controls style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
                         <source th:src="@{'/uploads/' + ${bug.caminhoArquivo}}" type="video/mp4">
@@ -78,12 +78,12 @@
         </div>
     </div>
     
-    <!-- Ações -->
+    <!-- AÇOES -->
     <div style="margin-bottom: 20px;">
         <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" 
            class="button button-secondary">Voltar para Sessão</a>
            
-        <!-- Permitir resolução independente do status da sessão -->
+        <!-- PODER RESOLVER ELE MESMO COM SESSÃO DE TESTES FINALIZADA -->
         <form th:if="${!bug.resolvido}" 
               sec:authorize="hasRole('ROLE_ADMIN')"
               th:action="@{/bugs/resolver}" 
@@ -97,7 +97,7 @@
             </button>
         </form>
         
-        <!-- Botão para reabrir bug se necessário -->
+        <!-- REABRIR BUG -->
         <form th:if="${bug.resolvido}" 
               sec:authorize="hasRole('ROLE_ADMIN')"
               th:action="@{/bugs/reabrir}" 

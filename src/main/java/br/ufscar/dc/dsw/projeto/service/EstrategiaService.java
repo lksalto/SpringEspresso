@@ -26,7 +26,6 @@ public class EstrategiaService {
         return op.orElse(null);
     }
 
-    // CORREÇÃO: Mude o retorno de 'void' para 'EstrategiaModel'
     public EstrategiaModel salvar(EstrategiaModel estrategia) {
         return estrategiaRepository.save(estrategia);
     }

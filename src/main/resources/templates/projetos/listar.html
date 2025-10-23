@@ -75,10 +75,10 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
-    <!-- Título dinâmico baseado na role -->
+    
     <h1 th:text="${titulo != null} ? ${titulo} : 'Projetos'">Projetos</h1>
     
-    <!-- Messages -->
+    
     <div th:if="${success}" class="message-box success">
         <p th:text="${success}"></p>
     </div>
@@ -86,7 +86,7 @@
         <p th:text="${fail}"></p>
     </div>
     
-    <!-- Subtitle informativo -->
+    
     <p th:if="${isAdmin != null and isAdmin}" style="color: #666; margin-bottom: 20px;">
         <i>Como administrador, você pode visualizar e gerenciar todos os projetos do sistema.</i>
     </p>
@@ -94,7 +94,7 @@
         <i>Exibindo apenas os projetos onde você é membro.</i>
     </p>
 
-    <!-- Botão de novo projeto apenas para ADMINs -->
+    
     <div style="margin-bottom: 20px;" sec:authorize="hasRole('ADMIN')">
         <a th:href="@{/projetos/novo}" class="button button-primary">Novo Projeto</a>
     </div>
@@ -116,7 +116,7 @@
                         <td th:text="${projeto.nome}"></td>
                         <td th:text="${projeto.descricao}"></td>
                         
-                        <!-- Coluna das Medalhas -->
+                        <!-- MEDALHAS -->
                         <td>
                             <div th:with="medalhas=${medalhasPorProjeto.get(projeto.id)}">
                                 <div th:if="${medalhas != null and (medalhas.get('ouro') > 0 or medalhas.get('prata') > 0 or medalhas.get('bronze') > 0)}" 
@@ -148,7 +148,7 @@
                             </div>
                         </td>
                         
-                        <!-- Mostrar nomes dos membros com quebra de linha -->
+                        <!-- MEMBROS -->
                         <td class="membros-cell">
                             <span th:if="${projeto.membros != null and !projeto.membros.isEmpty()}">
                                 <div th:each="membro : ${projeto.membros}">

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
-    // GARANTA QUE ESTE MÉTODO EXISTA
+
     UsuarioModel findByEmail(String email);
 }
