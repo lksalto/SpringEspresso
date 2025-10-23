@@ -23,7 +23,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/login", "/logout", "/css/**", "/js/**", "/webjars/**").permitAll()
+                .requestMatchers("/login", "/logout", "/css/**", "/js/**", "/webjars/**", "/uploads/estrategias/**").permitAll()
+                .requestMatchers("/estrategias", "/estrategias/detalhes/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -50,7 +51,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Para teste, senha em texto puro. Depois use BCryptPasswordEncoder
         return NoOpPasswordEncoder.getInstance();
     }
 }

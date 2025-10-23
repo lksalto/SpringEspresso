@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <title th:text="'Detalhes da Estratégia - ' + ${estrategia.nome}">Detalhes da Estratégia</title>
@@ -17,7 +19,10 @@
 
   <div style="margin-bottom: 20px;">
     <span th:if="${estrategia != null}">
-      <a th:href="@{/estrategias/editar/{id}(id=${estrategia.id})}" class="button button-primary" th:text="#{link.editar_estrategia}">Editar Esta Estratégia</a>
+      <a th:href="@{/estrategias/editar/{id}(id=${estrategia.id})}" 
+         class="button button-primary" 
+         th:text="#{link.editar_estrategia}"
+         sec:authorize="hasRole('ROLE_ADMIN')">Editar Esta Estratégia</a>
     </span>
   </div>
 

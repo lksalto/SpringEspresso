@@ -189,4 +189,33 @@ public class EstrategiaController {
         }
         return "redirect:/estrategias";
     }
+
+    // Endpoint público para visualização de estratégias
+    @GetMapping("/public/estrategias")
+    public String listarEstrategiasPublico(Model model) {
+        model.addAttribute("estrategias", estrategiaService.buscarTodas());
+        model.addAttribute("isGuest", true);
+        return "estrategias/list";
+    }
+
+    // Endpoint original protegido por autenticação
+    @GetMapping("/estrategias")
+    public String listarEstrategias(Model model, @RequestParam(value = "guest", defaultValue = "false") boolean guest) {
+        if (guest) {
+            return "redirect:/public/estrategias";
+        }
+        model.addAttribute("estrategias", estrategiaService.buscarTodas());
+        model.addAttribute("isGuest", false);
+        return "estrategias/list";
+    }
+
+    @GetMapping("/estrategias/{id}")
+    public String detalheEstrategia(@PathVariable Long id, Model model) {
+        EstrategiaModel estrategia = estrategiaService.buscarPorId(id);
+        if (estrategia != null) {
+            model.addAttribute("estrategia", estrategia);
+            return "estrategias/detalhes"; // ou o nome correto do template
+        }
+        return "redirect:/estrategias";
+    }
 }
