@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw.projeto.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,8 +21,18 @@ public class BugModel {
     @Column(nullable = false)
     private boolean resolvido = false;
 
-    @Column(name = "caminho_imagem")
-    private String caminhoImagem; // Armazena o caminho para a imagem
+    @Column(name = "caminho_arquivo") // Renomear de caminhoImagem para caminhoArquivo
+    private String caminhoArquivo;
+
+    @Column(name = "tipo_arquivo") // Novo campo para identificar se é imagem ou vídeo
+    @Enumerated(EnumType.STRING)
+    private TipoArquivo tipoArquivo; // "IMAGEM" ou "VIDEO"
+
+    @NotNull(message = "A criticidade é obrigatória")
+    @Column(name = "criticidade")
+    @Enumerated(EnumType.STRING)
+    private CriticidadeBug criticidade;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessao_id", nullable = false)
     private SessaoModel sessao;
@@ -63,12 +74,28 @@ public class BugModel {
         this.resolvido = resolvido;
     }
 
-    public String getCaminhoImagem() {
-        return caminhoImagem;
+    public String getCaminhoArquivo() {
+        return caminhoArquivo;
     }
 
-    public void setCaminhoImagem(String caminhoImagem) {
-        this.caminhoImagem = caminhoImagem;
+    public void setCaminhoArquivo(String caminhoArquivo) {
+        this.caminhoArquivo = caminhoArquivo;
+    }
+
+    public TipoArquivo getTipoArquivo() {
+        return tipoArquivo;
+    }
+
+    public void setTipoArquivo(TipoArquivo tipoArquivo) {
+        this.tipoArquivo = tipoArquivo;
+    }
+
+    public CriticidadeBug getCriticidade() {
+        return criticidade;
+    }
+
+    public void setCriticidade(CriticidadeBug criticidade) {
+        this.criticidade = criticidade;
     }
 
     public SessaoModel getSessao() {
@@ -77,5 +104,14 @@ public class BugModel {
 
     public void setSessao(SessaoModel sessao) {
         this.sessao = sessao;
+    }
+
+    // Método auxiliar para compatibilidade
+    public String getCaminhoImagem() {
+        return TipoArquivo.IMAGEM.equals(tipoArquivo) ? caminhoArquivo : null;
+    }
+
+    public String getCaminhoVideo() {
+        return TipoArquivo.VIDEO.equals(tipoArquivo) ? caminhoArquivo : null;
     }
 }

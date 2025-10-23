@@ -44,7 +44,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        boolean popula = true; // Ativando para testar
+        boolean popula = false; // Ativando para testar
 
         if (!popula) {
             System.out.println("População do banco de dados desativada.");

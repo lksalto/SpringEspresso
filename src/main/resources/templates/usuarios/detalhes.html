@@ -14,7 +14,7 @@
     <div style="margin-bottom: 20px;">
         <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-primary">Editar Este Usuário</a>
         <a th:href="@{/usuarios/remover/{id}(id=${usuario.id})}" 
-           class="button button-danger"
+           class="button button-secondary"
            onclick="return confirm('Tem certeza que deseja remover este usuário? Esta ação não pode ser desfeita.')">Remover Usuário</a>
     </div>
 
@@ -40,18 +40,18 @@
         </div>
         <div style="margin-bottom: 15px;">
             <strong>Permissões:</strong>
-            <ul th:if="${usuario.role == 'ROLE_ADMIN'}" style="margin: 5px 0 0 20px; color: #666;">
-                <li>Gerenciar usuários do sistema</li>
-                <li>Criar, editar e excluir projetos</li>
-                <li>Gerenciar estratégias</li>
-                <li>Acesso completo ao sistema</li>
-            </ul>
-            <ul th:if="${usuario.role == 'ROLE_USER'}" style="margin: 5px 0 0 20px; color: #666;">
-                <li>Participar de projetos como membro</li>
-                <li>Visualizar e usar estratégias</li>
-                <li>Registrar sessões de teste</li>
-                <li>Reportar bugs</li>
-            </ul>
+            <div th:if="${usuario.role == 'ROLE_ADMIN'}" style="margin-top: 5px; color: #666;">
+                <div>Gerenciar usuários do sistema</div>
+                <div>Criar, editar e excluir projetos</div>
+                <div>Gerenciar estratégias</div>
+                <div>Acesso completo ao sistema</div>
+            </div>
+            <div th:if="${usuario.role == 'ROLE_USER'}" style="margin-top: 5px; color: #666;">
+                <div>Participar de projetos como membro</div>
+                <div>Visualizar e usar estratégias</div>
+                <div>Registrar sessões de teste</div>
+                <div>Reportar bugs</div>
+            </div>
         </div>
     </div>
 

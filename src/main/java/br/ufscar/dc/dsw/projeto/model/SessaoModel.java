@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw.projeto.model;
 
 import jakarta.persistence.*;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,18 @@ public class SessaoModel {
     @Column(nullable = false)
     private StatusSessao status = StatusSessao.CRIADO;
 
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao;
+
+    @Column(name = "data_inicio_execucao")
+    private LocalDateTime dataInicioExecucao;
+
+    @Column(name = "data_finalizacao")
+    private LocalDateTime dataFinalizacao;
+
 
     public SessaoModel() {
+        this.dataCriacao = LocalDateTime.now();
     }
 
     public SessaoModel(String descricao, Duration duracao, ProjetoModel projeto, EstrategiaModel estrategia) {
@@ -113,5 +124,30 @@ public class SessaoModel {
 
     public void setBugs(List<BugModel> bugs) {
         this.bugs = bugs;
+    }
+
+    // Getters e setters
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataInicioExecucao() {
+        return dataInicioExecucao;
+    }
+
+    public void setDataInicioExecucao(LocalDateTime dataInicioExecucao) {
+        this.dataInicioExecucao = dataInicioExecucao;
+    }
+
+    public LocalDateTime getDataFinalizacao() {
+        return dataFinalizacao;
+    }
+
+    public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
+        this.dataFinalizacao = dataFinalizacao;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -192,8 +193,21 @@ public class SessaoController {
         }
 
         try {
-            StatusSessao status = StatusSessao.valueOf(novoStatus);
-            sessao.setStatus(status);
+            StatusSessao novoStatusEnum = StatusSessao.valueOf(novoStatus);
+            StatusSessao statusAtual = sessao.getStatus();
+            
+            // Atualizar timestamps baseado na mudança de status
+            if (statusAtual == StatusSessao.CRIADO && novoStatusEnum == StatusSessao.EM_EXECUCAO) {
+                sessao.setDataInicioExecucao(LocalDateTime.now());
+            } else if (novoStatusEnum == StatusSessao.FINALIZADO) {
+                sessao.setDataFinalizacao(LocalDateTime.now());
+                // Se estava criado e pulou direto para finalizado, marcar início também
+                if (sessao.getDataInicioExecucao() == null) {
+                    sessao.setDataInicioExecucao(LocalDateTime.now());
+                }
+            }
+            
+            sessao.setStatus(novoStatusEnum);
             sessaoService.salvar(sessao);
             attr.addFlashAttribute("mensagemSucesso", "Status da sessão atualizado com sucesso!");
         } catch (IllegalArgumentException e) {
