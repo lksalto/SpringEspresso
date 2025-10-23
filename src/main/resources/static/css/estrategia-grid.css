@@ -19,7 +19,7 @@
     padding-bottom: 35px; /* Espaço para o contador */
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(139, 69, 19, 0.1);
-    overflow: visible; /* Mudança: permite que pseudo-elementos saiam da área */
+    overflow: visible;
 }
 
 .strategy-button:hover {
@@ -82,8 +82,10 @@
     margin: 0;
     min-height: 60px;
     display: flex;
+    flex-direction: column; /* Mudança: layout vertical */
     align-items: center;
     justify-content: center;
+    position: relative; /* Para posicionar a medalha */
 }
 
 .strategy-button-link:hover {
@@ -96,14 +98,12 @@
     background: linear-gradient(135deg, #df8359, #f1b578);
 }
 
-/* ===== BORDAS DECORATIVAS SIMPLIFICADAS ===== */
+/* ===== BORDAS SIMPLIFICADAS ===== */
 
 /* Borda para estratégias sem sessões - Estilo neutro e discreto */
 .strategy-button.no-sessions {
     border: 2px solid #E5E5E5;
     background: linear-gradient(145deg, #FAFAFA, #F5F5F5);
-    position: relative;
-    z-index: 1;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
@@ -127,189 +127,179 @@
 }
 
 .strategy-button.no-sessions:hover {
-    transform: translateY(-2px); /* Hover mais sutil */
+    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border-color: #D0D0D0;
 }
 
-/* Borda Prateada - Clean e Minimalista */
-.strategy-button.silver-border {
-    border: 3px solid #4e4949;
-    background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
-    position: relative;
-    z-index: 1;
-    box-shadow: 
-        0 0 0 1px #D3D3D3,
-        0 4px 12px rgba(160,160,160,0.3);
-}
-
-.strategy-button.silver-border::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: linear-gradient(45deg, #E8E8E8, #C0C0C0, #E8E8E8);
-    border-radius: 16px;
-    z-index: -1;
-    opacity: 0.7;
-}
-
-.strategy-button.silver-border::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border: 1px solid rgba(0, 0, 0, 0.6);
-    border-radius: 14px;
-    z-index: -1;
-}
-
-/* Borda Dourada - Clean e Minimalista */
-.strategy-button.gold-border {
-    border: 3px solid #ddad34;
-    background: linear-gradient(145deg, #fffbf0, #fff4d6);
-    position: relative;
-    z-index: 1;
-    box-shadow: 
-        0 0 0 1px #FFD700,
-        0 4px 16px rgba(255,215,0,0.4),
-        0 0 15px rgba(255,215,0,0.15);
-}
-
-.strategy-button.gold-border::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: linear-gradient(45deg, #FFE55C, #FFD700, #FFA500);
-    border-radius: 16px;
-    z-index: -1;
-    opacity: 0.8;
-}
-
-.strategy-button.gold-border::after {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 1px solid #d48d08;
-    border-radius: 10px;
-    z-index: -1;
-}
-
-/* Borda Bronze - Para estratégias com 1-4 sessões */
+/* Borda Bronze - TOM BRONZE MAIS ESCURO */
 .strategy-button.bronze-border {
-    border: 3px solid #8B4513;
-    background: linear-gradient(145deg, #F5E6D3, #EDDCC9);
-    position: relative;
-    z-index: 1;
-    box-shadow: 
-        0 0 0 1px #CD853F,
-        0 4px 12px rgba(205, 133, 63, 0.3);
-}
-
-.strategy-button.bronze-border::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: linear-gradient(45deg, #DEB887, #CD853F, #D2B48C);
-    border-radius: 16px;
-    z-index: -1;
-    opacity: 0.6;
-}
-
-.strategy-button.bronze-border::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border: 1px solid rgba(205, 133, 63, 0.5);
-    border-radius: 14px;
-    z-index: -1;
-}
-
-.strategy-button.bronze-border:hover {
-    box-shadow: 
-        0 0 0 1px #CD853F,
-        0 6px 18px rgba(205, 133, 63, 0.4);
-}
-
-.strategy-button.bronze-border:hover::before {
-    opacity: 0.8;
-    transform: scale(1.01);
-}
-
-/* Indicadores visuais de progresso */
-.strategy-button.silver-border .strategy-button-link::after {
-    content: " 🥈";
-    font-size: 14px;
-    margin-left: 5px;
-}
-
-.strategy-button.gold-border .strategy-button-link::after {
-    content: " 🥇";
-    font-size: 14px;
-    margin-left: 5px;
-}
-
-.strategy-button.bronze-border .strategy-button-link::after {
-    content: " 🥉";
-    font-size: 14px;
-    margin-left: 5px;
-}
-
-/* Gradientes especiais para os botões premiados - CONTRASTE MELHORADO */
-.strategy-button.silver-border .strategy-button-link {
-    background: linear-gradient(135deg, #686767, #888787, #a0a0a0);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
-    color: #fffafa;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.5);
-}
-
-.strategy-button.gold-border .strategy-button-link {
-    background: linear-gradient(135deg, #E6AC00, #FFD700, #FFF2B3);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
-    color: #8B4513;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+    border: 2px solid #A0522D; /* Bronze mais escuro */
+    background: linear-gradient(145deg, #F5E6D3, #E6D3B7); /* Fundo bronze mais definido */
+    box-shadow: 0 2px 6px rgba(160, 82, 45, 0.2); /* Sombra bronze mais escura */
 }
 
 .strategy-button.bronze-border .strategy-button-link {
-    background: linear-gradient(135deg, #CD853F, #D2B48C, #DEB887);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-    color: #654321;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.4);
-}
-
-.strategy-button.silver-border .strategy-button-link:hover,
-.strategy-button.silver-border:hover .strategy-button-link {
-    background: linear-gradient(135deg, #A0A0A0, #C8C8C8, #E0E0E0);
-    color: #1A1A1A;
-}
-
-.strategy-button.gold-border .strategy-button-link:hover,
-.strategy-button.gold-border:hover .strategy-button-link {
-    background: linear-gradient(135deg, #FFD700, #FFEB99, #FFFDE6);
-    color: #654321;
+    background: linear-gradient(135deg, #CD853F, #B8860B); /* Gradiente bronze mais escuro */
+    color: #fdf9f5; /* Texto marrom mais escuro */
+    text-shadow: none;
 }
 
 .strategy-button.bronze-border .strategy-button-link:hover,
 .strategy-button.bronze-border:hover .strategy-button-link {
-    background: linear-gradient(135deg, #D2B48C, #DEB887, #F5DEB3);
-    color: #5D4037;
+    background: linear-gradient(135deg, #D2B48C, #A0522D); /* Bronze ainda mais escuro no hover */
+    color: #4A2C17;
 }
+
+.strategy-button.bronze-border:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(160, 82, 45, 0.3); /* Sombra mais intensa */
+    border-color: #8B4513; /* Borda ainda mais escura no hover */
+}
+
+.strategy-button.bronze-border .strategy-session-counter {
+    background-color: rgba(101, 67, 33, 0.8); /* Contador marrom mais escuro */
+    color: white;
+    border: 1px solid #8B4513; /* Borda marrom escura */
+    width: 180px;
+}
+
+/* Borda Prateada - MAIS DESTAQUE */
+.strategy-button.silver-border {
+    border: 2px solid #A9A9A9; /* Cinza mais escuro */
+    background: linear-gradient(145deg, #F5F5F5, #E8E8E8); /* Gradiente mais definido */
+    box-shadow: 0 3px 8px rgba(169, 169, 169, 0.2); /* Sombra mais pronunciada */
+}
+
+.strategy-button.silver-border .strategy-button-link {
+    background: linear-gradient(135deg, #DCDCDC, #C0C0C0); /* Prata mais definida */
+    color: #2F2F2F; /* Texto mais escuro */
+    text-shadow: 0 1px 1px rgba(255,255,255,0.3); /* Sombra clara sutil */
+}
+
+.strategy-button.silver-border .strategy-button-link:hover,
+.strategy-button.silver-border:hover .strategy-button-link {
+    background: linear-gradient(135deg, #E8E8E8, #D0D0D0);
+    color: #1A1A1A;
+}
+
+.strategy-button.silver-border:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(169, 169, 169, 0.3); /* Sombra maior */
+    border-color: #808080;
+}
+
+/* Borda Dourada - MUITO CHAMATIVA */
+.strategy-button.gold-border {
+    border: 3px solid #DAA520; /* Borda mais grossa */
+    background: linear-gradient(145deg, #FFFDF5, #FFF8DC); /* Amarelo mais vibrante */
+    box-shadow: 
+        0 0 0 1px #FFD700, /* Anel dourado */
+        0 4px 16px rgba(218, 165, 32, 0.4), /* Sombra maior */
+        0 0 20px rgba(255, 215, 0, 0.2); /* Brilho sutil */
+}
+
+.strategy-button.gold-border .strategy-button-link {
+    background: linear-gradient(135deg, #FFE135, #FFCD02, #FFA000); /* Gradiente dourado vibrante */
+    color: #8B4513; /* Texto marrom escuro para contraste */
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3); /* Sombra clara para destacar */
+    font-weight: 700; /* Texto mais grosso */
+}
+
+.strategy-button.gold-border .strategy-button-link:hover,
+.strategy-button.gold-border:hover .strategy-button-link {
+    background: linear-gradient(135deg, #FFD700, #FFC107, #FF8F00); /* Ainda mais vibrante no hover */
+    color: #654321;
+    transform: scale(1.02); /* Pequeno aumento no hover */
+}
+
+.strategy-button.gold-border:hover {
+    transform: translateY(-4px); /* Hover mais pronunciado */
+    box-shadow: 
+        0 0 0 1px #FFD700,
+        0 8px 24px rgba(218, 165, 32, 0.5), /* Sombra ainda maior */
+        0 0 30px rgba(255, 215, 0, 0.3); /* Brilho mais intenso */
+}
+
+/* ===== FIM DAS BORDAS SIMPLIFICADAS ===== */
+
+/* ===== MEDALHAS PENDURADAS ===== */
+/* Medalhas usando pseudo-elementos diretamente no botão */
+.strategy-button.bronze-border::after {
+    content: "🥉";
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 26px;
+    z-index: 11;
+    opacity: 0.9;
+    filter: drop-shadow(0 2px 4px rgba(160, 82, 45, 0.3));
+    
+    transform-origin: 50% 50%;
+}
+
+.strategy-button.silver-border::after {
+    content: "🥈";
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 26px;
+    z-index: 11;
+    opacity: 0.95;
+    filter: drop-shadow(0 2px 4px rgba(169, 169, 169, 0.4));
+    
+    transform-origin: 50% 50%;
+}
+
+.strategy-button.gold-border::after {
+    content: "🥇";
+    position: absolute;
+    bottom: -18px;
+    right: -10px;
+    font-size: 50px;
+    z-index: 12;
+    opacity: 1;
+    filter: drop-shadow(0 3px 6px rgba(255, 215, 0, 0.5));
+   
+    transform-origin: 50% 60%;
+}
+
+/* Animação de balanço */
+@keyframes swing {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        transform: rotate(3deg) scale(1.05);
+    }
+    75% {
+        transform: rotate(-3deg) scale(1.05);
+    }
+}
+
+/* Hover effects nas medalhas */
+.strategy-button.bronze-border:hover::after {
+    animation-duration: 0.8s;
+    font-size: 26px;
+}
+
+.strategy-button.silver-border:hover::after {
+    animation-duration: 0.8s;
+    font-size: 28px;
+}
+
+.strategy-button.gold-border:hover::after {
+    font-size: 55px;
+    filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.7));
+    animation-duration: 0.8s;
+}
+
+/* REMOVER os ::after dos indicadores visuais antigos */
+/* .strategy-button.bronze-border .strategy-button-link::after,
+.strategy-button.silver-border .strategy-button-link::after,
+.strategy-button.gold-border .strategy-button-link::after {
+    display: none;
+} */
 
 /* Contador de sessões */
 .strategy-session-counter {
@@ -325,28 +315,30 @@
     font-weight: bold;
     min-width: 50px;
     text-align: center;
-    z-index: 2;
+    z-index: 5; /* Menor que as medalhas */
 }
 
 .strategy-button.bronze-border .strategy-session-counter {
-    background-color: rgba(139, 69, 19, 0.9);
+    background-color: rgba(139, 69, 19, 0.7); /* Tom bronze */
     color: white;
-    border: 1px solid #8B4513;
+    border: 1px solid #CD853F; /* Borda bronze */
     width: 180px;
 }
 
 .strategy-button.silver-border .strategy-session-counter {
-    background-color: rgba(46, 46, 46, 0.9);
+    background-color: rgba(64, 64, 64, 0.8); /* Mais escuro */
     color: white;
-    border: 1px solid #757575;
+    border: 1px solid #808080;
     width: 180px;
 }
 
 .strategy-button.gold-border .strategy-session-counter {
-    background-color: rgba(218, 165, 32, 0.9);
-    color: #333;
-    border: 1px solid #DAA520;
-    width: 180px;
+    background-color: rgba(184, 134, 11, 0.9); /* Mais opaco */
+    color: white;
+    border: 2px solid #DAA520; /* Borda mais grossa */
+    width: 190px;
+    font-weight: 700; /* Texto mais grosso */
+    box-shadow: 0 2px 8px rgba(218, 165, 32, 0.3); /* Sombra no contador */
 }
 
 /* Responsividade */
@@ -363,13 +355,32 @@
         min-height: 50px;
     }
     
-    /* Reduzir efeitos decorativos em telas menores */
-    .strategy-button.silver-border::before,
-    .strategy-button.gold-border::before {
-        top: -3px;
-        left: -3px;
-        right: -3px;
-        bottom: -3px;
+    /* Reduzir efeitos em mobile */
+    .strategy-button.gold-border {
+        border-width: 2px; /* Borda normal em mobile */
+    }
+    
+    .strategy-button.gold-border:hover {
+        transform: translateY(-2px); /* Hover normal em mobile */
+    }
+    
+    /* Medalhas menores em tablet */
+    .strategy-button.bronze-border::after {
+        font-size: 20px;
+        bottom: 6px;
+        right: 6px;
+    }
+    
+    .strategy-button.silver-border::after {
+        font-size: 22px;
+        bottom: 6px;
+        right: 6px;
+    }
+    
+    .strategy-button.gold-border::after {
+        font-size: 24px;
+        bottom: 6px;
+        right: 6px;
     }
 }
 
@@ -384,14 +395,35 @@
         font-size: 15px;
     }
     
-    /* Simplificar ainda mais em telas pequenas */
-    .strategy-button.silver-border::before {
-        background: linear-gradient(45deg, #D3D3D3, #B8B8B8);
-        opacity: 0.5;
+    .strategy-button.bronze-border .strategy-session-counter,
+    .strategy-button.silver-border .strategy-session-counter,
+    .strategy-button.gold-border .strategy-session-counter {
+        width: 150px; /* Menor em mobile */
     }
     
-    .strategy-button.gold-border::before {
-        background: linear-gradient(45deg, #FFD700, #FFA500);
-        opacity: 0.6;
+    /* Simplificar efeitos dourados em mobile */
+    .strategy-button.gold-border {
+        box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
+    }
+    
+    /* Medalhas ainda menores em mobile */
+    .strategy-button.bronze-border::after,
+    .strategy-button.silver-border::after,
+    .strategy-button.gold-border::after {
+        animation: none; /* Sem animação em mobile para performance */
+        bottom: 4px;
+        right: 4px;
+    }
+    
+    .strategy-button.bronze-border::after {
+        font-size: 16px;
+    }
+    
+    .strategy-button.silver-border::after {
+        font-size: 18px;
+    }
+    
+    .strategy-button.gold-border::after {
+        font-size: 20px;
     }
 }
