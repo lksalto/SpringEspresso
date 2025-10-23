@@ -13,22 +13,45 @@
 
     <div style="margin-bottom: 20px;">
         <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-primary">Editar Este Usuário</a>
+        <a th:href="@{/usuarios/remover/{id}(id=${usuario.id})}" 
+           class="button button-danger"
+           onclick="return confirm('Tem certeza que deseja remover este usuário? Esta ação não pode ser desfeita.')">Remover Usuário</a>
     </div>
 
     <div class="card">
         <h3>Informações do Usuário</h3>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 15px;">
             <strong>ID:</strong> <span th:text="${usuario.id}"></span>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 15px;">
             <strong>Nome:</strong> <span th:text="${usuario.nome}"></span>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 15px;">
             <strong>Email:</strong> <span th:text="${usuario.email}"></span>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 15px;">
             <strong>Perfil de Acesso:</strong> 
-            <span th:text="${usuario.role == 'ADMIN' ? 'Administrador' : 'Usuário'}"></span>
+            <span th:if="${usuario.role == 'ADMIN'}" style="color: #d32f2f; font-weight: bold;">
+                🔐 Administrador
+            </span>
+            <span th:if="${usuario.role == 'USER'}" style="color: #1976d2; font-weight: bold;">
+                👤 Usuário
+            </span>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Permissões:</strong>
+            <ul th:if="${usuario.role == 'ADMIN'}" style="margin: 5px 0 0 20px; color: #666;">
+                <li>Gerenciar usuários do sistema</li>
+                <li>Criar, editar e excluir projetos</li>
+                <li>Gerenciar estratégias</li>
+                <li>Acesso completo ao sistema</li>
+            </ul>
+            <ul th:if="${usuario.role == 'USER'}" style="margin: 5px 0 0 20px; color: #666;">
+                <li>Participar de projetos como membro</li>
+                <li>Visualizar e usar estratégias</li>
+                <li>Registrar sessões de teste</li>
+                <li>Reportar bugs</li>
+            </ul>
         </div>
     </div>
 

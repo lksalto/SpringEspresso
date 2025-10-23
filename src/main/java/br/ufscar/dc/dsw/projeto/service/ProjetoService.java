@@ -8,6 +8,10 @@ import br.ufscar.dc.dsw.projeto.repository.EstrategiaRepository;
 import br.ufscar.dc.dsw.projeto.repository.ProjetoRepository;
 import br.ufscar.dc.dsw.projeto.model.UsuarioModel;
 import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
+import br.ufscar.dc.dsw.projeto.repository.SessaoRepository;
+import br.ufscar.dc.dsw.projeto.repository.BugRepository;
+import br.ufscar.dc.dsw.projeto.model.SessaoModel;
+import br.ufscar.dc.dsw.projeto.model.BugModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,13 @@ public class ProjetoService {
     private final EstrategiaRepository estrategiaRepository;
     
     @Autowired
-    private UsuarioRepository usuarioRepository; // Certifique-se de que está injetado
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SessaoRepository sessaoRepository;
+    
+    @Autowired
+    private BugRepository bugRepository;
 
     public ProjetoService(ProjetoRepository projetoRepository, EstrategiaRepository estrategiaRepository) {
         this.projetoRepository = projetoRepository;
@@ -51,12 +61,50 @@ public class ProjetoService {
         ProjetoModel projeto = projetoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
-        // ✅ Remove vínculos com estratégias antes de deletar o projeto
-        projeto.getEstrategias().clear();
-        projetoRepository.save(projeto); // atualiza o vínculo intermediário
+        try {
+            // Buscar todas as sessões do projeto
+            List<SessaoModel> sessoes = sessaoRepository.findAll()
+                    .stream()
+                    .filter(s -> s.getProjeto() != null && s.getProjeto().getId() != null && s.getProjeto().getId().equals(id))
+                    .collect(Collectors.toList());
+            
+            // Deletar bugs primeiro
+            for (SessaoModel sessao : sessoes) {
+                try {
+                    // Buscar bugs da sessão
+                    List<BugModel> bugs = bugRepository.findAll()
+                            .stream()
+                            .filter(b -> b.getSessao() != null && b.getSessao().getId() != null && b.getSessao().getId().equals(sessao.getId()))
+                            .collect(Collectors.toList());
+                    
+                    if (!bugs.isEmpty()) {
+                        bugRepository.deleteAll(bugs);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Erro ao deletar bugs da sessão " + sessao.getId() + ": " + e.getMessage());
+                }
+            }
+            
+            // Depois deletar as sessões
+            if (!sessoes.isEmpty()) {
+                sessaoRepository.deleteAll(sessoes);
+            }
 
-        // ✅ Agora é seguro deletar o projeto
-        projetoRepository.delete(projeto);
+            // Limpar relacionamentos (n-n)
+            if (projeto.getEstrategias() != null) {
+                projeto.getEstrategias().clear();
+            }
+            if (projeto.getMembros() != null) {
+                projeto.getMembros().clear();
+            }
+            projetoRepository.save(projeto);
+
+            // Finalmente deletar o projeto
+            projetoRepository.delete(projeto);
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao remover projeto: " + e.getMessage(), e);
+        }
     }
 
     public void salvar(ProjetoCadastroDTO dto) {
@@ -93,7 +141,7 @@ public class ProjetoService {
                 projeto.setEstrategias(new ArrayList<>());
             }
 
-            // ADICIONAR: Atualizar membros
+            // Atualizar membros
             if (dto.getMembrosIds() != null) {
                 List<UsuarioModel> membros = usuarioRepository.findAllById(dto.getMembrosIds());
                 projeto.setMembros(membros);
@@ -110,6 +158,11 @@ public class ProjetoService {
         List<EstrategiaModel> estrategiasPadrao = estrategiaRepository.findAll();
         projeto.getEstrategias().addAll(estrategiasPadrao);
         return projetoRepository.save(projeto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProjetoModel> buscarProjetosPorMembro(String emailUsuario) {
+        return projetoRepository.findByMembrosEmail(emailUsuario);
     }
 
 

@@ -41,10 +41,10 @@ public class BugService {
         BugModel bug = bugRepository.findById(id).orElseThrow(() -> 
                 new RuntimeException("Bug não encontrado: " + id));
         SessaoModel sessao = bug.getSessao();
-        if (sessao != null) {
-            sessao.getBugs().remove(bug); // Remove da lista da sessão
+        if (sessao!= null) {
+            sessao.getBugs().remove(bug); 
         }
-        bugRepository.delete(bug); // Depois de removido da sessão, pode deletar
+        bugRepository.delete(bug); 
     }
 
 }

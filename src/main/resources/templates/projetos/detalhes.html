@@ -18,8 +18,8 @@
     <div class="strategy-grid">
         <div th:each="estrategia : ${projeto.estrategias}" 
              class="strategy-button"
-             th:classappend="${sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 10 ? 'gold-border' : 
-                             (sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 4 ? 'silver-border' : '')}">
+             th:classappend="${sessoesFinalizadasPorEstrategia.get(estrategia.id) != null and sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 10 ? 'gold-border' : 
+                             (sessoesFinalizadasPorEstrategia.get(estrategia.id) != null and sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 4 ? 'silver-border' : '')}">
             <a th:href="@{/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes(projetoId=${projeto.id}, estrategiaId=${estrategia.id})}"
                class="strategy-button-link" 
                th:text="${estrategia.nome}"

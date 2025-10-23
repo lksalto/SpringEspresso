@@ -2,8 +2,6 @@ package br.ufscar.dc.dsw.projeto.util;
 
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +12,6 @@ import br.ufscar.dc.dsw.projeto.repository.EstrategiaRepository;
 import br.ufscar.dc.dsw.projeto.repository.ProjetoRepository;
 import br.ufscar.dc.dsw.projeto.repository.SessaoRepository;
 import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
-import org.springframework.security.crypto.password.PasswordEncoder; // <-- ADICIONE ESTE IMPORT
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +42,14 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+
+        boolean popula = false;
+
+        if (!popula) {
+            System.out.println("População do banco de dados desativada.");
+            return;
+        }
+
         // Limpa o banco na ordem certa
         sessaoRepository.deleteAll();
         projetoRepository.deleteAll();    
@@ -52,13 +57,16 @@ public class DatabaseSeeder implements CommandLineRunner {
         usuarioRepository.deleteAll();    
         
         // Cria usuários com senha criptografada
-        UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", passwordEncoder.encode("admin")); // <-- MODIFIQUE AQUI
+        UsuarioModel admin = new UsuarioModel("Admin", "admin@admin.com", passwordEncoder.encode("admin")); 
         admin.setRole("ROLE_ADMIN"); 
 
-        UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", passwordEncoder.encode("user")); // <-- MODIFIQUE AQUI
+        UsuarioModel user = new UsuarioModel("Maria Silva", "user@user.com", passwordEncoder.encode("user")); 
         user.setRole("ROLE_USER");
 
-        usuarioRepository.saveAll(List.of(admin, user));
+        UsuarioModel user2 = new UsuarioModel("Leandro Salto", "leandro@user.com", passwordEncoder.encode("lksalto")); 
+        user2.setRole("ROLE_USER");
+
+        usuarioRepository.saveAll(List.of(admin, user, user2));
         
         // Cria estratégias padrão
         List<EstrategiaModel> estrategiasPadrao = new ArrayList<>();
@@ -74,7 +82,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         
         
         ProjetoModel projeto1 = new ProjetoModel("Projeto Alpha", "Teste Projeto Alpha");
-        projeto1.getEstrategias().addAll(estrategiasPadrao); // Adiciona as estratégias novas ao projeto
+        projeto1.getEstrategias().addAll(estrategiasPadrao); 
         
         ProjetoModel projeto2 = new ProjetoModel("Projeto Beta", "Teste Projeto Beta");
         projeto2.getEstrategias().addAll(estrategiasPadrao);

@@ -45,6 +45,14 @@
         .status-criado { background-color: #007bff; }
         .status-em_execucao { background-color: #ffc107; color: #212529; }
         .status-finalizado { background-color: #28a745; }
+        .access-denied {
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            color: #856404;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -52,8 +60,6 @@
 
 <div class="wrapper">
     <h1>Detalhes da Sessão de Teste</h1>
-
-    <!-- Bloco de Debug removido -->
 
     <div th:if="${mensagemSucesso}" class="message-box success" th:text="${mensagemSucesso}"></div>
     <div th:if="${mensagemFalha}" class="message-box error" th:text="${mensagemFalha}"></div>
@@ -74,36 +80,51 @@
            th:text="${sessao.descricao}"></p>
     </div>
 
+    <!-- Verificar se o usuário atual é ADMIN ou o tester responsável -->
+    <div th:if="${#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.name == sessao.tester.email)}">
+        <div class="action-forms">
 
-    <div class="action-forms">
+            <!-- Adicionar Bug - apenas se status for EM_EXECUCAO -->
+            <div class="card" th:if="${sessao.status.name() == 'EM_EXECUCAO'}">
+                <h3>Adicionar Bug</h3>
+                <p>Registrar um novo bug para esta sessão.</p>
+                <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" class="button button-primary">
+                    Registrar Bug
+                </a>
+            </div>
 
-        <div class="card" th:if="${sessao.status.name() == 'EM_EXECUCAO'}">
-            <h3>Adicionar Bug</h3>
-            <p>Registrar um novo bug para esta sessão.</p>
-            <a th:href="@{/bugs/cadastro(idSessao=${sessao.id})}" class="button button-primary">
-                Registrar Bug
-            </a>
+            <!-- Mudar Status - apenas se não estiver finalizado -->
+            <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
+                <h3>Mudar Status</h3>
+                <form th:action="@{/sessoes/atualizarStatus}" method="post">
+                    <input type="hidden" name="sessaoId" th:value="${sessao.id}"/>
+                    <select name="novoStatus" required>
+                        <option th:value="${sessao.status.name()}" 
+                                th:text="${sessao.status.getDescricao()}" 
+                                selected="selected">
+                        </option>
+                        <option th:if="${sessao.status.name() == 'CRIADO'}" value="EM_EXECUCAO">Iniciar Execução</option>
+                        <option th:if="${sessao.status.name() == 'EM_EXECUCAO'}" value="FINALIZADO">Finalizar Sessão</option>
+                    </select>
+                    <button type="submit" class="button button-primary">Atualizar</button>
+                </form>
+            </div>
+
         </div>
+    </div>
 
-
-        <div class="card" th:if="${sessao.status.name() != 'FINALIZADO'}">
-            <h3>Mudar Status</h3>
-            <form th:action="@{/sessoes/atualizarStatus}" method="post">
-                <input type="hidden" name="sessaoId" th:value="${sessao.id}"/>
-                <select name="novoStatus" required>
-
-                    <option th:value="${sessao.status.name()}" 
-                            th:text="${sessao.status.getDescricao()}" 
-                            selected="selected">
-                    </option>
-
-                    <option th:if="${sessao.status.name() == 'CRIADO'}" value="EM_EXECUCAO">Iniciar Execução</option>
-                    <option th:if="${sessao.status.name() == 'EM_EXECUCAO'}" value="FINALIZADO">Finalizar Sessão</option>
-                </select>
-                <button type="submit" class="button button-primary">Atualizar</button>
-            </form>
+    <!-- Mensagem para usuários sem permissão -->
+    <div th:unless="${#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.name == sessao.tester.email)}">
+        <div class="access-denied">
+            <h3>⚠️ Acesso Restrito</h3>
+            <p><strong>Apenas o tester responsável ou administradores podem:</strong></p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>Adicionar bugs à sessão</li>
+                <li>Alterar o status da sessão</li>
+                <li>Editar ou remover a sessão</li>
+            </ul>
+            <p><em>Tester atual: <span th:text="${sessao.tester != null ? sessao.tester.nome : 'Não atribuído'}"></span></em></p>
         </div>
-
     </div>
 
     <div class="details-card" style="flex-basis: 100%; margin-top: 20px;">
@@ -123,14 +144,17 @@
                 <td th:text="${bug.descricao}"></td>
                 <td th:text="${#temporals.format(bug.dataRegistro, 'dd/MM/yyyy HH:mm')}"></td>
                 <td>
-                    <!-- CORREÇÃO: Link "Ver Imagem" substituído por "Visualizar" -->
+                    <!-- Botão Visualizar - disponível para todos -->
                     <a th:href="@{/bugs/detalhes/{id}(id=${bug.id})}" class="button button-secondary small">Visualizar</a>
                     
-                    <!-- Ações de Edição e Remoção de Bug -->
-                    <a th:href="@{/bugs/editar/{id}(id=${bug.id})}" class="button button-secondary small">Editar</a>
-                    <form th:action="@{/bugs/excluir/{id}(id=${bug.id})}" method="post" onsubmit="return confirm('Tem certeza que deseja remover este bug?');">
-                        <button type="submit" class="button button-secondary small">Remover</button>
-                    </form>
+                    <!-- Botões de Edição e Remoção - apenas para ADMIN ou tester responsável -->
+                    <span th:if="${#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.name == sessao.tester.email)}">
+                        <form th:action="@{/bugs/excluir/{id}(id=${bug.id})}" method="post" 
+                              style="display: inline-block; margin-left: 5px;" 
+                              onsubmit="return confirm('Tem certeza que deseja remover este bug?');">
+                            <button th:if="${(#authorization.expression('hasRole(''ADMIN'')'))}" type="submit" class="button button-danger small">Remover</button>
+                        </form>
+                    </span>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(sessao.bugs)}">
@@ -140,14 +164,16 @@
         </table>
     </div>
 
-    <!-- MOVIDO PARA CÁ: Botões de Edição e Remoção da Sessão -->
-    <div style="text-align: right; margin-top: 20px;" th:if="${sessao.status.name() == 'CRIADO'}">
+    <!-- Botões de Edição e Remoção da Sessão - apenas para ADMIN ou tester responsável -->
+    <div th:if="${(#authorization.expression('hasRole(''ADMIN'')') or (sessao.tester != null and #authentication.name == sessao.tester.email)) and sessao.status.name() == 'CRIADO'}"
+         style="text-align: right; margin-top: 20px;">
         <a th:href="@{/sessoes/editar/{id}(id=${sessao.id})}" class="button button-secondary small">Editar Sessão</a>
-        <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post" style="display: inline-block; margin-left: 5px;" onsubmit="return confirm('Tem certeza que deseja remover esta sessão?');">
+        <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}" method="post" 
+              style="display: inline-block; margin-left: 5px;" 
+              onsubmit="return confirm('Tem certeza que deseja remover esta sessão?');">
             <button type="submit" class="button button-danger small">Remover Sessão</button>
         </form>
     </div>
-
 
     <div style="text-align: center; margin-top: 20px;">
         <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" class="button button-secondary">Voltar para a Lista de Sessões</a>

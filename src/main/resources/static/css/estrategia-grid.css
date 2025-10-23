@@ -4,15 +4,28 @@
 
 .strategy-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 4px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 20px 0;
 }
 
 .strategy-button {
     position: relative;
+    background-color: #FAFAFA;
+    border: 2px solid #D2B48C;
+    border-radius: 12px;
+    padding: 0;
+    padding-bottom: 35px; /* Espaço para o contador */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(139, 69, 19, 0.1);
+    overflow: hidden;
+}
+
+.strategy-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(139, 69, 19, 0.2);
+    border-color: #A0522D;
 }
 
 .strategy-button .hidden-checkbox {
@@ -55,26 +68,136 @@
 
 /* Novo estilo para os links na página de listagem de estratégias */
 .strategy-button-link {
+    display: block;
+    padding: 20px 15px;
+    text-decoration: none;
+    color: #5D4E37;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    background: linear-gradient(135deg, #c08154, #96593c);
+    color: white;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin: 0;
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    color: #007bff;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    text-align: center;
-    font-weight: bold;
-    box-sizing: border-box;
-    text-decoration: none; /* Remove o sublinhado do link */
 }
 
 .strategy-button-link:hover {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #A0522D, #CD853F);
     color: white;
-    border-color: #0056b3;
+    text-decoration: none;
+}
+
+.strategy-button:hover .strategy-button-link {
+    background: linear-gradient(135deg, #df8359, #f1b578);
+}
+
+/* Bordas baseadas no progresso das sessões */
+.strategy-button.silver-border {
+    border: 3px solid #C0C0C0;
+    box-shadow: 0 2px 8px rgba(192, 192, 192, 0.3);
+}
+
+.strategy-button.silver-border:hover {
+    border-color: #A8A8A8;
+    box-shadow: 0 6px 15px rgba(192, 192, 192, 0.4);
+}
+
+.strategy-button.gold-border {
+    border: 3px solid #FFD700;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.strategy-button.gold-border:hover {
+    border-color: #FFC107;
+    box-shadow: 0 6px 15px rgba(255, 215, 0, 0.5);
+}
+
+/* Indicadores visuais de progresso */
+.strategy-button.silver-border .strategy-button-link::after {
+    content: " 🥈";
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.strategy-button.gold-border .strategy-button-link::after {
+    content: " 🥇";
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+/* Gradientes especiais para os botões premiados */
+.strategy-button.silver-border .strategy-button-link {
+    background: linear-gradient(135deg, #8B4513, #A0522D, #C0C0C0);
+}
+
+.strategy-button.gold-border .strategy-button-link {
+    background: linear-gradient(135deg, #8B4513, #A0522D, #FFD700);
+}
+
+.strategy-button.silver-border .strategy-button-link:hover,
+.strategy-button.silver-border:hover .strategy-button-link {
+    background: linear-gradient(135deg, #A0522D, #CD853F, #C0C0C0);
+}
+
+.strategy-button.gold-border .strategy-button-link:hover,
+.strategy-button.gold-border:hover .strategy-button-link {
+    background: linear-gradient(135deg, #A0522D, #CD853F, #FFD700);
+}
+
+/* Contador de sessões */
+.strategy-session-counter {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(139, 69, 19, 0.8);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.strategy-button.silver-border .strategy-session-counter {
+    background-color: rgba(192, 192, 192, 0.9);
+    color: #333;
+}
+
+.strategy-button.gold-border .strategy-session-counter {
+    background-color: rgba(255, 215, 0, 0.9);
+    color: #333;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .strategy-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 15px 0;
+    }
+    
+    .strategy-button-link {
+        padding: 15px 10px;
+        font-size: 14px;
+        min-height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .strategy-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .strategy-button-link {
+        padding: 18px 15px;
+        font-size: 15px;
+    }
 }
