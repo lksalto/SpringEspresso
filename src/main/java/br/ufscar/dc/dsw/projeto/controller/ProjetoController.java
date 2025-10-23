@@ -9,7 +9,7 @@ import br.ufscar.dc.dsw.projeto.model.StatusSessao;
 import br.ufscar.dc.dsw.projeto.service.EstrategiaService;
 import br.ufscar.dc.dsw.projeto.service.ProjetoService;
 import br.ufscar.dc.dsw.projeto.service.UsuarioService;
-import br.ufscar.dc.dsw.projeto.repository.SessaoRepository;
+import br.ufscar.dc.dsw.projeto.service.SessaoService; // NOVA IMPORTAÇÃO
 
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +40,10 @@ public class ProjetoController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private SessaoRepository sessaoRepository;
+    private SessaoService sessaoService; // NOVA INJEÇÃO - SUBSTITUI O SessaoRepository
 
     @GetMapping("/listar")
-    public String listar(Model model, Authentication authentication) { // Mudança aqui: Principal -> Authentication
+    public String listar(Model model, Authentication authentication) {
         try {
             List<ProjetoModel> projetos;
             boolean isAdmin = false;
@@ -66,15 +66,30 @@ public class ProjetoController {
                 projetos = new ArrayList<>();
             }
 
+            // ===== CALCULAR MEDALHAS PARA CADA PROJETO =====
+            Map<Long, Map<String, Integer>> medalhasPorProjeto = new HashMap<>();
+            
+            for (ProjetoModel projeto : projetos) {
+                Map<Long, Long> sessoesFinalizadas = sessaoService.contarSessoesPorEstrategia(
+                    projeto.getId(), 
+                    StatusSessao.FINALIZADO
+                );
+                
+                Map<String, Integer> medalhas = calcularMedalhas(sessoesFinalizadas);
+                medalhasPorProjeto.put(projeto.getId(), medalhas);
+            }
+
             model.addAttribute("projetos", projetos);
+            model.addAttribute("medalhasPorProjeto", medalhasPorProjeto);
             model.addAttribute("isAdmin", isAdmin);
             model.addAttribute("titulo", titulo);
 
-            return "projetos/listar"; // Certifique-se que está usando o caminho correto
+            return "projetos/listar";
 
         } catch (Exception e) {
             model.addAttribute("fail", "Erro ao carregar projetos: " + e.getMessage());
             model.addAttribute("projetos", new ArrayList<>());
+            model.addAttribute("medalhasPorProjeto", new HashMap<>());
             model.addAttribute("isAdmin", false);
             model.addAttribute("titulo", "Projetos");
             return "projetos/listar";
@@ -85,65 +100,48 @@ public class ProjetoController {
     public String detalhes(@PathVariable Long id, Model model) {
         ProjetoModel projeto = projetoService.buscar(id);
         if (projeto == null) {
-            //redirectAttributes.addFlashAttribute("fail", "Projeto não encontrado.");
             return "redirect:/projetos/listar";
         }
         
-        // Contar sessões finalizadas por estratégia
-        Map<Long, Long> sessoesFinalizadasPorEstrategia = new HashMap<>();
-        
-        System.out.println("=== DEBUG SESSÕES ===");
-        System.out.println("Projeto ID: " + id);
-        System.out.println("Total de sessões no sistema: " + sessaoRepository.findAll().size());
-        
-        for (EstrategiaModel estrategia : projeto.getEstrategias()) {
-            long sessoesFinalizadas = contarSessoesFinalizadas(id, estrategia.getId());
-            sessoesFinalizadasPorEstrategia.put(estrategia.getId(), sessoesFinalizadas);
-            
-            System.out.println("Estratégia: " + estrategia.getNome() + " (ID: " + estrategia.getId() + ")");
-            System.out.println("Sessões finalizadas: " + sessoesFinalizadas);
-        }
+        // ===== VERSÃO OTIMIZADA - UMA SÓ QUERY =====
+        Map<Long, Long> sessoesFinalizadasPorEstrategia = sessaoService.contarSessoesPorEstrategia(
+            id, 
+            StatusSessao.FINALIZADO
+        );
         
         model.addAttribute("projeto", projeto);
         model.addAttribute("sessoesFinalizadasPorEstrategia", sessoesFinalizadasPorEstrategia);
-        return "projetos/detalhes"; // Era "projeto/detalhes"
-    }
-    private long contarSessoesFinalizadas(Long projetoId, Long estrategiaId) {
-        // Método alternativo mais direto
-        try {
-            long count = sessaoRepository.findAll()
-                    .stream()
-                    .peek(s -> System.out.println("Sessão ID: " + s.getId() + ", Projeto: " + 
-                            (s.getProjeto() != null ? s.getProjeto().getId() : "null") + 
-                            ", Estratégia: " + (s.getEstrategia() != null ? s.getEstrategia().getId() : "null") + 
-                            ", Status: " + s.getStatus()))
-                    .filter(s -> s.getProjeto() != null && 
-                                s.getProjeto().getId() != null && 
-                                s.getProjeto().getId().equals(projetoId) &&
-                                s.getEstrategia() != null && 
-                                s.getEstrategia().getId() != null && 
-                                s.getEstrategia().getId().equals(estrategiaId) &&
-                                s.getStatus() != null &&
-                                s.getStatus() == StatusSessao.FINALIZADO)
-                    .count();
-            
-            System.out.println("Contagem final para Projeto " + projetoId + ", Estratégia " + estrategiaId + ": " + count);
-            return count;
-        } catch (Exception e) {
-            System.err.println("Erro ao contar sessões: " + e.getMessage());
-            return 0;
-        }
+        return "projetos/detalhes";
     }
     
+    // ===== REMOVER COMPLETAMENTE ESTE MÉTODO =====
+    // private long contarSessoesFinalizadas(Long projetoId, Long estrategiaId) { ... }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/novo")
     public String novo(Model model) {
-        ProjetoCadastroDTO dto = new ProjetoCadastroDTO();
-        model.addAttribute("projetoCadastroDTO", dto);
-        model.addAttribute("estrategias", estrategiaService.buscarTodas());
-        model.addAttribute("usuarios", usuarioService.listarTodos());
-        return "projetos/formulario"; // Era "projeto/cadastro" ou "projeto/formulario"
+        try {
+            ProjetoCadastroDTO projetoCadastroDTO = new ProjetoCadastroDTO();
+            
+            List<EstrategiaModel> estrategias = estrategiaService.buscarTodas();
+            List<UsuarioModel> usuarios = usuarioService.listarTodos();
+
+            // Pré-selecionar todas as estratégias
+            List<Long> todasEstrategiasIds = estrategias.stream()
+                .map(EstrategiaModel::getId)
+                .collect(Collectors.toList());
+            projetoCadastroDTO.setEstrategiasIds(todasEstrategiasIds);
+
+            model.addAttribute("projetoCadastroDTO", projetoCadastroDTO);
+            model.addAttribute("estrategias", estrategias);
+            model.addAttribute("usuarios", usuarios);
+
+            return "projetos/formulario";
+
+        } catch (Exception e) {
+            model.addAttribute("fail", "Erro ao carregar formulário: " + e.getMessage());
+            return "projetos/listar";
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -170,7 +168,6 @@ public class ProjetoController {
     public String editar(@PathVariable Long id, Model model) {
         ProjetoModel projeto = projetoService.buscar(id);
         if (projeto == null) {
-            //redirectAttributes.addFlashAttribute("fail", "Projeto não encontrado.");
             return "redirect:/projetos/listar";
         }
 
@@ -194,7 +191,7 @@ public class ProjetoController {
         model.addAttribute("projetoEdicaoDTO", dto);
         model.addAttribute("estrategias", estrategiaService.buscarTodas());
         model.addAttribute("usuarios", usuarioService.listarTodos());
-        return "projetos/formulario"; // Era "projeto/formulario"
+        return "projetos/formulario";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -220,5 +217,30 @@ public class ProjetoController {
             redirectAttributes.addFlashAttribute("fail", "Erro ao remover projeto: " + e.getMessage());
         }
         return "redirect:/projetos/listar";
+    }
+
+    // ===== NOVO MÉTODO PARA CALCULAR MEDALHAS =====
+    private Map<String, Integer> calcularMedalhas(Map<Long, Long> sessoesFinalizadas) {
+        Map<String, Integer> medalhas = new HashMap<>();
+        medalhas.put("ouro", 0);
+        medalhas.put("prata", 0);
+        medalhas.put("bronze", 0);
+        
+        if (sessoesFinalizadas == null || sessoesFinalizadas.isEmpty()) {
+            return medalhas;
+        }
+        
+        // Contar medalhas baseado no número de sessões finalizadas
+        for (Long count : sessoesFinalizadas.values()) {
+            if (count >= 10) {
+                medalhas.put("ouro", medalhas.get("ouro") + 1);
+            } else if (count >= 5) {
+                medalhas.put("prata", medalhas.get("prata") + 1);
+            } else if (count >= 1) {
+                medalhas.put("bronze", medalhas.get("bronze") + 1);
+            }
+        }
+        
+        return medalhas;
     }
 }

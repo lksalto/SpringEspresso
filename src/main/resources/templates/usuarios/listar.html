@@ -39,18 +39,18 @@
                     <td th:text="${usuario.nome}"></td>
                     <td th:text="${usuario.email}"></td>
                     <td>
-                        <span th:if="${usuario.role == 'ADMIN'}" style="color: #d32f2f; font-weight: bold;">
+                        <span th:if="${usuario.role == 'ROLE_ADMIN'}" style="color: #d32f2f; font-weight: bold;">
                             🔐 Administrador
                         </span>
-                        <span th:if="${usuario.role == 'USER'}" style="color: #1976d2; font-weight: bold;">
+                        <span th:if="${usuario.role == 'ROLE_USER'}" style="color: #1976d2; font-weight: bold;">
                             👤 Usuário
                         </span>
                     </td>
                     <td class="actions">
                         <a th:href="@{/usuarios/detalhes/{id}(id=${usuario.id})}" class="button button-secondary">Ver</a>
-                        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-primary">Editar</a>
+                        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="button button-secondary">Editar</a>
                         <a th:href="@{/usuarios/remover/{id}(id=${usuario.id})}" 
-                           class="button button-danger"
+                           class="button button-secondary"
                            onclick="return confirm('Tem certeza que deseja remover este usuário?')">Remover</a>
                     </td>
                 </tr>

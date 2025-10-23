@@ -10,6 +10,65 @@
     <title th:text="${titulo != null} ? ${titulo} : 'Lista de Projetos'">Lista de Projetos</title>
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    
+    <!-- Estilos para as medalhas -->
+    <style>
+        .medalhas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .medalha-item {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            min-width: fit-content;
+        }
+        
+        .medalha-item.ouro {
+            background: rgba(255, 215, 0, 0.15);
+            color: #B8860B;
+            border: 1px solid rgba(24, 21, 4, 0.3);
+        }
+        
+        .medalha-item.prata {
+            background: rgba(192, 192, 192, 0.15);
+            color: #696969;
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+        
+        .medalha-item.bronze {
+            background: rgba(205, 133, 63, 0.15);
+            color: #c46d2f;
+            border: 1px solid rgba(228, 170, 112, 0.3);
+        }
+        
+        .sem-medalhas {
+            color: #999;
+            font-style: italic;
+            font-size: 13px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .medalhas-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .medalha-item {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -47,7 +106,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Estratégias</th>
+                        <th>Medalhas por Estratégias</th>
                         <th>Membros</th>
                         <th>Ações</th>
                     </tr>
@@ -56,7 +115,38 @@
                     <tr th:each="projeto : ${projetos}">
                         <td th:text="${projeto.nome}"></td>
                         <td th:text="${projeto.descricao}"></td>
-                        <td th:text="${projeto.estrategias != null} ? ${#lists.size(projeto.estrategias)} : 0"></td>
+                        
+                        <!-- Coluna das Medalhas -->
+                        <td>
+                            <div th:with="medalhas=${medalhasPorProjeto.get(projeto.id)}">
+                                <div th:if="${medalhas != null and (medalhas.get('ouro') > 0 or medalhas.get('prata') > 0 or medalhas.get('bronze') > 0)}" 
+                                     class="medalhas-container">
+                                     
+                                    <span th:if="${medalhas.get('ouro') > 0}" 
+                                          class="medalha-item ouro" 
+                                          th:title="|${medalhas.get('ouro')} estratégia(s) com 10+ sessões finalizadas|">
+                                        <span th:text="${medalhas.get('ouro')}">0</span>x🥇
+                                    </span>
+                                    
+                                    <span th:if="${medalhas.get('prata') > 0}" 
+                                          class="medalha-item prata"
+                                          th:title="|${medalhas.get('prata')} estratégia(s) com 5-9 sessões finalizadas|">
+                                        <span th:text="${medalhas.get('prata')}">0</span>x🥈
+                                    </span>
+                                    
+                                    <span th:if="${medalhas.get('bronze') > 0}" 
+                                          class="medalha-item bronze"
+                                          th:title="|${medalhas.get('bronze')} estratégia(s) com 1-4 sessões finalizadas|">
+                                        <span th:text="${medalhas.get('bronze')}">0</span>x🥉
+                                    </span>
+                                </div>
+                                
+                                <div th:if="${medalhas == null or (medalhas.get('ouro') == 0 and medalhas.get('prata') == 0 and medalhas.get('bronze') == 0)}" 
+                                     class="sem-medalhas">
+                                    Nenhuma sessão finalizada
+                                </div>
+                            </div>
+                        </td>
                         
                         <!-- Mostrar nomes dos membros com quebra de linha -->
                         <td class="membros-cell">

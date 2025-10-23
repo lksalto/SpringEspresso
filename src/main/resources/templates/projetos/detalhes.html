@@ -18,14 +18,16 @@
     <div class="strategy-grid">
         <div th:each="estrategia : ${projeto.estrategias}" 
              class="strategy-button"
-             th:classappend="${sessoesFinalizadasPorEstrategia.get(estrategia.id) != null and sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 10 ? 'gold-border' : 
-                             (sessoesFinalizadasPorEstrategia.get(estrategia.id) != null and sessoesFinalizadasPorEstrategia.get(estrategia.id) >= 4 ? 'silver-border' : '')}">
+             th:with="sessoesFinalizada=${sessoesFinalizadasPorEstrategia.get(estrategia.id) != null ? sessoesFinalizadasPorEstrategia.get(estrategia.id) : 0}"
+             th:classappend="${sessoesFinalizada >= 10 ? 'gold-border' : 
+                             (sessoesFinalizada >= 5 ? 'silver-border' : 
+                             (sessoesFinalizada >= 1 ? 'bronze-border' : 'no-sessions'))}">
             <a th:href="@{/projetos/{projetoId}/estrategias/{estrategiaId}/sessoes(projetoId=${projeto.id}, estrategiaId=${estrategia.id})}"
                class="strategy-button-link" 
                th:text="${estrategia.nome}"
-               th:title="'Sessões finalizadas: ' + ${sessoesFinalizadasPorEstrategia.get(estrategia.id)}"></a>
+               th:title="'Sessões finalizadas: ' + ${sessoesFinalizada}"></a>
             <div class="strategy-session-counter">
-                <span th:text="${sessoesFinalizadasPorEstrategia.get(estrategia.id)} + ' sessões'"></span>
+                <span th:text="${sessoesFinalizada} + ' sessão' + (${sessoesFinalizada} != 1 ? 's' : '') + ' finalizada' + (${sessoesFinalizada} != 1 ? 's' : '')"></span>
             </div>
         </div>
     </div>
