@@ -23,6 +23,13 @@
          class="button button-primary" 
          th:text="#{link.editar_estrategia}"
          sec:authorize="hasRole('ROLE_ADMIN')">Editar Esta Estratégia</a>
+       <!--Remover estratégia-->
+      <a th:href="@{/estrategias/remover/{id}(id=${estrategia.id})}" 
+         class="button button-secondary" 
+         th:text="#{link.remover_estrategia}"
+         sec:authorize="hasRole('ROLE_ADMIN')"
+         onclick="return confirm('Tem certeza que deseja remover esta estratégia? Esta ação não pode ser desfeita.');">Remover Esta Estratégia</a>    
+
     </span>
   </div>
 
@@ -56,6 +63,7 @@
               </a>
             </div>
           </div>
+          <input type="hidden" name="exemplosUrlImagem" th:value="${exemplo.urlImagem}">
         </div>
       </div>
       <div th:unless="${not #lists.isEmpty(estrategia.exemplos)}">

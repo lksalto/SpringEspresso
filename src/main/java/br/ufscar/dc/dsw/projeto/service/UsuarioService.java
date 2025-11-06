@@ -2,6 +2,8 @@ package br.ufscar.dc.dsw.projeto.service;
 
 import br.ufscar.dc.dsw.projeto.model.UsuarioModel;
 import br.ufscar.dc.dsw.projeto.repository.UsuarioRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,5 +79,17 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public boolean emailJaExiste(String email) {
         return usuarioRepository.findByEmail(email) != null;
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioModel getUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UsuarioModel) {
+                return (UsuarioModel) principal;
+            }
+        }
+        return null;
     }
 }

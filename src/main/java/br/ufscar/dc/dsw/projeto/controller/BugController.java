@@ -59,7 +59,7 @@ public class BugController {
                 bug.setResolvido(false);
                 
                 bugService.salvar(bug, arquivo);
-                
+
                 redirectAttributes.addFlashAttribute("mensagemSucesso", "Bug cadastrado com sucesso!");
                 return "redirect:/sessoes/detalhes/" + idSessao;
             } else {

@@ -92,6 +92,13 @@ public class UsuarioController {
             }
             
             usuarioService.remover(id);
+
+            // O USUÁRIO NÃO PODE SE REMOVER
+            if(usuario.getEmail().equals(usuarioService.getUsuarioLogado().getEmail())) {
+                redirectAttributes.addFlashAttribute("fail", "Você não pode remover seu próprio usuário.");
+                return "redirect:/usuarios";
+            }   
+
             redirectAttributes.addFlashAttribute("success", "Usuário removido com sucesso!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("fail", "Erro ao remover usuário: " + e.getMessage());
