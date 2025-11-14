@@ -90,14 +90,14 @@ public class UsuarioController {
                 redirectAttributes.addFlashAttribute("fail", "Usuário não encontrado.");
                 return "redirect:/usuarios";
             }
-            
-            usuarioService.remover(id);
-
             // O USUÁRIO NÃO PODE SE REMOVER
             if(usuario.getEmail().equals(usuarioService.getUsuarioLogado().getEmail())) {
                 redirectAttributes.addFlashAttribute("fail", "Você não pode remover seu próprio usuário.");
                 return "redirect:/usuarios";
             }   
+            usuarioService.remover(id);
+
+
 
             redirectAttributes.addFlashAttribute("success", "Usuário removido com sucesso!");
         } catch (Exception e) {
