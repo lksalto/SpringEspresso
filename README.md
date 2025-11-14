@@ -2,7 +2,7 @@
 
 ---
 
-## 🚀 Tecnologias utilizadas
+## 🚀 Tecnologias utilizadas:
 **Back-end:**
 
 - Spring MVC
