@@ -8,7 +8,7 @@
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
   <h1 th:text="#{titulo.detalhes.estrategia}">Detalhes da Estratégia</h1>
@@ -83,10 +83,11 @@
         <p style="color: #666; font-style: italic;" th:text="#{mensagem.sem.dados}">Nenhuma dica cadastrada para esta estratégia.</p>
       </div>
     </div>
+  <a th:href="@{/}" class="button button-secondary" style="margin-top: 15px;">Main Menu</a>
   <a th:href="@{/estrategias}" class="button button-secondary" style="margin-top: 15px;">Voltar para a Lista</a>
+  
   </div>
 
-  <div th:replace="~{fragments/navigation :: navigation-section-multiple}"></div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

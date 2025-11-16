@@ -133,13 +133,7 @@ public class ProjetoService {
             projeto.setNome(dto.getNome());
             projeto.setDescricao(dto.getDescricao());
 
-            // Atualizar estratégias
-            if (dto.getEstrategiasIds() != null) {
-                List<EstrategiaModel> estrategias = estrategiaRepository.findAllById(dto.getEstrategiasIds());
-                projeto.setEstrategias(estrategias);
-            } else {
-                projeto.setEstrategias(new ArrayList<>());
-            }
+
 
             // Atualizar membros
             if (dto.getMembrosIds() != null) {

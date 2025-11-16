@@ -139,6 +139,7 @@
   margin-top: 10px;
 }
 
+
 .add-item-btn:hover {
   background: var(--laranja-suave) !important;
   border-color: var(--cafe-escuro) !important;

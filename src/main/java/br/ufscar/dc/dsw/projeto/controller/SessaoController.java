@@ -98,7 +98,7 @@ public class SessaoController {
     public String salvarSessao(@RequestParam Long projetoId,
                                @RequestParam Long estrategiaId,
                                @RequestParam String descricao,
-                               @RequestParam(required = false) Long testerId,
+                               @RequestParam(required = true) Long testerId,
                                @RequestParam Long duracaoMinutos,
                                Authentication authentication,
                                RedirectAttributes redirectAttributes) {
@@ -110,6 +110,12 @@ public class SessaoController {
             redirectAttributes.addFlashAttribute("mensagemFalha", "Erro ao salvar: Projeto ou Estratégia inválido.");
             return "redirect:/home";
         }
+
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        if (testerId == null) {
+        redirectAttributes.addFlashAttribute("mensagemFalha", "Selecione um tester para continuar.");
+        return "redirect:/projetos/" + projetoId + "/estrategias/" + estrategiaId + "/sessoes/novo";
+    }
 
         SessaoModel sessao = new SessaoModel();
         sessao.setProjeto(projeto);

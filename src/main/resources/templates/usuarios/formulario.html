@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/form.css}"/>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
     <h1 th:text="${usuario.id == null ? 'Novo Usuário' : 'Editar Usuário'}">Formulário de Usuário</h1>

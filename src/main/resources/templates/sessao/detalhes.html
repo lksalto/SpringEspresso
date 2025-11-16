@@ -33,7 +33,7 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
     <h1>Detalhes da Sessão</h1>
@@ -222,7 +222,9 @@
 
     <!-- Navegação -->
     <div style="margin-top: 20px;">
+        <a th:href="@{/}" class="button button-secondary" style="margin-top: 15px;">Main Menu</a>
         <a th:href="@{/projetos/{pid}/estrategias/{eid}/sessoes(pid=${sessao.projeto.id}, eid=${sessao.estrategia.id})}" 
+        
            class="button button-secondary">Voltar para Sessões</a>
     </div>
 </div>

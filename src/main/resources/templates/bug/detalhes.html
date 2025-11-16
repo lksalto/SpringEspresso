@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
     <h1>Detalhes do Bug #<span th:text="${bug.id}"></span></h1>
@@ -76,16 +76,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- AÇOES -->
-    <div style="margin-bottom: 20px;">
-        <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" 
-           class="button button-secondary">Voltar para Sessão</a>
-           
-        <!-- PODER RESOLVER ELE MESMO COM SESSÃO DE TESTES FINALIZADA -->
+                <!-- PODER RESOLVER ELE MESMO COM SESSÃO DE TESTES FINALIZADA -->
         <form th:if="${!bug.resolvido}" 
-              sec:authorize="hasRole('ROLE_ADMIN')"
+              
               th:action="@{/bugs/resolver}" 
               method="post" 
               style="display: inline; margin-left: 10px;">
@@ -96,6 +89,14 @@
                 Marcar como Resolvido
             </button>
         </form>
+    </div>
+    
+    <!-- AÇOES -->
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/sessoes/detalhes/{id}(id=${bug.sessao.id})}" 
+           class="button button-secondary">Voltar para Sessão</a>
+           
+
         
         <!-- REABRIR BUG -->
         <form th:if="${bug.resolvido}" 
@@ -110,6 +111,15 @@
                 Reabrir Bug
             </button>
         </form>
+
+        <!-- VOLTAR PARA LISTA DE BUGS (somente ADMIN) -->
+        <a sec:authorize="hasRole('ROLE_ADMIN')"
+        th:href="@{/bugs/listar}"
+        class="button button-secondary"
+        style="margin-left: 10px;">
+            Voltar para Lista de Bugs
+        </a>
+
     </div>
 </div>
 

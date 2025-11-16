@@ -123,4 +123,9 @@ public class BugService {
             return false;
         }
     }
+
+    public List<BugModel> listarTodosComSessaoEProjeto() {
+        return bugRepository.findAllOrdered();
+    }
+
 }

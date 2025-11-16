@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/bugs")
@@ -101,4 +102,13 @@ public class BugController {
         }
         return "redirect:/bugs/detalhes/" + bugId;
     }
+
+    @GetMapping("/listar")
+public String listarTodos(Model model) {
+    List<BugModel> bugs = bugService.listarTodosComSessaoEProjeto();
+
+    model.addAttribute("bugs", bugs);
+    return "bug/listar";
+}
+
 }

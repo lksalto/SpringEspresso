@@ -1,0 +1,926 @@
+[33mcommit 56cdbdb998adf5e147f832f99eac2695f8cf4aff[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Nov 13 23:42:29 2025 -0300
+
+    add
+
+ README.md | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 2eec2a9512f94e746f1182f6cf2e5fb57bac6733[m[33m ([m[1;31morigin/comecardozero[m[33m, [m[1;31morigin/BKP_DEF[m[33m, [m[1;32mcomecardozero[m[33m, [m[1;32mBKP_DEF[m[33m)[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Nov 13 23:35:42 2025 -0300
+
+    ajuste deletar proprio usuario
+
+ .../java/br/ufscar/dc/dsw/projeto/controller/UsuarioController.java | 6 [32m+++[m[31m---[m
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+[33mcommit c21bcfe9e6616bc1df77f9d3edfcf1b06a0221de[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Nov 13 23:16:01 2025 -0300
+
+    add
+
+ src/main/java/br/ufscar/dc/dsw/projeto/util/DatabaseSeeder.java | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit c0c43eefba8a1e1c2bf9820d9b634210c7ae7cb8[m[33m ([m[1;31morigin/BKP[m[33m, [m[1;32mBKP[m[33m)[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Nov 6 17:38:59 2025 -0300
+
+    final
+
+ .../dc/dsw/projeto/controller/BugController.java   |   2 [32m+[m[31m-[m
+ .../dsw/projeto/controller/UsuarioController.java  |   7 [32m+++++++[m
+ .../dc/dsw/projeto/service/UsuarioService.java     |  14 [32m+++++++++++++[m
+ src/main/resources/i18n/messages_en.properties     |  23 [31m---------------------[m
+ src/main/resources/messages.properties             |   1 [32m+[m
+ src/main/resources/templates/bug/cadastro.html     |   4 [32m++[m[31m--[m
+ .../resources/templates/estrategias/detalhes.html  |   8 [32m+++++++[m
+ target/classes/i18n/messages_en.properties         |  23 [31m---------------------[m
+ uploads/bugs/Bug_33_S4419.mp4                      | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/bugs/Bug_34_S4419.jpg                      | Bin [31m0[m -> [32m26771[m bytes
+ uploads/bugs/Bug_36_S4630.jpg                      | Bin [31m0[m -> [32m26771[m bytes
+ uploads/estrategias/exemplo_523_E523.jpg           | Bin [31m0[m -> [32m26771[m bytes
+ uploads/estrategias/exemplo_523_E523.png           | Bin [31m0[m -> [32m144660[m bytes
+ uploads/estrategias/exemplo_524_E524.png           | Bin [31m0[m -> [32m144660[m bytes
+ 14 files changed, 33 insertions(+), 49 deletions(-)
+
+[33mcommit 421c40c45e888fb101423cd761bf4e82060be185[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 15:48:18 2025 -0300
+
+    ajustes finais
+
+ .../dsw/projeto/service/SessaoExpiracaoService.java   |   2 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |   2 [32m+[m[31m-[m
+ src/main/resources/static/css/estrategia-grid.css     |   2 [32m+[m[31m-[m
+ src/main/resources/templates/login.html               |   2 [32m+[m[31m-[m
+ src/main/resources/templates/sessao/detalhes.html     |   2 [32m+[m[31m-[m
+ uploads/bugs/Bug_20_S3987.jpg                         | Bin [31m99007[m -> [32m0[m bytes
+ uploads/bugs/Bug_28_S4414.mp4                         | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/bugs/Bug_29_S4414.jpg                         | Bin [31m0[m -> [32m26771[m bytes
+ uploads/bugs/Bug_30_S4415.jpg                         | Bin [31m0[m -> [32m26771[m bytes
+ uploads/bugs/Bug_31_S4416.mp4                         | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/bugs/Bug_32_S4416.jpg                         | Bin [31m0[m -> [32m26771[m bytes
+ uploads/estrategias/exemplo_504_E504.jpg              | Bin [31m0[m -> [32m26771[m bytes
+ uploads/estrategias/exemplo_512_E512.jpg              | Bin [31m0[m -> [32m26771[m bytes
+ 13 files changed, 5 insertions(+), 5 deletions(-)
+
+[33mcommit 720f8ee67b9b719f03b897470a0119609220bc50[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 13:10:32 2025 -0300
+
+    ajustes comentários e refatoração de coisas duplicadas
+
+ .../ufscar/dc/dsw/projeto/ProjetoApplication.java  |   1 [31m-[m
+ .../projeto/controller/EstrategiaController.java   |  11 [32m++[m[31m----[m
+ .../dc/dsw/projeto/controller/HomeController.java  |   2 [32m+[m[31m-[m
+ .../dc/dsw/projeto/controller/LoginController.java |   2 [32m+[m[31m-[m
+ .../dsw/projeto/controller/ProjetoController.java  |  22 [32m+++++[m[31m------[m
+ .../dsw/projeto/controller/SessaoController.java   |  36 [32m+++++++++++[m[31m-------[m
+ .../br/ufscar/dc/dsw/projeto/model/BugModel.java   |   8 [32m++[m[31m--[m
+ .../dc/dsw/projeto/model/CriticidadeBug.java       |   7 [32m++[m[31m--[m
+ .../dc/dsw/projeto/model/EstrategiaModel.java      |   6 [32m+[m[31m--[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |   9 [32m++[m[31m---[m
+ .../ufscar/dc/dsw/projeto/model/SessaoModel.java   |  12 [32m+++[m[31m---[m
+ .../ufscar/dc/dsw/projeto/model/UsuarioModel.java  |   1 [31m-[m
+ .../dsw/projeto/repository/ProjetoRepository.java  |   2 [32m+[m[31m-[m
+ .../dsw/projeto/repository/UsuarioRepository.java  |   2 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/service/BugService.java  |  41 [32m++++++++++[m[31m-----------[m
+ .../dc/dsw/projeto/service/EstrategiaService.java  |   1 [31m-[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  16 [32m++++[m[31m----[m
+ .../projeto/service/SessaoExpiracaoService.java    |  12 [32m+++[m[31m---[m
+ .../dc/dsw/projeto/service/UsuarioService.java     |   4 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |   2 [32m+[m
+ src/main/resources/messages.properties             |   2 [32m+[m[31m-[m
+ src/main/resources/static/css/estrategia-grid.css  |   2 [32m+[m[31m-[m
+ src/main/resources/templates/bug/cadastro.html     |   1 [31m-[m
+ src/main/resources/templates/bug/detalhes.html     |  10 [32m++[m[31m---[m
+ src/main/resources/templates/bug/formulario.html   |   1 [31m-[m
+ .../resources/templates/estrategias/cadastro.html  |   0
+ src/main/resources/templates/projeto/lista.html    |   7 [32m++[m[31m--[m
+ src/main/resources/templates/projetos/listar.html  |  12 [32m+++[m[31m---[m
+ src/main/resources/templates/sessao/detalhes.html  |  27 [32m+++++++[m[31m-------[m
+ .../resources/templates/sessao/formulario.html     |  11 [32m++[m[31m----[m
+ .../resources/templates/sessoes/formulario.html    |   5 [32m+[m[31m--[m
+ target/classes/templates/projeto/lista.html        |   7 [32m++[m[31m--[m
+ uploads/00068e0d-76d7-484d-9a26-dd6290c60a8e.png   | Bin [31m23350[m -> [32m0[m bytes
+ ...920abd40c_Captura de tela 2024-03-17 142133.png | Bin [31m59240[m -> [32m0[m bytes
+ uploads/42ddb747-caf5-4319-8986-a4847af1e03c.png   | Bin [31m23350[m -> [32m0[m bytes
+ uploads/4b3447c9-00af-447f-a348-1cda4d34530e.png   | Bin [31m23350[m -> [32m0[m bytes
+ uploads/4e3690cb-2d3c-44a7-a555-e338bbed0929.png   | Bin [31m304902[m -> [32m0[m bytes
+ uploads/4fc57b6b-c1d1-4ef5-9dd1-3374e1b7b12d.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/50bdd598-1548-489e-9dff-592637c8833c.png   | Bin [31m23350[m -> [32m0[m bytes
+ ...6dc95a77a_Captura de tela 2024-03-13 113251.png | Bin [31m144660[m -> [32m0[m bytes
+ uploads/67947d11-4234-457b-bae8-c068340ce472.png   | Bin [31m4008[m -> [32m0[m bytes
+ uploads/75d36e2d-7082-4eea-b69b-d1efec299dbf.jpg   | Bin [31m26771[m -> [32m0[m bytes
+ uploads/75d91c28-4e6b-4ab1-867b-6de0fedf8e3d.png   | Bin [31m23350[m -> [32m0[m bytes
+ uploads/76acd57f-fafc-4fc6-807c-d574fb726e34.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/82836a33-0fdf-462e-b994-da40cc251e7c.png   | Bin [31m144660[m -> [32m0[m bytes
+ uploads/84b5a110-9f55-4c64-b64c-d0795214eaca.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/91bd6e17-e947-4796-b7d7-cae461a8d3b2.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/97de8fc0-c5aa-4882-96be-a79c747f1e63.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/a11857b4-aea2-4a9b-8bcf-2dd3e3127102.png   | Bin [31m144660[m -> [32m0[m bytes
+ uploads/b9192ed4-791c-43c0-a82e-0dd50d846170.png   | Bin [31m23350[m -> [32m0[m bytes
+ uploads/ba0005dd-f2ef-4125-9569-39c0443e466d.png   | Bin [31m144660[m -> [32m0[m bytes
+ uploads/bugs/Bug_20_S3987.jpg                      | Bin [31m0[m -> [32m99007[m bytes
+ uploads/c225b58d-be38-47b7-8001-699e22e592f0.png   | Bin [31m59240[m -> [32m0[m bytes
+ uploads/c966f58b-b190-42ab-8a47-e92fdd9bb53b.png   | Bin [31m4008[m -> [32m0[m bytes
+ uploads/e5fc33a9-19c6-4855-a250-6dcf8d548211.png   | Bin [31m23350[m -> [32m0[m bytes
+ uploads/e79c7374-5010-40bf-9352-d3a24338451e.mp4   | Bin [31m4456104[m -> [32m0[m bytes
+ uploads/eaa59c9e-ca6d-4ee6-bb52-c942947badd0.jpg   | Bin [31m26771[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_11_E11.png             | Bin [31m144660[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_1_E1.png               | Bin [31m144660[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_283_E283.png           | Bin [31m144660[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_301_E301.png           | Bin [31m14302[m -> [32m0[m bytes
+ 61 files changed, 132 insertions(+), 150 deletions(-)
+
+[33mcommit f0c2955273c63be8de47001b07f2b1ba3e285adf[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 03:56:24 2025 -0300
+
+    adicionando video
+
+ pom.xml                                            |   3 [32m+[m
+ .../ufscar/dc/dsw/projeto/ProjetoApplication.java  |  15 [32m+[m
+ .../br/ufscar/dc/dsw/projeto/config/WebConfig.java |  15 [32m+[m
+ .../dc/dsw/projeto/controller/BugController.java   | 179 [32m+++++[m[31m------[m
+ .../dsw/projeto/controller/SessaoController.java   |  18 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/projeto/model/BugModel.java   |  48 [32m++[m[31m-[m
+ .../dc/dsw/projeto/model/CriticidadeBug.java       |  24 [32m++[m
+ .../ufscar/dc/dsw/projeto/model/SessaoModel.java   |  36 [32m+++[m
+ .../ufscar/dc/dsw/projeto/model/TipoArquivo.java   |  16 [32m+[m
+ .../dc/dsw/projeto/repository/BugRepository.java   |   3 [32m+[m[31m-[m
+ .../dsw/projeto/repository/SessaoRepository.java   |   3 [32m+[m
+ .../ufscar/dc/dsw/projeto/service/BugService.java  | 105 [32m++++++[m[31m-[m
+ .../projeto/service/SessaoExpiracaoService.java    |  79 [32m+++++[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |   2 [32m+[m[31m-[m
+ src/main/resources/application.properties          |  13 [32m+[m
+ src/main/resources/templates/bug/cadastro.html     |  70 [32m+++++[m
+ src/main/resources/templates/bug/detalhes.html     | 142 [32m++++++[m[31m---[m
+ src/main/resources/templates/bug/formulario.html   |  93 [32m+++++[m[31m-[m
+ src/main/resources/templates/sessao/detalhes.html  | 340 [32m++++++++++++[m[31m---------[m
+ .../resources/templates/sessao/formulario.html     |   4 [32m+[m[31m-[m
+ .../resources/templates/sessoes/formulario.html    |   4 [32m+[m[31m-[m
+ src/main/resources/templates/sessoes/lista.html    |  42 [32m++[m[31m-[m
+ .../resources/templates/usuarios/detalhes.html     |  26 [32m+[m[31m-[m
+ uploads/00068e0d-76d7-484d-9a26-dd6290c60a8e.png   | Bin [31m0[m -> [32m23350[m bytes
+ ...920abd40c_Captura de tela 2024-03-17 142133.png | Bin [31m0[m -> [32m59240[m bytes
+ uploads/42ddb747-caf5-4319-8986-a4847af1e03c.png   | Bin [31m0[m -> [32m23350[m bytes
+ uploads/4b3447c9-00af-447f-a348-1cda4d34530e.png   | Bin [31m0[m -> [32m23350[m bytes
+ uploads/4fc57b6b-c1d1-4ef5-9dd1-3374e1b7b12d.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/50bdd598-1548-489e-9dff-592637c8833c.png   | Bin [31m0[m -> [32m23350[m bytes
+ ...6dc95a77a_Captura de tela 2024-03-13 113251.png | Bin [31m0[m -> [32m144660[m bytes
+ uploads/67947d11-4234-457b-bae8-c068340ce472.png   | Bin [31m0[m -> [32m4008[m bytes
+ uploads/75d36e2d-7082-4eea-b69b-d1efec299dbf.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ uploads/75d91c28-4e6b-4ab1-867b-6de0fedf8e3d.png   | Bin [31m0[m -> [32m23350[m bytes
+ uploads/76acd57f-fafc-4fc6-807c-d574fb726e34.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/82836a33-0fdf-462e-b994-da40cc251e7c.png   | Bin [31m0[m -> [32m144660[m bytes
+ uploads/84b5a110-9f55-4c64-b64c-d0795214eaca.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/91bd6e17-e947-4796-b7d7-cae461a8d3b2.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/97de8fc0-c5aa-4882-96be-a79c747f1e63.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/a11857b4-aea2-4a9b-8bcf-2dd3e3127102.png   | Bin [31m0[m -> [32m144660[m bytes
+ uploads/b9192ed4-791c-43c0-a82e-0dd50d846170.png   | Bin [31m0[m -> [32m23350[m bytes
+ uploads/ba0005dd-f2ef-4125-9569-39c0443e466d.png   | Bin [31m0[m -> [32m144660[m bytes
+ uploads/c225b58d-be38-47b7-8001-699e22e592f0.png   | Bin [31m0[m -> [32m59240[m bytes
+ uploads/c966f58b-b190-42ab-8a47-e92fdd9bb53b.png   | Bin [31m0[m -> [32m4008[m bytes
+ uploads/e5fc33a9-19c6-4855-a250-6dcf8d548211.png   | Bin [31m0[m -> [32m23350[m bytes
+ uploads/e79c7374-5010-40bf-9352-d3a24338451e.mp4   | Bin [31m0[m -> [32m4456104[m bytes
+ uploads/eaa59c9e-ca6d-4ee6-bb52-c942947badd0.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ 46 files changed, 912 insertions(+), 368 deletions(-)
+
+[33mcommit 4c70260e4854d12a77e26b6f3179be27d3820e8f[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 01:56:17 2025 -0300
+
+    adicionado acesso de convidado
+
+ .../br/ufscar/dc/dsw/config/SecurityConfig.java    |   4 [32m+[m[31m--[m
+ .../projeto/controller/EstrategiaController.java   |  29 [32m+++++++++++++++++++++[m
+ .../resources/templates/estrategias/detalhes.html  |   9 [32m+++++[m[31m--[m
+ src/main/resources/templates/login.html            |   7 [32m+++++[m
+ uploads/estrategias/exemplo_283_E283.png           | Bin [31m0[m -> [32m144660[m bytes
+ uploads/estrategias/exemplo_301_E301.png           | Bin [31m0[m -> [32m14302[m bytes
+ 6 files changed, 45 insertions(+), 4 deletions(-)
+
+[33mcommit 8ec098fdd8d6e51afdc473e640e9540681b65233[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 01:36:37 2025 -0300
+
+    adicionando medalhas
+
+ src/main/resources/static/css/estrategia-grid.css  | 366 [32m+++++++++++[m[31m----------[m
+ .../resources/templates/projetos/detalhes.html     |   2 [32m+[m[31m-[m
+ 2 files changed, 200 insertions(+), 168 deletions(-)
+
+[33mcommit 65150aa1fae0711ea49f4c49978cf4201a8d436f[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 23 01:09:41 2025 -0300
+
+    adicionando bordas
+
+ .../dsw/projeto/controller/ProjetoController.java  | 128 [32m++++++[m[31m-----[m
+ .../dsw/projeto/repository/SessaoRepository.java   |   5 [32m+[m
+ .../dc/dsw/projeto/service/SessaoService.java      |  29 [32m++[m[31m-[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java | 150 [32m+++++++++++[m[31m--[m
+ src/main/resources/static/css/estrategia-grid.css  | 236 [32m+++++++++++++++++++[m[31m--[m
+ src/main/resources/templates/projeto/detalhes.html |   2 [32m+[m[31m-[m
+ .../resources/templates/projetos/detalhes.html     |  10 [32m+[m[31m-[m
+ src/main/resources/templates/projetos/listar.html  |  94 [32m+++++++[m[31m-[m
+ .../resources/templates/usuarios/detalhes.html     |   8 [32m+[m[31m-[m
+ .../resources/templates/usuarios/formulario.html   |   4 [32m+[m[31m-[m
+ src/main/resources/templates/usuarios/listar.html  |   8 [32m+[m[31m-[m
+ 11 files changed, 555 insertions(+), 119 deletions(-)
+
+[33mcommit 0b55918e83ce42d9bfa1978ecf812e951b653d01[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Wed Oct 22 23:50:20 2025 -0300
+
+    melhoramento front end
+
+ .../dsw/projeto/controller/ProjetoController.java  | 123 [32m+++++++[m[31m--[m
+ .../dsw/projeto/controller/SessaoController.java   | 106 [32m++++++[m[31m--[m
+ .../dsw/projeto/controller/UsuarioController.java  | 102 [32m+++++++[m
+ .../dsw/projeto/repository/ProjetoRepository.java  |  12 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/service/BugService.java  |   6 [32m+[m[31m-[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  67 [32m++++[m[31m-[m
+ .../dc/dsw/projeto/service/UsuarioService.java     |  54 [32m+++[m[31m-[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |  22 [32m+[m[31m-[m
+ src/main/resources/application.properties          |  21 [32m+[m[31m-[m
+ src/main/resources/static/css/estrategia-grid.css  | 163 [32m+++++++++[m[31m--[m
+ .../resources/templates/estrategias/detalhes.html  |   1 [32m+[m
+ .../templates/estrategias/formulario.html          |   2 [32m+[m[31m-[m
+ .../resources/templates/estrategias/listar.html    |  28 [32m+[m[31m-[m
+ .../resources/templates/fragments/navigation.html  |   1 [31m-[m
+ src/main/resources/templates/home.html             |  16 [32m+[m[31m-[m
+ src/main/resources/templates/projeto/detalhes.html |  16 [32m+[m[31m-[m
+ .../resources/templates/projeto/formulario.html    | 123 [31m---------[m
+ src/main/resources/templates/projeto/lista.html    |  56 [32m+++[m[31m-[m
+ .../resources/templates/projetos/detalhes.html     |  39 [32m+++[m
+ .../resources/templates/projetos/formulario.html   | 297 [32m+++++++++++++++++++++[m
+ src/main/resources/templates/projetos/listar.html  | 107 [32m++++++++[m
+ src/main/resources/templates/sessao/detalhes.html  | 102 [32m++++[m[31m---[m
+ .../resources/templates/sessao/formulario.html     |  71 [32m+++[m[31m--[m
+ .../resources/templates/sessoes/formulario.html    |  74 [32m++++[m[31m-[m
+ .../resources/templates/usuarios/detalhes.html     |  33 [32m++[m[31m-[m
+ .../resources/templates/usuarios/formulario.html   |  24 [32m+[m[31m-[m
+ src/main/resources/templates/usuarios/listar.html  |  11 [32m+[m[31m-[m
+ .../EspressoGamingTestingJpaApplicationTests.java  |  13 [31m-[m
+ src/test/resources/application.properties          |  10 [31m-[m
+ target/classes/templates/fragments/navigation.html |   1 [31m-[m
+ target/classes/templates/projeto/formulario.html   | 123 [31m---------[m
+ target/classes/templates/projeto/lista.html        |  56 [32m+++[m[31m-[m
+ target/classes/templates/usuario/formulario.html   |  66 [31m-----[m
+ uploads/4e3690cb-2d3c-44a7-a555-e338bbed0929.png   | Bin [31m0[m -> [32m304902[m bytes
+ uploads/783419e0-6596-4a06-89c1-291dbfa8e446.png   | Bin [31m1557[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_11_E11.png             | Bin [31m0[m -> [32m144660[m bytes
+ 36 files changed, 1401 insertions(+), 545 deletions(-)
+
+[33mcommit da1c78a530a85746e1fbd8b6d5474931c1e8a451[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Wed Oct 22 15:11:09 2025 -0300
+
+    Adicionando permissoes de usuarios
+
+ .../dc/dsw/projeto/controller/BugController.java   |  41 [32m++[m[31m---[m
+ .../projeto/controller/EstrategiaController.java   | 196 [32m+++++++++++++++++[m[31m----[m
+ .../dsw/projeto/controller/ProjetoController.java  | 110 [32m++++++++[m[31m----[m
+ .../dsw/projeto/controller/SessaoController.java   |   3 [32m+[m[31m-[m
+ .../dc/dsw/projeto/dto/ProjetoCadastroDTO.java     |  13 [32m+[m[31m-[m
+ .../dc/dsw/projeto/dto/ProjetoEdicaoDTO.java       |  12 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/projeto/model/BugModel.java   |   3 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/projeto/model/DicaModel.java  |  26 [32m+++[m
+ .../dc/dsw/projeto/model/EstrategiaModel.java      |  17 [32m++[m
+ .../ufscar/dc/dsw/projeto/model/ExemploModel.java  |  31 [32m++++[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |  47 [32m+++++[m
+ .../ufscar/dc/dsw/projeto/model/UsuarioModel.java  |   2 [32m+[m[31m-[m
+ .../dc/dsw/projeto/repository/DicaRepository.java  |   7 [32m+[m
+ .../dsw/projeto/repository/ExemploRepository.java  |   9 [32m+[m
+ .../dc/dsw/projeto/service/EstrategiaService.java  |  16 [32m+[m[31m-[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  72 [32m+++++[m[31m---[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |   4 [32m+[m[31m-[m
+ src/main/resources/messages.properties             |  62 [32m+++++++[m
+ src/main/resources/messages_pt_BR.properties       |  18 [31m--[m
+ src/main/resources/templates/bug/formulario.html   |   4 [32m+[m[31m-[m
+ .../resources/templates/estrategias/detalhes.html  |   5 [32m+[m[31m-[m
+ .../templates/estrategias/formulario.html          |  11 [32m+[m[31m-[m
+ .../resources/templates/fragments/navigation.html  |   4 [32m+[m[31m-[m
+ .../resources/templates/projeto/formulario.html    |  86 [32m+++++[m[31m----[m
+ src/main/resources/templates/projeto/lista.html    |  58 [32m++++[m[31m--[m
+ src/main/resources/templates/sessao/detalhes.html  |   5 [32m+[m[31m-[m
+ .../resources/templates/usuario/formulario.html    |  75 [31m--------[m
+ src/main/resources/templates/usuario/lista.html    |  57 [31m------[m
+ .../resources/templates/usuarios/detalhes.html     |  40 [32m+++++[m
+ .../resources/templates/usuarios/formulario.html   |  66 [32m+++++++[m
+ src/main/resources/templates/usuarios/listar.html  |  62 [32m+++++++[m
+ target/classes/templates/fragments/navigation.html |   4 [32m+[m[31m-[m
+ target/classes/templates/projeto/formulario.html   |  86 [32m+++++[m[31m----[m
+ target/classes/templates/projeto/lista.html        |  58 [32m++++[m[31m--[m
+ target/classes/templates/usuario/formulario.html   |  87 [32m++++[m[31m-----[m
+ uploads/783419e0-6596-4a06-89c1-291dbfa8e446.png   | Bin [31m0[m -> [32m1557[m bytes
+ uploads/bug_1_E1_P1.jpg                            | Bin [31m26771[m -> [32m0[m bytes
+ uploads/estrategias/exemplo_1_E1.png               | Bin [31m0[m -> [32m144660[m bytes
+ 38 files changed, 942 insertions(+), 455 deletions(-)
+
+[33mcommit 0aa09bc951f95af811be00c5a691aaf62e7ab0e3[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Mon Oct 20 12:48:30 2025 -0300
+
+    alterado meio de salvar imagens de bugs, e possibilidade de excluir entidades
+
+ .../dc/dsw/projeto/controller/BugController.java   |  65 [32m++++++++++++++[m[31m-----[m
+ .../projeto/controller/EstrategiaController.java   |   2 [32m+[m[31m-[m
+ .../dsw/projeto/controller/SessaoController.java   |  24 [32m+++++++[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |   8 [32m++[m[31m-[m
+ .../ufscar/dc/dsw/projeto/model/SessaoModel.java   |   5 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/service/BugService.java  |  13 [32m++++[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  71 [32m+++++++++++++[m[31m--------[m
+ .../dc/dsw/projeto/service/SessaoService.java      |  10 [32m+++[m
+ src/main/resources/static/css/main.css             |  49 [32m++++++[m[31m--------[m
+ src/main/resources/templates/sessao/detalhes.html  |  14 [32m++[m[31m--[m
+ src/main/resources/templates/sessoes/lista.html    |  12 [32m++[m[31m--[m
+ target/classes/static/css/main.css                 |  49 [32m++++++[m[31m--------[m
+ uploads/be814a4e-232f-4315-9c92-654ac6bf8d6b.jpg   | Bin [31m26771[m -> [32m0[m bytes
+ ...-431e-b109-e7fe436b1033.jpg => bug_1_E1_P1.jpg} | Bin
+ uploads/d0b63767-446f-4547-a8b1-173cebcd2cf6.jpg   | Bin [31m26771[m -> [32m0[m bytes
+ uploads/e7365696-0062-4bf4-99ac-bcc17536e2e4.jpg   | Bin [31m26771[m -> [32m0[m bytes
+ 16 files changed, 200 insertions(+), 122 deletions(-)
+
+[33mcommit 9c5ff1543979cb0fe77406b25817a385d2cbffa7[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 16 00:48:03 2025 -0300
+
+    ajuste bug
+
+ .../dc/dsw/config/CustomUserDetailsService.java    |  25 [32m+++[m
+ .../java/br/ufscar/dc/dsw/config/MvcConfig.java    |  18 [32m+++[m
+ .../dc/dsw/projeto/controller/BugController.java   | 102 [32m+++++++[m[31m-----[m
+ .../dsw/projeto/controller/SessaoController.java   |  32 [32m+++[m[31m-[m
+ .../ufscar/dc/dsw/projeto/model/UsuarioModel.java  |  21 [32m++[m[31m-[m
+ .../dsw/projeto/repository/UsuarioRepository.java  |   3 [32m+[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |  20 [32m++[m[31m-[m
+ src/main/resources/templates/bug/detalhes.html     |  62 [32m+++++++[m
+ src/main/resources/templates/bug/formulario.html   |  19 [32m++[m[31m-[m
+ src/main/resources/templates/sessao/detalhes.html  | 179 [32m+++++++++++++[m[31m--------[m
+ .../resources/templates/sessao/formulario.html     |  48 [32m+++[m[31m---[m
+ uploads/2dc9f051-f138-431e-b109-e7fe436b1033.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ uploads/be814a4e-232f-4315-9c92-654ac6bf8d6b.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ uploads/d0b63767-446f-4547-a8b1-173cebcd2cf6.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ uploads/e7365696-0062-4bf4-99ac-bcc17536e2e4.jpg   | Bin [31m0[m -> [32m26771[m bytes
+ 15 files changed, 392 insertions(+), 137 deletions(-)
+
+[33mcommit 41884b0d19cc6a331330da6b87331d602a1bd24a[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Wed Oct 15 23:16:53 2025 -0300
+
+    Adicionado projeto, sessao e bug
+
+ .../dc/dsw/projeto/controller/BugController.java   |  87 [32m++++++++[m
+ .../dsw/projeto/controller/ProjetoController.java  |  45 [32m+++[m[31m-[m
+ .../dsw/projeto/controller/SessaoController.java   | 121 [32m+++++++++++[m
+ .../dc/dsw/projeto/dto/ProjetoEdicaoDTO.java       |   8 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/projeto/model/BugModel.java   |  82 [32m+++++++[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |   8 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/model/SessaoModel.java   | 116 [32m++++++++++[m
+ .../ufscar/dc/dsw/projeto/model/StatusSessao.java  |  17 [32m++[m
+ .../dc/dsw/projeto/repository/BugRepository.java   |  14 [32m++[m
+ .../dsw/projeto/repository/ProjetoRepository.java  |   3 [32m+[m[31m-[m
+ .../dsw/projeto/repository/SessaoRepository.java   |  19 [32m++[m
+ .../dsw/projeto/repository/UsuarioRepository.java  |   6 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/service/BugService.java  |  37 [32m++++[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  26 [32m++[m[31m-[m
+ .../dc/dsw/projeto/service/SessaoService.java      |  37 [32m++++[m
+ .../dc/dsw/projeto/service/UsuarioService.java     |  29 [32m+++[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |  46 [32m++[m[31m--[m
+ src/main/resources/static/css/estrategia-grid.css  |  12 [32m+[m[31m-[m
+ src/main/resources/templates/bug/formulario.html   |  60 [32m++[m[31m----[m
+ src/main/resources/templates/projeto/detalhes.html |  31 [32m+++[m
+ .../resources/templates/projeto/formulario.html    |   6 [32m+[m[31m-[m
+ src/main/resources/templates/projeto/lista.html    |   5 [32m+[m[31m-[m
+ src/main/resources/templates/sessao/detalhes.html  | 237 [32m+++++++[m[31m--------------[m
+ .../resources/templates/sessoes/formulario.html    |  44 [32m++++[m
+ src/main/resources/templates/sessoes/lista.html    | 102 [32m+++++++++[m
+ target/classes/templates/projeto/formulario.html   |   6 [32m+[m[31m-[m
+ target/classes/templates/projeto/lista.html        |   5 [32m+[m[31m-[m
+ 27 files changed, 938 insertions(+), 271 deletions(-)
+
+[33mcommit cbaf95dca27a370523a35d7223438fc54d509b33[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 2 17:11:57 2025 -0300
+
+    Criação de Projeto e Estratégia, e suas relações
+
+ .../br/ufscar/dc/dsw/config/SecurityConfig.java    | 22 [32m++[m[31m---[m
+ .../projeto/controller/EstrategiaController.java   |  5 [32m++[m
+ .../dsw/projeto/controller/ProjetoController.java  | 41 [32m+++++++[m[31m--[m
+ .../dc/dsw/projeto/dto/ProjetoCadastroDTO.java     | 26 [32m++++++[m
+ .../dc/dsw/projeto/dto/ProjetoEdicaoDTO.java       | 33 [32m++++++++[m
+ .../dc/dsw/projeto/model/EstrategiaModel.java      | 24 [32m++[m[31m----[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |  6 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/projeto/model/UsuarioModel.java  | 97 [32m+++++++++++++++++++[m[31m---[m
+ .../dc/dsw/projeto/service/ProjetoService.java     | 41 [32m++++++++[m[31m-[m
+ .../dsw/projeto/service/UsuarioDetailsService.java | 20 [32m++[m[31m---[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java | 57 [32m++++++++[m[31m-----[m
+ src/main/resources/application.properties          |  2 [32m+[m[31m-[m
+ src/main/resources/messages.properties             | 37 [32m+++++++++[m
+ src/main/resources/messages_pt_BR.properties       | 18 [32m++++[m
+ src/main/resources/static/css/estrategia-grid.css  | 76 [32m+++++++++++++++++[m
+ .../resources/templates/estrategias/listar.html    |  6 [32m+[m[31m-[m
+ src/main/resources/templates/login.html            | 39 [32m++++++[m[31m---[m
+ .../resources/templates/projeto/formulario.html    | 23 [32m++++[m[31m-[m
+ src/main/resources/templates/projeto/lista.html    | 54 [32m+++++++[m[31m-----[m
+ target/classes/templates/projeto/formulario.html   | 23 [32m++++[m[31m-[m
+ target/classes/templates/projeto/lista.html        | 54 [32m+++++++[m[31m-----[m
+ 21 files changed, 555 insertions(+), 149 deletions(-)
+
+[33mcommit e4e188be3f6ac1705c2e995a2c624e69ce154aa7[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Thu Oct 2 00:00:50 2025 -0300
+
+    primeiro dia
+
+ .vscode/settings.json                              |   3 [32m+[m[31m-[m
+ pom.xml                                            |   4 [32m+[m
+ .../dsw/EspressoGamingTestingJpaApplication.java   |  22 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/config/SecurityConfig.java    |  54 [32m++++[m
+ .../br/ufscar/dc/dsw/config/ThymeleafConfig.java   |  50 [31m----[m
+ .../br/ufscar/dc/dsw/config/WebSecurityConfig.java |  52 [31m----[m
+ .../dc/dsw/config/seeders/DatabaseSeeder.java      |  27 [31m--[m
+ .../dc/dsw/config/seeders/EstrategiaSeeder.java    | 241 [31m----------------[m
+ .../dc/dsw/config/seeders/ProjetoSeeder.java       |  56 [31m----[m
+ .../dc/dsw/config/seeders/UsuarioSeeder.java       |  53 [31m----[m
+ .../ufscar/dc/dsw/controllers/BugController.java   | 105 [31m-------[m
+ .../dc/dsw/controllers/CustomErrorController.java  |  45 [31m---[m
+ .../dc/dsw/controllers/EstrategiaController.java   | 140 [31m---------[m
+ .../controllers/EstrategiasPublicasController.java |  30 [31m--[m
+ .../ufscar/dc/dsw/controllers/HomeController.java  |  37 [31m---[m
+ .../dc/dsw/controllers/LanguageController.java     |  37 [31m---[m
+ .../dc/dsw/controllers/ProjetoController.java      | 133 [31m---------[m
+ .../dc/dsw/controllers/SessaoController.java       | 147 [31m----------[m
+ .../dc/dsw/controllers/UsuarioController.java      | 132 [31m---------[m
+ .../java/br/ufscar/dc/dsw/dtos/BugCadastroDTO.java |  19 [31m--[m
+ src/main/java/br/ufscar/dc/dsw/dtos/BugDTO.java    |  16 [31m--[m
+ .../java/br/ufscar/dc/dsw/dtos/BugEdicaoDTO.java   |  19 [31m--[m
+ src/main/java/br/ufscar/dc/dsw/dtos/DicaDto.java   |  13 [31m-[m
+ .../java/br/ufscar/dc/dsw/dtos/EstrategiaDto.java  |  22 [31m--[m
+ .../java/br/ufscar/dc/dsw/dtos/ExemploDto.java     |  19 [31m--[m
+ .../br/ufscar/dc/dsw/dtos/ProjetoCadastroDTO.java  |  12 [31m-[m
+ .../java/br/ufscar/dc/dsw/dtos/ProjetoDTO.java     |  14 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/ProjetoEdicaoDTO.java    |  13 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/ProjetoResumoDTO.java    |   9 [31m-[m
+ src/main/java/br/ufscar/dc/dsw/dtos/SessaoDTO.java |  21 [31m--[m
+ .../br/ufscar/dc/dsw/dtos/SessaoDetalhesDTO.java   |  10 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/SessaoEdicaoDTO.java     |  24 [31m--[m
+ .../br/ufscar/dc/dsw/dtos/UsuarioCadastroDTO.java  |  26 [31m--[m
+ .../java/br/ufscar/dc/dsw/dtos/UsuarioDTO.java     |  12 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/UsuarioEdicaoDTO.java    |  27 [31m--[m
+ .../dc/dsw/exception/GlobalExceptionHandler.java   |  40 [31m---[m
+ .../java/br/ufscar/dc/dsw/models/BugModel.java     |  57 [31m----[m
+ .../java/br/ufscar/dc/dsw/models/DicaModel.java    |  64 [31m-----[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   | 111 [31m--------[m
+ .../java/br/ufscar/dc/dsw/models/ExemploModel.java |  98 [31m-------[m
+ .../ufscar/dc/dsw/models/HistoricoStatusModel.java |  95 [31m-------[m
+ .../java/br/ufscar/dc/dsw/models/ProjetoModel.java | 113 [31m--------[m
+ .../java/br/ufscar/dc/dsw/models/SessaoModel.java  | 151 [31m----------[m
+ .../java/br/ufscar/dc/dsw/models/UsuarioModel.java | 139 [31m---------[m
+ .../br/ufscar/dc/dsw/models/enums/BugStatus.java   |   7 [31m-[m
+ .../java/br/ufscar/dc/dsw/models/enums/Papel.java  |   6 [31m-[m
+ .../ufscar/dc/dsw/models/enums/StatusSessao.java   |   7 [31m-[m
+ .../projeto/controller/EstrategiaController.java   |  53 [32m++++[m
+ .../dc/dsw/projeto/controller/HomeController.java  |  13 [32m+[m
+ .../dc/dsw/projeto/controller/LoginController.java |  13 [32m+[m
+ .../dsw/projeto/controller/ProjetoController.java  |  45 [32m+++[m
+ .../dc/dsw/projeto/model/EstrategiaModel.java      |  36 [32m+++[m
+ .../ufscar/dc/dsw/projeto/model/ProjetoModel.java  |  35 [32m+++[m
+ .../ufscar/dc/dsw/projeto/model/UsuarioModel.java  |  34 [32m+++[m
+ .../projeto/repository/EstrategiaRepository.java   |   7 [32m+[m
+ .../dsw/projeto/repository/ProjetoRepository.java  |   6 [32m+[m
+ .../dsw/projeto/repository/UsuarioRepository.java  |  12 [32m+[m
+ .../dc/dsw/projeto/service/EstrategiaService.java  |  37 [32m+++[m
+ .../dc/dsw/projeto/service/ProjetoService.java     |  22 [32m++[m
+ .../dsw/projeto/service/UsuarioDetailsService.java |  37 [32m+++[m
+ .../ufscar/dc/dsw/projeto/util/DatabaseSeeder.java |  79 [32m++++++[m
+ .../dc/dsw/projeto/util/SessaoRepository.java      |   5 [32m+[m
+ .../ufscar/dc/dsw/repositories/BugRepository.java  |  29 [31m--[m
+ .../ufscar/dc/dsw/repositories/DicaRepository.java |  18 [31m--[m
+ .../dc/dsw/repositories/EstrategiaRepository.java  |  10 [31m-[m
+ .../dc/dsw/repositories/ExemploRepository.java     |  18 [31m--[m
+ .../dc/dsw/repositories/ProjetoRepository.java     |  29 [31m--[m
+ .../dc/dsw/repositories/SessaoRepository.java      |  20 [31m--[m
+ .../dc/dsw/repositories/UsuarioRepository.java     |  15 [31m-[m
+ .../br/ufscar/dc/dsw/security/UsuarioDetails.java  |  71 [31m-----[m
+ .../java/br/ufscar/dc/dsw/services/BugService.java | 133 [31m---------[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  | 312 [31m---------------------[m
+ .../br/ufscar/dc/dsw/services/ProjetoService.java  | 162 [31m-----------[m
+ .../br/ufscar/dc/dsw/services/SecurityService.java |  57 [31m----[m
+ .../br/ufscar/dc/dsw/services/SessaoService.java   | 148 [31m----------[m
+ .../br/ufscar/dc/dsw/services/UsuarioService.java  | 127 [31m---------[m
+ src/main/resources/application.properties          |  30 [32m+[m[31m-[m
+ .../estrategias/aaaaaaaaaaaaaaaaaaaaa_1.png        | Bin [31m1557[m -> [32m0[m bytes
+ .../resources/templates/estrategia/listar.html     |  64 [31m-----[m
+ .../resources/templates/estrategias/cadastro.html  |   0
+ .../{estrategia => estrategias}/detalhes.html      |   0
+ .../{estrategia => estrategias}/formulario.html    |   0
+ .../resources/templates/estrategias/listar.html    |  68 [32m+++++[m
+ src/main/resources/templates/home.html             |  14 [32m+[m[31m-[m
+ src/main/resources/templates/login.html            |  51 [32m+[m[31m---[m
+ src/main/resources/templates/projeto/cadastro.html |  18 [32m++[m
+ src/main/resources/templates/projeto/lista.html    | 113 [32m++[m[31m------[m
+ target/classes/templates/projeto/lista.html        | 113 [32m++[m[31m------[m
+ 88 files changed, 663 insertions(+), 3923 deletions(-)
+
+[33mcommit 358f1195b04d991466e95b867682996a44b91ce3[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Wed Oct 1 21:33:00 2025 -0300
+
+    tentativa de mudar as classes
+
+ .../ufscar/dc/dsw/controllers/BugController.java   |  86 [32m++++++++[m[31m-------[m
+ .../controllers/EstrategiasPublicasController.java |  30 [32m++++++[m
+ .../dc/dsw/controllers/SessaoController.java       |   8 [32m+[m[31m-[m
+ .../java/br/ufscar/dc/dsw/dtos/BugCadastroDTO.java |  15 [32m+[m[31m--[m
+ src/main/java/br/ufscar/dc/dsw/dtos/BugDTO.java    |  14 [32m++[m[31m-[m
+ .../java/br/ufscar/dc/dsw/dtos/BugEdicaoDTO.java   |  18 [32m++[m[31m--[m
+ .../java/br/ufscar/dc/dsw/models/BugModel.java     | 119 [32m+++++++[m[31m--------------[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |  12 [32m+++[m
+ .../ufscar/dc/dsw/models/HistoricoStatusModel.java |  20 [32m++[m[31m--[m
+ .../java/br/ufscar/dc/dsw/models/ProjetoModel.java |  24 [32m+++++[m
+ .../java/br/ufscar/dc/dsw/models/SessaoModel.java  |   3 [32m+[m[31m-[m
+ .../br/ufscar/dc/dsw/models/enums/BugStatus.java   |   7 [32m++[m
+ .../ufscar/dc/dsw/repositories/BugRepository.java  |  20 [32m++[m[31m--[m
+ .../dc/dsw/repositories/EstrategiaRepository.java  |   8 [32m+[m[31m-[m
+ .../dc/dsw/repositories/SessaoRepository.java      |   3 [32m+[m[31m-[m
+ .../java/br/ufscar/dc/dsw/services/BugService.java |  86 [32m++++++++++[m[31m-----[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  |   6 [32m++[m
+ .../br/ufscar/dc/dsw/services/ProjetoService.java  |  24 [32m+++++[m
+ .../br/ufscar/dc/dsw/services/SecurityService.java |  19 [32m++[m[31m--[m
+ .../br/ufscar/dc/dsw/services/SessaoService.java   |   3 [32m+[m[31m-[m
+ src/main/resources/application.properties          |  13 [32m+++[m
+ .../estrategias/aaaaaaaaaaaaaaaaaaaaa_1.png        | Bin [31m0[m -> [32m1557[m bytes
+ .../static/uploads/estrategias/completionist_4.png | Bin [31m0[m -> [32m40562[m bytes
+ .../static/uploads/estrategias/completionist_5.png | Bin [31m0[m -> [32m185192[m bytes
+ src/main/resources/templates/projeto/lista.html    |  36 [32m+++++[m[31m--[m
+ target/classes/templates/projeto/lista.html        |  36 [32m+++++[m[31m--[m
+ 26 files changed, 388 insertions(+), 222 deletions(-)
+
+[33mcommit 4f1d014b26ccd60b53fe4cb447f72d0b401a9af4[m[33m ([m[1;31morigin/AlterarDependenciaDeClasses[m[33m)[m
+Author: lksalto <saltolks@gmail.com>
+Date:   Wed Sep 24 20:34:22 2025 -0300
+
+    Initial commit
+
+ .vscode/settings.json                              |   3 [32m+[m
+ .../dc/dsw/config/seeders/EstrategiaSeeder.java    | 153 [32m++++++++++[m[31m--[m
+ .../dc/dsw/controllers/EstrategiaController.java   |   4 [32m+[m
+ .../java/br/ufscar/dc/dsw/dtos/ExemploDto.java     |   3 [32m+[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |   5 [32m+[m[31m-[m
+ .../java/br/ufscar/dc/dsw/models/ExemploModel.java |  25 [32m+[m[31m-[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  | 273 [32m+++++++++++++++[m[31m------[m
+ src/main/resources/application.properties          |   5 [32m+[m[31m-[m
+ .../232e2f58-e0a8-41fb-8117-05607473e349.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../2efc5bd6-beee-463e-b15e-1f65c7e8c995.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../940cfbc4-1141-4f20-865c-93b2eae17b39.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../static/uploads/estrategias/completionist_1.png | Bin [31m0[m -> [32m11581[m bytes
+ .../static/uploads/estrategias/completionist_2.png | Bin [31m0[m -> [32m144660[m bytes
+ .../static/uploads/estrategias/completionist_3.png | Bin [31m0[m -> [32m304902[m bytes
+ .../static/uploads/estrategias/golden-path.jpg     | Bin [31m0[m -> [32m7053[m bytes
+ .../static/uploads/estrategias/neighboring.jpg     | Bin [31m0[m -> [32m7325[m bytes
+ .../static/uploads/estrategias/noob-journey.jpg    | Bin [31m0[m -> [32m4827[m bytes
+ .../static/uploads/estrategias/overtime.jpg        | Bin [31m0[m -> [32m6448[m bytes
+ .../static/uploads/estrategias/single-session.jpg  | Bin [31m0[m -> [32m6694[m bytes
+ .../static/uploads/estrategias/speed-run.jpg       | Bin [31m0[m -> [32m5991[m bytes
+ .../static/uploads/estrategias/stress-test.jpg     | Bin [31m0[m -> [32m5655[m bytes
+ .../static/uploads/estrategias/user-interface.jpg  | Bin [31m0[m -> [32m6020[m bytes
+ .../resources/templates/estrategia/detalhes.html   |   4 [32m+[m[31m-[m
+ .../resources/templates/estrategia/formulario.html |   2 [32m+[m[31m-[m
+ 24 files changed, 372 insertions(+), 105 deletions(-)
+
+[33mcommit 3bc95be461d6a1370b816f8b3d206f0f15635b6a[m[33m ([m[1;31mupstream/main[m[33m, [m[1;31mupstream/HEAD[m[33m)[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Mon Jun 23 11:15:18 2025 -0300
+
+    final
+
+ README.md                                          |   2 [32m+[m[31m-[m
+ .../dc/dsw/controllers/EstrategiaController.java   |  21 [32m+++[m[31m----[m
+ .../java/br/ufscar/dc/dsw/dtos/EstrategiaDto.java  |  16 [32m+++[m[31m--[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |  26 [32m+++++[m[31m---[m
+ .../java/br/ufscar/dc/dsw/models/SessaoModel.java  |  13 [32m++[m[31m--[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  |  66 [32m++++++++++++[m[31m---------[m
+ .../{SecurityService => SecurityService.java}      |   0
+ .../232e2f58-e0a8-41fb-8117-05607473e349.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ .../2efc5bd6-beee-463e-b15e-1f65c7e8c995.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ .../940cfbc4-1141-4f20-865c-93b2eae17b39.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ 10 files changed, 77 insertions(+), 67 deletions(-)
+
+[33mcommit 2f6202b8f0122c8e2ad02cc7cbecd48989a2d811[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Mon Jun 23 09:34:37 2025 -0300
+
+    Revert "three cheers for sweet revenge"
+    
+    This reverts commit f8eed37879091aa330b5870db63b3b15f61604bb.
+
+ .../br/ufscar/dc/dsw/config/WebSecurityConfig.java |   2 [31m-[m
+ .../dc/dsw/controllers/EstrategiaController.java   |  17 [32m++[m[31m---[m
+ .../dc/dsw/controllers/UsuarioController.java      |  23 [32m++[m[31m----[m
+ .../java/br/ufscar/dc/dsw/dtos/EstrategiaDto.java  |  16 [32m+++[m[31m--[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |  26 [32m+++[m[31m----[m
+ .../java/br/ufscar/dc/dsw/models/ExemploModel.java |   2 [31m-[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  |  80 [32m++++++++[m[31m-------------[m
+ src/main/resources/static/css/main.css             |   2 [32m+[m[31m-[m
+ .../21f10029-49f9-493e-9dc9-3c160723c7a7.jpg       | Bin [31m10232[m -> [32m0[m bytes
+ .../bb3055b9-d7c4-4362-83ee-fbac944ae904.jpg       | Bin [31m10232[m -> [32m0[m bytes
+ .../c95c4b48-e492-4076-899b-0c16ebb29577.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../ee0102bb-a1e9-42c4-bba3-49580063c970.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../fae9f201-3805-4af3-9b33-9cfec31e72c6.jpg       | Bin [31m7742[m -> [32m0[m bytes
+ .../resources/templates/estrategia/detalhes.html   |   2 [32m+[m[31m-[m
+ .../resources/templates/estrategia/listar.html     |  15 [32m++[m[31m--[m
+ target/classes/static/css/main.css                 |   2 [32m+[m[31m-[m
+ 16 files changed, 73 insertions(+), 114 deletions(-)
+
+[33mcommit f8eed37879091aa330b5870db63b3b15f61604bb[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Mon Jun 23 09:09:09 2025 -0300
+
+    three cheers for sweet revenge
+
+ .../br/ufscar/dc/dsw/config/WebSecurityConfig.java |   2 [32m+[m
+ .../dc/dsw/controllers/EstrategiaController.java   |  17 [32m+++[m[31m--[m
+ .../dc/dsw/controllers/UsuarioController.java      |  23 [32m++++[m[31m--[m
+ .../java/br/ufscar/dc/dsw/dtos/EstrategiaDto.java  |  16 [32m++[m[31m---[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |  26 [32m++++[m[31m---[m
+ .../java/br/ufscar/dc/dsw/models/ExemploModel.java |   2 [32m+[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  |  80 [32m+++++++++++++[m[31m--------[m
+ src/main/resources/static/css/main.css             |   2 [32m+[m[31m-[m
+ .../21f10029-49f9-493e-9dc9-3c160723c7a7.jpg       | Bin [31m0[m -> [32m10232[m bytes
+ .../bb3055b9-d7c4-4362-83ee-fbac944ae904.jpg       | Bin [31m0[m -> [32m10232[m bytes
+ .../c95c4b48-e492-4076-899b-0c16ebb29577.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ .../ee0102bb-a1e9-42c4-bba3-49580063c970.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ .../fae9f201-3805-4af3-9b33-9cfec31e72c6.jpg       | Bin [31m0[m -> [32m7742[m bytes
+ .../resources/templates/estrategia/detalhes.html   |   2 [32m+[m[31m-[m
+ .../resources/templates/estrategia/listar.html     |  15 [32m++[m[31m--[m
+ target/classes/static/css/main.css                 |   2 [32m+[m[31m-[m
+ 16 files changed, 114 insertions(+), 73 deletions(-)
+
+[33mcommit 02575988297069b83d231354d327af56deea84c6[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Mon Jun 23 08:45:32 2025 -0300
+
+    Fix table when there is no test session
+
+ src/main/resources/templates/sessao/lista.html | 17 [32m+++++++++++++++++[m
+ 1 file changed, 17 insertions(+)
+
+[33mcommit d20e5b0eaba4288e7b5a3956f5aaac0949031ef1[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Mon Jun 23 07:05:33 2025 -0300
+
+    sofro.
+
+ .../br/ufscar/dc/dsw/config/WebSecurityConfig.java |   3 [32m+[m[31m-[m
+ .../dc/dsw/controllers/ProjetoController.java      |  12 [32m++[m[31m-[m
+ .../dc/dsw/repositories/ProjetoRepository.java     |   6 [32m++[m
+ .../br/ufscar/dc/dsw/services/ProjetoService.java  |  46 [32m++++++[m[31m--[m
+ src/main/resources/application.properties          |   2 [32m+[m[31m-[m
+ src/main/resources/static/css/main.css             | 116 [32m++++++++++++++[m[31m-------[m
+ src/main/resources/templates/bug/formulario.html   |   1 [32m+[m
+ src/main/resources/templates/projeto/lista.html    |  12 [32m++[m[31m-[m
+ target/classes/static/css/main.css                 | 116 [32m++++++++++++++[m[31m-------[m
+ target/classes/templates/projeto/lista.html        |  12 [32m++[m[31m-[m
+ 10 files changed, 232 insertions(+), 94 deletions(-)
+
+[33mcommit a18663202c6c2bf5fd3503b0b1ff29fcd452e207[m
+Merge: 3337513 b604fa1
+Author: João Arthur <139086013+jooj-arthur@users.noreply.github.com>
+Date:   Mon Jun 23 00:45:51 2025 -0300
+
+    Merge pull request #11 from ronanpjr/joão
+    
+    integrando bugs
+
+[33mcommit b604fa10e5bdcb0548cd0eab9d0641166642c4e2[m[33m ([m[1;31mupstream/joão[m[33m, [m[1;31morigin/joão[m[33m)[m
+Merge: cde4f7e 3337513
+Author: João Arthur <139086013+jooj-arthur@users.noreply.github.com>
+Date:   Mon Jun 23 00:39:48 2025 -0300
+
+    correção gitignore
+
+[33mcommit cde4f7ec5d00dc43924bf48efc4668adf3ad03b2[m
+Author: João Arthur <139086013+jooj-arthur@users.noreply.github.com>
+Date:   Mon Jun 23 00:32:43 2025 -0300
+
+    resolvendo problema com .gitignore
+
+ .gitignore                                         |   3 [32m+[m
+ target/classes/application.properties              |  38 [31m---[m
+ target/classes/i18n/messages_en.properties         | 240 [31m--------------[m
+ target/classes/i18n/messages_pt_BR.properties      | 230 [31m--------------[m
+ target/classes/static/css/main.css                 | 348 [31m---------------------[m
+ .../webfonts/maple-mono-latin-800-normal.woff      | Bin [31m83532[m -> [32m0[m bytes
+ target/classes/templates/error/error-400.html      |  25 [31m--[m
+ target/classes/templates/error/error-403.html      |  26 [31m--[m
+ target/classes/templates/error/error-404.html      |  24 [31m--[m
+ target/classes/templates/error/error-500.html      |  34 [31m--[m
+ target/classes/templates/error/error.html          |  26 [31m--[m
+ target/classes/templates/fragments/footer.html     |  12 [31m-[m
+ target/classes/templates/fragments/header.html     |  13 [31m-[m
+ target/classes/templates/home.html                 |  60 [31m----[m
+ target/classes/templates/login.html                |  39 [31m---[m
+ target/classes/templates/projeto/lista.html        |  64 [31m----[m
+ target/classes/templates/sessao/detalhes.html      | 151 [31m---------[m
+ target/classes/templates/sessao/formulario.html    |  99 [31m------[m
+ target/classes/templates/sessao/lista.html         | 124 [31m--------[m
+ .../classes/templates/sessao/minhas_sessoes.html   |  49 [31m---[m
+ target/classes/templates/usuario/formulario.html   |  76 [31m-----[m
+ target/classes/templates/usuario/lista.html        |  53 [31m----[m
+ 22 files changed, 3 insertions(+), 1731 deletions(-)
+
+[33mcommit a2eca56923b53034d53c612e1f5a8f2d6a68255d[m
+Author: João Arthur <139086013+jooj-arthur@users.noreply.github.com>
+Date:   Mon Jun 23 00:14:28 2025 -0300
+
+    integrando bugs
+
+ pom.xml                                            | 171 [32m++++++++++[m[31m-----------[m
+ .../br/ufscar/dc/dsw/config/SecurityConfig.java    |  42 [31m-----[m
+ .../{BugController => BugController.java}          |  32 [32m++[m[31m--[m
+ .../dc/dsw/controllers/SessaoController.java       |  13 [32m+[m[31m-[m
+ .../dtos/{BugCadastroDTO => BugCadastroDTO.java}   |   2 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/{BugDTO => BugDTO.java}  |   2 [31m-[m
+ .../dsw/dtos/{BugEdicaoDTO => BugEdicaoDTO.java}   |   2 [31m-[m
+ .../br/ufscar/dc/dsw/dtos/ProjetoResumoDTO.java    |   9 [32m++[m
+ src/main/java/br/ufscar/dc/dsw/dtos/SessaoDTO      |  11 [31m--[m
+ .../br/ufscar/dc/dsw/dtos/SessaoDetalhesDTO.java   |  10 [32m++[m
+ .../java/br/ufscar/dc/dsw/models/BugModel.java     |  40 [32m+++[m[31m--[m
+ .../java/br/ufscar/dc/dsw/models/DicaModel.java    |  14 [32m++[m
+ .../br/ufscar/dc/dsw/models/EstrategiaModel.java   |  14 [32m++[m
+ .../java/br/ufscar/dc/dsw/models/ExemploModel.java |  14 [32m++[m
+ .../ufscar/dc/dsw/models/HistoricoStatusModel.java |  14 [32m++[m
+ .../java/br/ufscar/dc/dsw/models/ProjetoModel.java |  14 [32m++[m
+ .../java/br/ufscar/dc/dsw/models/SessaoModel.java  |  14 [32m++[m
+ .../java/br/ufscar/dc/dsw/models/UsuarioModel.java |  14 [32m++[m
+ .../ufscar/dc/dsw/repositories/BugRepository.java  |   7 [32m+[m[31m-[m
+ .../dsw/services/{BugService => BugService.java}   |  32 [32m+++[m[31m-[m
+ .../br/ufscar/dc/dsw/services/UsuarioService.java  |   1 [31m-[m
+ src/main/resources/application.properties          |   8 [32m+[m[31m-[m
+ src/main/resources/templates/bug/formulario.html   |  57 [32m++++[m[31m---[m
+ .../resources/templates/bug/listaPorSessao.html    |  43 [32m++++[m[31m--[m
+ src/main/resources/templates/home.html             |   6 [31m-[m
+ src/main/resources/templates/sessao/detalhes.html  | 125 [32m+++++++++[m[31m------[m
+ src/test/resources/application.properties          |  10 [32m++[m
+ 27 files changed, 448 insertions(+), 273 deletions(-)
+
+[33mcommit 33375131e2ef07559220183c06e64917f1c37d19[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Sun Jun 22 19:01:19 2025 -0300
+
+    internacionalizacoeszinhas c:
+
+ .../dc/dsw/controllers/UsuarioController.java      |  4 [31m--[m
+ .../ufscar/dc/dsw/services/EstrategiaService.java  |  8 [32m+[m[31m---[m
+ src/main/resources/i18n/messages_en.properties     | 37 [32m++++++++++++++++[m[31m-[m
+ src/main/resources/i18n/messages_pt_BR.properties  | 46 [32m+++++++++++++++++++++[m[31m-[m
+ src/main/resources/templates/fragments/footer.html | 10 [32m++[m[31m---[m
+ .../resources/templates/fragments/navigation.html  | 31 [32m+++++++[m[31m--------[m
+ .../resources/templates/projeto/formulario.html    | 20 [32m++++++[m[31m----[m
+ src/main/resources/templates/projeto/lista.html    | 30 [32m+++++++[m[31m-------[m
+ .../resources/templates/usuario/formulario.html    | 31 [32m+++++++[m[31m--------[m
+ target/classes/i18n/messages_en.properties         | 37 [32m++++++++++++++++[m[31m-[m
+ target/classes/i18n/messages_pt_BR.properties      | 46 [32m+++++++++++++++++++++[m[31m-[m
+ target/classes/static/css/main.css                 |  7 [32m++++[m
+ target/classes/templates/fragments/footer.html     | 10 [32m++[m[31m---[m
+ target/classes/templates/fragments/navigation.html | 31 [32m+++++++[m[31m--------[m
+ target/classes/templates/projeto/formulario.html   | 20 [32m++++++[m[31m----[m
+ target/classes/templates/projeto/lista.html        | 30 [32m+++++++[m[31m-------[m
+ target/classes/templates/usuario/formulario.html   | 31 [32m+++++++[m[31m--------[m
+ 17 files changed, 292 insertions(+), 137 deletions(-)
+
+[33mcommit 1865451ed5de889bf191ae7df8e1cbc08ff565eb[m
+Merge: 6920d31 49baee5
+Author: João Arthur <139086013+jooj-arthur@users.noreply.github.com>
+Date:   Sun Jun 22 16:48:18 2025 -0300
+
+    Merge branch 'main' into joão
+
+[33mcommit 49baee58cc3ad1e78707fb46600fb719c6c798f8[m
+Author: GRISELDA KAREN SILLERICO JUSTO <karensillericojusto@gmail.com>
+Date:   Sat Jun 21 22:45:54 2025 -0300
+
+    Update README.md
+
+ README.md | 21 [32m++++++++++++++[m[31m-------[m
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+[33mcommit 9456f3db2d17d82baeb55b8e8528a9a1222f8f6d[m
+Author: GRISELDA KAREN SILLERICO JUSTO <karensillericojusto@gmail.com>
+Date:   Sat Jun 21 22:43:34 2025 -0300
+
+    Update README.md
+
+ README.md | 11 [32m+++++++[m[31m----[m
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+[33mcommit a5016186c89f73f56e13a7c09f288c77c229271c[m
+Author: GRISELDA KAREN SILLERICO JUSTO <karensillericojusto@gmail.com>
+Date:   Sat Jun 21 22:41:39 2025 -0300
+
+    Update README.md
+
+ README.md | 69 [32m+++++++++++++++++++++++++++++++++[m[31m------------------------------[m
+ 1 file changed, 36 insertions(+), 33 deletions(-)
+
+[33mcommit f8021d1a7b79e698e0793157e5437bc0ca924b18[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Sat Jun 21 19:42:56 2025 -0300
+
+    Fix session owner
+
+ src/main/java/br/ufscar/dc/dsw/services/SessaoService.java | 4 [32m++[m[31m--[m
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+[33mcommit dbf72ab05a9b7339be144d108db401d98b3fc91f[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Sat Jun 21 18:44:40 2025 -0300
+
+    Fix projects view for testers
+
+ .../dc/dsw/config/seeders/ProjetoSeeder.java       |  2 [32m+[m[31m-[m
+ .../java/br/ufscar/dc/dsw/dtos/ProjetoDTO.java     |  3 [32m+[m[31m-[m
+ .../dc/dsw/repositories/ProjetoRepository.java     |  7 [32m++[m
+ .../br/ufscar/dc/dsw/services/ProjetoService.java  | 30 [32m+++++++[m[31m--[m
+ src/main/resources/templates/projeto/lista.html    | 15 [32m++[m[31m---[m
+ src/main/resources/templates/sessao/detalhes.html  | 76 [32m+++++++++++[m[31m-----------[m
+ src/main/resources/templates/sessao/lista.html     |  8 [32m++[m[31m-[m
+ target/classes/templates/projeto/lista.html        | 15 [32m++[m[31m---[m
+ target/classes/templates/sessao/detalhes.html      | 76 [32m+++++++++++[m[31m-----------[m
+ target/classes/templates/sessao/lista.html         |  8 [32m++[m[31m-[m
+ 10 files changed, 134 insertions(+), 106 deletions(-)
+
+[33mcommit 85c42953fa8bf78c82334d61e0c6166ef10b3106[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Sat Jun 21 18:01:38 2025 -0300
+
+    Fix strategy table
+
+ src/main/resources/static/css/main.css | 7 [32m+++++++[m
+ 1 file changed, 7 insertions(+)
+
+[33mcommit 0c5a31053c5f18f15eaecce3c8cd370edeb97a89[m
+Merge: fc0f67e 026cf04
+Author: Ronan Pereira Junior <137451604+ronanpjr@users.noreply.github.com>
+Date:   Sat Jun 21 17:31:46 2025 -0300
+
+    Merge pull request #9 from ronanpjr/minorUserFixes
+    
+    minor fixes
+
+[33mcommit 026cf041ee1780be395ac1845a80a7a6b21a1ca0[m[33m ([m[1;31mupstream/minorUserFixes[m[33m, [m[1;31morigin/minorUserFixes[m[33m)[m
+Author: ronanpjr <ronanpereira@estudante.ufscar.br>
+Date:   Sat Jun 21 17:30:40 2025 -0300
+
+    minor fixes
+
+ src/main/java/br/ufscar/dc/dsw/dtos/UsuarioEdicaoDTO.java | 8 [32m++++[m[31m----[m
+ src/main/resources/i18n/messages_en.properties            | 6 [32m++++[m[31m--[m
+ src/main/resources/i18n/messages_pt_BR.properties         | 4 [32m++[m[31m--[m
+ target/classes/i18n/messages_en.properties                | 6 [32m++++[m[31m--[m
+ target/classes/i18n/messages_pt_BR.properties             | 4 [32m++[m[31m--[m
+ 5 files changed, 16 insertions(+), 12 deletions(-)
+
+[33mcommit fc0f67e1b86e0436d7a6777ea735604cb99a9060[m
+Merge: fd13026 715b137
+Author: Felipe Kenji <68760458+Fekenji@users.noreply.github.com>
+Date:   Sat Jun 21 17:08:55 2025 -0300
+
+    Merge pull request #8 from ronanpjr/sessao-teste
+    
+    Adiciona parte de sessões de teste
+
+[33mcommit 715b1378f3255886e6cb73f15030023b2d4b3c8c[m[33m ([m[1;31mupstream/sessao-teste[m[33m, [m[1;31morigin/sessao-teste[m[33m)[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Sat Jun 21 17:04:44 2025 -0300
+
+    Add view restriction
+
+ src/main/resources/templates/sessao/detalhes.html | 222 [32m+++++++++++++[m[31m---------[m
+ target/classes/templates/sessao/detalhes.html     | 222 [32m+++++++++++++[m[31m---------[m
+ 2 files changed, 262 insertions(+), 182 deletions(-)
+
+[33mcommit baa2cf891e5fbac77014de3f8ebd14146b9ab207[m
+Author: Felipe Kenji <fekenji2005@gmail.com>
+Date:   Sat Jun 21 17:00:08 2025 -0300
+
+    Refine session area
+
+ .../dc/dsw/config/seeders/DatabaseSeeder.java      |  14 [32m++[m[31m-[m
+ .../dc/dsw/config/seeders/EstrategiaSeeder.java    |  18 [32m++[m[31m--[m
+ .../dc/dsw/config/seeders/ProjetoSeeder.java       |  56 [32m+++++++++++[m
+ .../dc/dsw/config/seeders/UsuarioSeeder.java       |   6 [32m+[m[31m-[m
+ .../dc/dsw/controllers/SessaoController.java       |  34 [32m++++++[m[31m-[m
+ .../br/ufscar/dc/dsw/dtos/SessaoEdicaoDTO.java     |  24 [32m+++++[m
+ .../dc/dsw/exception/GlobalExceptionHandler.java   |  30 [32m+++[m[31m---[m
+ .../repositories/HistoricoStatusRepository.java    |  25 [31m-----[m
+ .../br/ufscar/dc/dsw/s

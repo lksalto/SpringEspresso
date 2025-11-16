@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/form.css}"/>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
     <h1>Nova Sessão para <span th:text="${sessao.projeto.nome}"></span> - <span th:text="${sessao.estrategia.nome}"></span></h1>
@@ -65,6 +65,12 @@
                        th:value="${usuarioLogado != null ? usuarioLogado.nome + ' (Você)' : 'Você'}" 
                        readonly 
                        style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 8px; border-radius: 4px; width: 100%;">
+                
+                <input type="hidden" 
+                       id="testerId"
+                       name="testerId"
+                       th:value="${usuarioLogado.id}" />
+
                 <small style="color: #666; display: block; margin-top: 5px;">
                     Você será automaticamente definido como tester responsável por esta sessão
                 </small>

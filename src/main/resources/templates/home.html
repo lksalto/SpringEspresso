@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <div class="wrapper">
     <h2 style="text-align: center;">
@@ -41,6 +41,13 @@
             <h3 th:text="#{home.card.estrategias.titulo}"></h3>
             <p th:text="#{home.card.estrategias.descricao}"></p>
             <a th:href="@{/estrategias}" class="button button-primary" th:text="#{home.card.estrategias.botao}"></a>
+        </div>
+
+        <!-- Botão para Bugs -->
+        <div class="card">
+            <h3 th:text="#{home.card.bugs.relatorio}"></h3>
+            <p th:text="#{home.card.bugs.descricao}"></p>
+            <a th:href="@{bugs/listar}" class="button button-primary" th:text="#{home.card.bugs.botao}"></a>
         </div>
 
 
